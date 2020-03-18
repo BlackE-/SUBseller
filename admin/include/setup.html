@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>SUBSeller</title>
+	<style type="text/css">
+		#setup_form{margin:0 auto;width:90%;max-width: 640px;}
+		#setup_form input{width:100%;}
+
+	</style>
+</head>
+<body>
+	<form id="setup_form">
+		<p>Mailchimp ID List</p>
+		<input type="text" name="mailchimp_id_list">
+		<p>Admin Email</p>
+		<input type="text" name="admin_email">
+		<p>From Email</p>
+		<input type="text" name="from_email">
+		<p>Contacto Email</p>
+		<input type="text" name="contacto_email">
+		<p>Limit free delivery</p>
+		<input type="text" name="limit_free_delivery">
+		<p>Costo envio</p>
+		<input type="text" name="delivery_cost">
+		<p>Limite Conekta</p>
+		<input type="text" name="limit_conekta" value="5000">
+		<p>Limite Oxxo Conecta</p>
+		<input type="text" name="limit_oxxo_conekta" value="10000">
+		<input type="submit" value="guardar">
+	</form>
+	<script type="text/javascript">
+		document.querySelector("#setup_form").addEventListener("submit", function(e){
+			// e.preventDefault();
+			// // const inputs = document.forms["setup_form"].getElementsByTagName('input');
+			// const inputs = document.querySelectorAll('input[type="text"]');
+			// const dataPOST = [];
+			// // 0: 'a', 1: 'b', 2: 'c'
+			// for (const prop in inputs) {
+			//   if(!Object.is(inputs[prop].value,undefined)){
+			//   	dataPOST.push({ 
+			//   		index : inputs[prop].name,
+			//   		value: inputs[prop].value });
+			//   }
+			// }
+
+			// const dbParam = JSON.stringify(dataPOST);
+			// let xmlhttp = new XMLHttpRequest();
+			// xmlhttp.onreadystatechange = function() {
+			// 	if (this.readyState == 4 && this.status == 200) {
+			// 		console.log(this.response);
+			// 		myObj = JSON.parse(this.response);
+			// 		console.log(myObj);
+			// 	}
+			// }
+			// xmlhttp.open("POST", "SETUP-setData.php", true);
+			// xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			// xmlhttp.send("data=" + dbParam);
+
+
+			e.preventDefault();
+			const inputs = document.querySelectorAll('input[type="text"]');
+			let sendString = '';
+			for (const prop in inputs) {
+			  	if(!Object.is(inputs[prop].value,undefined)){
+			  		let index = inputs[prop].name;
+			  		let value = inputs[prop].value;
+					sendString += index +  '=' + value + '&';
+				}
+			}
+			console.log(sendString);
+			let xmlhttp = new XMLHttpRequest();
+			xmlhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.response);
+					myObj = JSON.parse(this.response);
+					console.log(myObj);
+				}
+			}
+			xmlhttp.open("POST", "SETUP-setData.php", true);
+			xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+			xmlhttp.send(sendString);
+
+		});
+	</script>
+</body>
+</html>
