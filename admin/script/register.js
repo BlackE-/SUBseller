@@ -40,17 +40,33 @@
             return false;
         }
 
+        //open modal for loading
         modal.style.display = "block";
-
-        // let fd = new FormData();
-        // fd.append( 'email', email );
-//      fd.append( 'password', pass );
-//      fd.append( 'tipo', 1 );
         //ajax call
 
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                modal.style.display = "none";
+                myObj = JSON.parse(this.response);
+                if(myObj.return){
+                    document.getElementById("error").innerHTML = myObj.message;
 
-        //open modal for loading
-
+                    document.getElementById('form1').classList.add('noShow');
+                     document.getElementById('divToLogin').classList.remove('noShow');
+                     document.getElementById('divToLogin').classList.add('show');
+                     
+                }else{
+                    document.getElementById("error").innerHTML = this.responseText;
+                }
+                
+            }
+        };
+        
+        xhttp.open("POST", "include/REGISTER-user.php", true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(`email=${email_element.value}&password=${pass_element.value}`);
+        
         
     }
 

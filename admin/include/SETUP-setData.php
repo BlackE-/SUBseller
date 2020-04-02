@@ -1,9 +1,8 @@
 <?php
-	require_once "db.php";
-	require_once "setup.php";
-
-	$db = new DB();
-	$set = new Setup($db);
+	require_once dirname(__FILE__) . '/include/setup.php';
+	$set = new Setup();
+	// require_once "setup.php";
+	// $set = new Setup();
 	
 	$all = $_POST;
 	$returnValue = false;

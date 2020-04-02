@@ -1,21 +1,26 @@
 <?php
-	require_once dirname(__FILE__) . '/include/db.php';
 	require_once dirname(__FILE__) . '/include/setup.php';
-
-	$db = new DB();
-	$set = new Setup($db);
+	$set = new Setup();
+	$checkDBLogin = $set->checkDBLogin();
+	if(!$checkDBLogin['return']){
+		header("Location: init.php"); 
+		exit;
+	}
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>SUBSeller</title>
+	<?php include('header_meta.php');?>
 	<style type="text/css">
 		body{font-family: sans-serif;}
 		
 	</style>
 </head>
 <body>
-	
+	<?php include('header.php');?>
+	<?php include('sidebar.php');?>
+
+
+	<?php include('footer.php');?>
 </body>
 </html>
