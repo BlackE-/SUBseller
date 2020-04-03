@@ -9,7 +9,7 @@
 <body>   
     <div class="container" id="loginContainer">
     	<img class="logo" src="../img/subseller.svg">
-        <form class="loginForm">
+        <form class="loginForm" id="loginForm">
         	<p class="topRegister"><b>INICIAR SESIÓN</b></p>
         	<div class="row">
         	    <input type="email" name="email" placeholder="Email" />
@@ -21,10 +21,11 @@
         		<input type="submit" class="submitLogin" value="INICIAR SESIÓN">
         		<p class="forgot"><a href="recoverPassword.php"><i>Olvidé mi contraseña</i></a></p>
         	</div>
-        	
-        	<div class="error"></div>
+        	<div class="error" id="error"></div>
     	</form>
 	</div>
+
+	<?php include("modal.php");?> 
 	
     <?php include("footer.php");?>
 		<script src="script/login.js"></script>

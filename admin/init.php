@@ -11,6 +11,9 @@
 	        	<p class="topRegister"><b>BASE DE DATOS</b></p>
 	        	<p class="topRegister">Para comenzar a utilizar la plataforma necesitamos la siguiente información</p>
 		        	<div class="row">
+		        	    <input type="text" name="host" placeholder="Host" required/>
+		        	</div>
+		        	<div class="row">
 		        	    <input type="text" name="database" placeholder="Database" required/>
 		        	</div>
 		        	<div class="row">

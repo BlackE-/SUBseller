@@ -9,7 +9,7 @@
 		$status = true;
 
 		$myfile = fopen("setup.ini", "w") or die("Unable to open file!");
-		$txt = 'host=localhost;'.PHP_EOL;
+		$txt = 'host='.$all['host'].';'.PHP_EOL;
 		$txt .= 'username='.$all['username'].';'.PHP_EOL;
 		$txt .= 'pwd='.$all['password'].';'.PHP_EOL;
 		$txt .= 'database='.$all['database'].';';

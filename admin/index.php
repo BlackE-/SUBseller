@@ -3,7 +3,7 @@
 	$set = new Setup();
 	$checkDBLogin = $set->checkDBLogin();
 	if(!$checkDBLogin['return']){
-		header("Location: init.php"); 
+		header("Location: init"); 
 		exit;
 	}
 ?>
@@ -11,16 +11,77 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<style type="text/css">
-		body{font-family: sans-serif;}
-		
-	</style>
 </head>
 <body>
 	<?php include('header.php');?>
-	<?php include('sidebar.php');?>
-
-
+	<div class="mainContainer" id="mainContainer">
+		<?php include('sidebar.php');?>
+		<div id="main" class="main">
+			<div class="ventasTotalContainer">
+				<p>Total Ventas</p>
+				<h1>
+					<?php
+						$totalVentas = 2000.00;
+						echo '$'.number_format($totalVentas, 2);
+					?>
+				</h1>
+			</div>
+			<div class="totalClientesContainer">
+				<p>Total Clientes</p>
+				<h1>
+					<?php
+						$totalClientes = 25;
+						echo $totalClientes;
+					?>
+				</h1>
+			</div>
+			<div class="salesByMonthContainer">
+				<div class="canvasContainer">	
+					<canvas id="myChart"></canvas>
+				</div>
+			</div>
+		</div>
+	</div>
 	<?php include('footer.php');?>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+	<script type="text/javascript">
+		var ctx = document.getElementById('myChart');
+		var myChart = new Chart(ctx, {
+		    type: 'bar',
+		    data: {
+		        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		        datasets: [{
+		            label: '# of Votes',
+		            data: [12, 19, 3, 5, 2, 3],
+		            backgroundColor: [
+		                'rgba(255, 99, 132, 0.2)',
+		                'rgba(54, 162, 235, 0.2)',
+		                'rgba(255, 206, 86, 0.2)',
+		                'rgba(75, 192, 192, 0.2)',
+		                'rgba(153, 102, 255, 0.2)',
+		                'rgba(255, 159, 64, 0.2)'
+		            ],
+		            borderColor: [
+		                'rgba(255, 99, 132, 1)',
+		                'rgba(54, 162, 235, 1)',
+		                'rgba(255, 206, 86, 1)',
+		                'rgba(75, 192, 192, 1)',
+		                'rgba(153, 102, 255, 1)',
+		                'rgba(255, 159, 64, 1)'
+		            ],
+		            borderWidth: 1
+		        }]
+		    },
+		    options: {
+		        scales: {
+		            yAxes: [{
+		                ticks: {
+		                    beginAtZero: true
+		                }
+		            }]
+		        }
+		    }
+		});
+	</script>
 </body>
 </html>

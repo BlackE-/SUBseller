@@ -17,7 +17,7 @@
 	    	<h1>Bienvenido a SUBcommerce</h1>
 	    	<img class="logo" src="../img/subseller.svg">
 	        <form class="loginForm" id="form1">
-	        	<p class="topRegister"><b>REGISTRO</b></p>
+	        	<p class="topRegister"><b>Registro</b></p>
 	        	<p class="topRegister">Para continuar crea tu usuario</p>
 	        	<div class="row">
 	        	    <input type="email" name="email" placeholder="email@gmail.com" required/>
@@ -32,7 +32,7 @@
 	    	</form>
 	    	<div class="noShow" id="divToLogin">
 	    		<h1>Success</h1>
-	    		<p>Usuario registrado.</p>
+	    		<p>Todo ha sido instalado correctamente.</p>
 	    		<a href="login"><button>INICIAR SESIÓN</button></a>
 	    	</div>
 	    	
@@ -42,6 +42,6 @@
 		<?php include("modal.php");?> 
 		
 	    <?php include("footer.php");?>  
-			<script src="script/register.js"></script>
+			<script src="script/config.js"></script>
 	</body>
 </html>

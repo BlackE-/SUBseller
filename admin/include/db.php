@@ -5,8 +5,9 @@
         private $pwd;
         private $database;
         private $connection;
-        
         public $error_message = '';
+
+
         
         function __construct(){
             $array_ini = parse_ini_file('setup.ini', true);
@@ -121,7 +122,7 @@
                             id_user INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             username VARCHAR(45),
                             email VARCHAR(45) NOT NULL UNIQUE,
-                            _password VARCHAR(45) NOT NULL,
+                            _password VARCHAR(255) NOT NULL,
                             type VARCHAR(5),
                             date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
                             )";
@@ -143,7 +144,7 @@
                             id_client INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             name VARCHAR(45),
                             email VARCHAR(45) NOT NULL UNIQUE,
-                            _password VARCHAR(45),
+                            _password VARCHAR(255),
                             sex VARCHAR(1) COMMENT 'F/M',
                             id_facebook VARCHAR(30),
                                 date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -235,6 +236,17 @@
                     $returnValue = false;
                     $this->HandleDBError('Error creating tables');
                 }
+                $create = "CREATE TABLE settings(
+                                id_settings INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                name VARCHAR(45),
+                                value VARCHAR(100)
+                            )";
+                $result = mysqli_query($this->connection,$create);
+                if(!$result){
+                    $returnValue = false;
+                    $this->HandleDBError('Error creating tables');
+                }
+
                 $create = "CREATE TABLE product(
                                 id_product INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 sku VARCHAR(50) NOT NULL COMMENT 'UNIQUE CODE FOR PRODUCT',

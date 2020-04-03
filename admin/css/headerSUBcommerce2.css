@@ -1,0 +1,118 @@
+header {
+  display: grid;
+  grid-template-columns: 150px auto 120px;
+  grid-gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #b7002a;
+  align-items: center;
+  box-shadow: 0px 2px 20px rgba(33, 33, 33, 0.4);
+}
+
+header .logoContainer img {
+  width: 30px;
+}
+
+@media only screen and (max-width: 460px) {
+  .logoContainer span {
+    display: none;
+  }
+}
+.mainContainer {
+  display: grid;
+  grid-template-columns: 150px auto;
+}
+
+.mainContainer #sidebar {
+  height: 85vh;
+  padding: 10px 0 10px 10px;
+  background: #b7002a;
+  display: grid;
+  grid-template-rows: 80% 50px;
+}
+.mainContainer #sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mainContainer #sidebar ul li {
+  padding: 10px 0 10px 10px;
+}
+.mainContainer #sidebar ul li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.mainContainer #sidebar ul li i {
+  width: 25px;
+}
+.mainContainer #sidebar ul li i, .mainContainer #sidebar ul span {
+  display: inline-block;
+}
+.mainContainer #sidebar ul li:hover {
+  background: #ffffff;
+}
+.mainContainer #sidebar ul li:hover a {
+  color: #b7002a;
+}
+.mainContainer #sidebar ul li.active {
+  background: #ffffff;
+}
+.mainContainer #sidebar ul li.active a {
+  color: #b7002a;
+}
+
+.mainContainer #main {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+}
+.mainContainer #main .salesByMonthContainer {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.mainContainer #main .salesByMonthContainer .canvasContainer {
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+@media only screen and (max-width: 740px) {
+  .mainContainer {
+    grid-template-columns: 50px 85%;
+  }
+
+  .mainContainer #sidebar ul li span {
+    display: none;
+  }
+}
+@media only screen and (max-width: 460px) {
+  .mainContainer #main {
+    grid-template-rows: 1fr 1fr;
+  }
+}
+footer {
+  display: grid;
+  background: #ccc;
+  padding: 20px;
+  align-items: baseline;
+  grid-template-columns: 33.3333% 33.3333% 33.3333%;
+}
+
+footer div:first-child img {
+  width: 50px;
+}
+
+footer div:nth-child(3) {
+  text-align: right;
+}
+
+@media only screen and (max-width: 460px) {
+  footer {
+    grid-template-columns: 100%;
+    grid-gap: 10px;
+    justify-items: center;
+  }
+}
+
+/*# sourceMappingURL=headerSUBcommerce2.css.map */

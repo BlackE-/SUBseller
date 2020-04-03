@@ -18,6 +18,7 @@
 	  margin: 15% auto; /* 15% from the top and centered */
 	  border: 1px solid #888;
 	  width: 80%; /* Could be more or less, depending on screen size */
+	  max-width: 540px;
 	  text-align: center;
 	}
 	.modal-header{height: 30px;background-color: #d6232e;position: relative;}
@@ -75,3 +76,14 @@
 		</div>
 	</div>
 </div>
+<script type="text/javascript">
+	const modal = document.getElementById("modal");
+    const closeModal = document.getElementsByClassName("closeModal")[0];
+    // When the user clicks on <span> (x), close the modal
+    closeModal.onclick = function() { modal.style.display = "none";}
+    window.onclick = function(event) {
+      if (event.target === modal) {
+        modal.style.display = "none";
+      }
+    }
+</script>
