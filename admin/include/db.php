@@ -239,7 +239,8 @@
                 $create = "CREATE TABLE settings(
                                 id_settings INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 name VARCHAR(45),
-                                value VARCHAR(100)
+                                value VARCHAR(100),
+                                type VARCHAR(50)
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){
@@ -257,9 +258,11 @@
                                 discount DECIMAL(3,2),
                                 tax DECIMAL(10,2),
                                 unit VARCHAR(5) DEFAULT 'PZA',
-                                caption VARCHAR(10),
+                                description_short VARCHAR(45),
+                                tiempo_de_uso VARCHAR(10),
                                 description TEXT, 
                                 fav BOOLEAN DEFAULT 0,
+                                out_of_stock BOOLEAN DEFAULT 0,
                                 brand_id_brand INT UNSIGNED NOT NULL,
                                 product_type_id_product_type INT UNSIGNED NOT NULL,
                                 
@@ -314,6 +317,22 @@
                                     ON DELETE NO ACTION ON UPDATE CASCADE,
                                 FOREIGN KEY(category_id_category)
                                     REFERENCES category(id_category)
+                                    ON DELETE NO ACTION ON UPDATE CASCADE
+                            )";
+                $result = mysqli_query($this->connection,$create);
+                if(!$result){
+                    $returnValue = false;
+                    $this->HandleDBError('Error creating tables');
+                }
+                $create = "CREATE TABLE product_inventory(
+                                id_product_inventory INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                product_id_product INT UNSIGNED,
+                                stock INT DEFAULT 0,
+
+                                INDEX (product_id_product),
+                                
+                                FOREIGN KEY(product_id_product)
+                                    REFERENCES product(id_product)
                                     ON DELETE NO ACTION ON UPDATE CASCADE
                             )";
                 $result = mysqli_query($this->connection,$create);

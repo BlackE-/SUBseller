@@ -7,3 +7,4 @@
 		<span>Copyright <?php echo date("Y");?></span>
 	</div>
 </footer>
+<script type="text/javascript" src="script/header.js"></script>

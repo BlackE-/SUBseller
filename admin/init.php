@@ -30,8 +30,6 @@
 		</div>
 
 		<?php include("modal.php");?> 
-		
-	    <?php include("footer.php");?>  
 			<script src="script/init.js"></script>
 	</body>
 </html>

@@ -1,0 +1,55 @@
+.mainContainer #main {padding: 20px;}
+#setup_form{margin:0 auto;width:90%;display: grid; grid-template-columns: 1fr 1fr 1fr; grid-gap: 10px;    align-self: center;}
+#setup_form div{border:1px solid;padding:10px;overflow: hidden;border-radius: 5px;max-width: 360px;}
+#setup_form h2{font-style: italic;font-size:14px;border-bottom:1px solid #b7002a;}
+#setup_form p{font-style: italic; font-size: 12px;}
+#setup_form input{width:calc(100% - 20px);outline: none;transition:border 300ms ease-out;text-align: right;}
+#setup_form input:focus{border:2px solid transparent;border-bottom: 1px solid #b7002a;}
+#setup_form input[type='submit']{grid-column-start: 3;grid-column-end: 4;background: #b7002a;color:#fff;padding:10px;border:0;border-radius: 5px;
+	width: 100%;text-align: center;}
+@media only screen and (max-width: 960px) {
+	#setup_form{grid-template-columns: auto auto;}
+	#setup_form input[type='submit']{grid-column-start: 2;grid-column-end: 3;}
+}
+@media only screen and (max-width: 560px) {
+	#setup_form{grid-template-columns: auto;}
+	#setup_form input[type='submit']{grid-column-start: 1;grid-column-end: 2;}
+}
+
+.switch {position: relative;height: 26px;  width: 120px;  margin: 20px auto;  background: rgba(255, 255, 255, 0.25);  border-radius: 3px;padding: 0 !important;}
+.switch-label {position: relative;z-index: 2;float: left;  width: 58px;line-height: 26px;font-size: 11px;color: #000;text-align: center; cursor: pointer;}
+.switch-label:active { font-weight: bold;}
+.switch-label-off { padding-left: 2px;}
+.switch-label-on {  padding-right: 2px;}
+.switch-input { display: none;}
+.switch-input:checked + .switch-label {
+  font-weight: bold;
+  color: #fff;
+  -webkit-transition: 0.15s ease-out;
+  -moz-transition: 0.15s ease-out;
+  -ms-transition: 0.15s ease-out;
+  -o-transition: 0.15s ease-out;
+  transition: 0.15s ease-out;
+  -webkit-transition-property: color;
+  -moz-transition-property: color;
+  -ms-transition-property: color;
+  -o-transition-property: color;
+  transition-property: color;
+}
+.switch-input:checked + .switch-label-on ~ .switch-selection {left: 60px;}
+.switch-selection {
+  position: absolute;
+  z-index: 1;
+  top: 2px;
+  left: 2px;
+  display: block;
+  width: 58px;
+  height: 22px;
+  border-radius: 3px;
+  background-color: #b7002a;
+  -webkit-transition: left 0.15s ease-out;
+  -moz-transition: left 0.15s ease-out;
+  -ms-transition: left 0.15s ease-out;
+  -o-transition: left 0.15s ease-out;
+  transition: left 0.15s ease-out;
+}

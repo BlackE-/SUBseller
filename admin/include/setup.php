@@ -9,7 +9,6 @@
 	    function __construct(){
 	        $this->db = new DB();
 	    }
-
 	    function checkDBLogin(){
 	    	if(!$this->db->DBLogin()){
 	    		$returnValue['return'] = false;
@@ -21,6 +20,11 @@
 	    	return $returnValue;
 	    }
 
+	    function getErrorMessage(){return $this->db->error_message;}
+
+	    /*
+			LOGIN
+	    */
 	    function loginAdmin($email,$password){
 	    	$returnValue = true;
 	    	$formvars = array();
@@ -52,7 +56,9 @@
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
-
+	    /*
+			REGISTER
+	    */
 	    function register_user($email,$password){
 	    	$returnValue = true;
 	    	$formvars = array();
@@ -63,14 +69,15 @@
 					.$formvars['email'] . "','"
 					.$formvars['type'] . "','"
 					.$formvars['password']."',NOW())";
-			$this->db->HandleError($qry);
 			if(!$this->db->insertQuery($qry)){
 				$returnValue = false;
 			}
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
-
+	    /*
+			CONFIG FUNCTIONS
+	    */
 	    function createTablesAndRegisterAdmin($email,$password){
 	    	$returnValue = true;
 	    	if(!$this->db->createTables()){
@@ -87,64 +94,217 @@
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
+				//conekta
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_status','dev','payment_conekta')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
 
-				$qry = "INSERT into settings (name,value) values 
-											('mailchimp_id_list','')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_key_public_dev','','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('admin_email','".$formvars['email'] . "')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_key_private_dev','','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('from_email','".$formvars['email'] . "')";
+
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_key_public_prod','','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('contacto_email','".$formvars['email'] . "')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_key_private_prod','','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('limit_free_delivery','1000')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_limit','5000','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('delivery_cost','250')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('conekta_limit_oxxo','10000','payment_conekta')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('limit_conekta','5000')";
+
+
+				//paypal
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_status','dev','payment_paypal')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-				$qry = "INSERT into settings (name,value) values 
-											('limit_oxxo_conekta','10000')";
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_key_public_dev','','payment_paypal')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_key_private_dev','','payment_paypal')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_key_public_prod','','payment_paypal')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_key_private_prod','','payment_paypal')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+
+
+				//mailchimp
+				$qry = "INSERT into settings (name,value,type) values 
+											('mailchimp_id_list','','email_mailchimp')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				
+				//email
+				$qry = "INSERT into settings (name,value,type) values 
+											('from_email','".$formvars['email'] . "','email_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('contacto_email','".$formvars['email'] . "','email_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+
+
+
+				//envios
+				$qry = "INSERT into settings (name,value,type) values 
+											('limit_free_delivery','1000','delivery_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('delivery_cost','250','delivery_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+
+
+
+				//social media
+				$qry = "INSERT into settings (name,value,type) values 
+											('instagram','','socialmedia_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}$qry = "INSERT into settings (name,value,type) values 
+											('facebook','','socialmedia_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}$qry = "INSERT into settings (name,value,type) values 
+											('twitter','','socialmedia_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}$qry = "INSERT into settings (name,value,type) values 
+											('whatsapp','','socialmedia_website')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				
 		    }
 		    $this->db->closeAll();
 		    return $returnValue;
 		}
-		function insertSettings(){
 
+		
+		
+		/*
+			Orders
+		*/
+		function getOrders(){
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM _order ORDER BY id_order';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No orders');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No orders');
+					$returnValue = false;
+				}else{
+					$returnValue = $result;
+				}
+			}
+			return $returnValue; 
+		}
+		function getClientNameById($id_client){
+			$this->checkDBLogin();
+			$qry = 'SELECT name FROM client WHERE id_client = '.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['name'];
+				}
+			}
+			return $returnValue;
+		}
+		function getTypeTransation($id_order){
+			$this->checkDBLogin();
+			$qry = 'SELECT type FROM transaction WHERE order_id_order = '.$id_order;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['type'];
+				}
+			}
+			return $returnValue;
 		}
 
-		function getErrorMessage(){
-			return $this->db->error_message;
+
+		/*
+			Products
+		*/
+		function getProducts(){
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM products ORDER BY id_products';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No productos');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No productos');
+					$returnValue = false;
+				}else{
+					$returnValue = $result;
+				}
+			}
+			return $returnValue;
 		}
 
-
-
+		/*
+			SETTINGS
+		*/
 	    function getMetaTags(){
 			$this->db->DBLogin();
-			$qry = 'SELECT * FROM settings';
+			$qry = 'SELECT * FROM settings ';
 			$data = $this->db->selectQuery($qry);
 			if(!$data){
 				$this->db->HandleDBError($qry);
@@ -163,6 +323,7 @@
 
 		function setConfigData($data){
 			$returnValue['return'] = false;
+			$this->db->DBLogin();
 			foreach( $data as $key=>$value ) {
 				$qry = 'UPDATE settings SET value="'.$value.'" WHERE name="'.$key.'"';
 				if($this->db->updateQuery($qry)){
@@ -176,11 +337,10 @@
 			$this->db->closeAll();
 			return $returnValue;
 		}
-
 		function getConfigData(){
 			$returnValue['return'] = false;
 			$this->db->DBLogin();
-			$qry = 'SELECT * FROM settings';
+			$qry = 'SELECT * FROM settings ORDER by id_settings DESC';
 			$data = $this->db->selectQuery($qry);
 			if(!$data){
 				$this->db->HandleDBError($qry);
@@ -190,7 +350,7 @@
 
 			$array_data = [];
 			while($row = $this->db->fetchArray($data)){
-				array_push($array_data,['key'=>$row['name'],'value'=>$row['value']]);
+				array_push($array_data,['key'=>$row['name'],'value'=>$row['value'],'type'=>$row['type']]);
 			}
 			$returnValue['data'] = $array_data;
 
@@ -201,19 +361,27 @@
 		/*
 		UTIL FUNCTIONS
 		*/
-
+		function CheckLogin(){
+			$returnValue = true;
+	        if(!isset($_SESSION)){ session_start(); }
+	        $sessionvar = $this->GetLoginSessionVar();
+	        if(empty($_SESSION[$sessionvar])){
+	            $this->db->HandleError("Session expiro!");
+	            return false;
+	        }
+	        if($_SESSION['timeout'] < time()){
+	            $this->db->HandleError("Session time expiro!" . $_SESSION['timeout'] . time());
+	            $returnValue = false;
+	        }
+	        return $returnValue;
+	    }
 		function GetLoginSessionVar(){
 	        $retvar = md5($this->rand_key);
 	        $retvar = 'user_'.substr($retvar,0,10);
 	        return $retvar;
 	    }
-	    function GetAbsoluteURLFolder(){
-	        return $_SERVER['SERVER_NAME'];
-	    }	
-	    function RedirectToURL($url){
-	        header("Location: $url");
-	        exit;
-	    }
+	    function GetAbsoluteURLFolder(){return $_SERVER['SERVER_NAME'];}	
+	    function RedirectToURL($url){header("Location: $url");exit;}
 
 		/*	
 

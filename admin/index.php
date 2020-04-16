@@ -1,9 +1,17 @@
 <?php
 	require_once dirname(__FILE__) . '/include/setup.php';
 	$set = new Setup();
+
 	$checkDBLogin = $set->checkDBLogin();
 	if(!$checkDBLogin['return']){
-		header("Location: init"); 
+		header('Location: init.php');
+		exit;
+	}
+	
+	$CheckLogin = $set->CheckLogin();
+	if(!$CheckLogin){
+		echo $set->getErrorMessage();
+		header("Location: login"); 
 		exit;
 	}
 ?>
@@ -11,6 +19,7 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
+	<link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
 	<?php include('header.php');?>
@@ -46,13 +55,14 @@
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
 	<script type="text/javascript">
 		var ctx = document.getElementById('myChart');
+		
 		var myChart = new Chart(ctx, {
 		    type: 'bar',
 		    data: {
-		        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+		        labels: ['29/03','30/03','31/03','1/04', '2/04', '3/04'],
 		        datasets: [{
-		            label: '# of Votes',
-		            data: [12, 19, 3, 5, 2, 3],
+		            label: 'orders',
+		            data: [1, 3, 0, 1, 2, 3],
 		            backgroundColor: [
 		                'rgba(255, 99, 132, 0.2)',
 		                'rgba(54, 162, 235, 0.2)',
@@ -76,7 +86,8 @@
 		        scales: {
 		            yAxes: [{
 		                ticks: {
-		                    beginAtZero: true
+		                    beginAtZero: true,
+		                    stepSize: 1
 		                }
 		            }]
 		        }

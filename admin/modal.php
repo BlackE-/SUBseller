@@ -80,10 +80,12 @@
 	const modal = document.getElementById("modal");
     const closeModal = document.getElementsByClassName("closeModal")[0];
     // When the user clicks on <span> (x), close the modal
-    closeModal.onclick = function() { modal.style.display = "none";}
+    openModalFunction = () =>{ modal.style.display = "block"; }
+    closeModalFunction = () =>{ modal.style.display = "none"; }
+    closeModal.onclick = closeModalFunction();
     window.onclick = function(event) {
       if (event.target === modal) {
-        modal.style.display = "none";
+        closeModalFunction();
       }
     }
 </script>

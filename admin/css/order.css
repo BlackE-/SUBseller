@@ -1,0 +1,2 @@
+.mainContainer #main{display: grid;grid-template-columns: 1fr;grid-template-rows:1fr;}
+.mainContainer #main .pedidosContainer{padding:20px;}

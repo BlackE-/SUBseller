@@ -14,7 +14,7 @@ header{
 
 .mainContainer{display: grid;grid-template-columns: 150px auto;}
 .mainContainer{
-	#sidebar{height:85vh;padding:10px 0 10px 10px;background:$colorRed;display: grid;grid-template-rows: 80% 50px;}
+	#sidebar{padding:10px 0 0 10px;background:$colorRed;display: grid;grid-template-rows: calc(100% - 77px) 80px;}
 	#sidebar ul{margin: 0;padding:0;list-style: none;}
 	#sidebar ul{
 			li{padding:10px 0 10px 10px;}
@@ -27,21 +27,16 @@ header{
 			li.active a{color: $colorRed;}
 	}
 }
-.mainContainer{
-	#main{padding:20px;display: grid;grid-template-columns: 1fr 1fr;grid-template-rows: 1fr;grid-gap: 10px;}
-	#main .salesByMonthContainer{grid-column-start: 1;grid-column-end: 3;}
-	#main .salesByMonthContainer .canvasContainer{max-width: 960px;margin:0 auto;width:100%;text-align: center;}
-	#main .salesByMonthContainer canvas{}
-}
 
 @media only screen and (max-width:$sizeTablet) {
-	.mainContainer{grid-template-columns:50px 85%;}
-	.mainContainer #sidebar ul li span{display:none;}
+	.mainContainer{grid-template-columns: 50px auto;}
+	.mainContainer{
+		#sidebar ul{
+			li span{display: none;}
+		}
+	}
 }
 
-@media only screen and(max-width:$sizeMobile){
-	.mainContainer #main{grid-template-rows: 1fr 1fr;}	
-}
 
 footer{display: grid;background:#ccc;padding: 20px;align-items:baseline;grid-template-columns:33.3333% 33.3333% 33.3333%; }
 footer div:first-child img{width:50px;}

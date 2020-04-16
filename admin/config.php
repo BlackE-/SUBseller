@@ -3,7 +3,7 @@
 	$set = new Setup();
 	$checkDBLogin = $set->checkDBLogin();
 	if(!$checkDBLogin['return']){
-		header('Location: init.php');
+		header('Location: init');
 		exit;
 	}
 ?>
@@ -41,7 +41,6 @@
 
 		<?php include("modal.php");?> 
 		
-	    <?php include("footer.php");?>  
 			<script src="script/config.js"></script>
 	</body>
 </html>

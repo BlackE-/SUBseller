@@ -27,7 +27,6 @@
 
 	<?php include("modal.php");?> 
 	
-    <?php include("footer.php");?>
 		<script src="script/login.js"></script>
 	</body>
 </html>
