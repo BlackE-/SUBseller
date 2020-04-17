@@ -133,7 +133,8 @@
                 }
                 $create = "CREATE TABLE brand(
                             id_brand INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                            name VARCHAR(45)
+                            name VARCHAR(45),
+                            status BOOLEAN COMMENT '0-HIDDEN 1-SHOW'
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){

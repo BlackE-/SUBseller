@@ -170,14 +170,19 @@
 					$returnValue = false;
 				}
 				
-				//email
+				//website_settings
 				$qry = "INSERT into settings (name,value,type) values 
-											('from_email','".$formvars['email'] . "','email_website')";
+											('website_url','','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
-											('contacto_email','".$formvars['email'] . "','email_website')";
+											('from_email','".$formvars['email'] . "','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('contacto_email','".$formvars['email'] . "','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
@@ -228,6 +233,7 @@
 			Orders
 		*/
 		function getOrders(){
+			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'SELECT * FROM _order ORDER BY id_order';
 			$result = $this->db->selectQuery($qry);
@@ -245,6 +251,7 @@
 			return $returnValue; 
 		}
 		function getClientNameById($id_client){
+			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'SELECT name FROM client WHERE id_client = '.$id_client;
 			$result = $this->db->selectQuery($qry);
@@ -261,6 +268,7 @@
 			return $returnValue;
 		}
 		function getTypeTransation($id_order){
+			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'SELECT type FROM transaction WHERE order_id_order = '.$id_order;
 			$result = $this->db->selectQuery($qry);
@@ -282,6 +290,7 @@
 			Products
 		*/
 		function getProducts(){
+			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'SELECT * FROM products ORDER BY id_products';
 			$result = $this->db->selectQuery($qry);
@@ -298,6 +307,58 @@
 			}
 			return $returnValue;
 		}
+
+		/*
+			STORE
+		*/
+		function getBrands(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM brand ORDER BY id_brand';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No marcas');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No marcas');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data, $row);
+					}
+					$returnValue = $array_data;
+
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertBrand($brand){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'INSERT INTO brand(name,status) VALUES ("'.$brand.'",1) ';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar la marca');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
+		function updateBrand($id_brand,$brand_name,$brand_status){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE brand SET name="'.$brand_name.'", status="'.$brand_status.'" WHERE id_brand = '.$id_brand;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo actualizar la marca');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
 
 		/*
 			SETTINGS

@@ -32,7 +32,7 @@
 							switch($type){
 								case 'delivery_website': echo '<h2>Entregas/Envíos</h2>'; break;
 								case 'email_mailchimp': echo '<h2>Mailchimp</h2>';break;
-								case 'email_website':	echo '<h2>Correos Electrónicos</h2>';break;
+								case 'website_settings':	echo '<h2>Sitio / Correos Electrónicos</h2>';break;
 								case 'payment_conekta':	echo '<h2>Conekta</h2>';break;
 								case 'payment_paypal':	echo '<h2>Paypal</h2>';break;
 								case 'socialmedia_website':echo '<h2>Social Media</h2>';break;

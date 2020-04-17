@@ -5,6 +5,7 @@
 		<li id="nav_products"><a href="products"><i class="fas fa-tags"></i> <span>PRODUCTS</span></a></li>
 		<li id="nav_clients"><a href="clients"><i class="fas fa-users"></i> <span>CLIENTS</span></a></li>
 		<li id="nav_discounts"><a href="discounts"><i class="fas fa-gift"></i> <span>DISCOUNTS</span></a></li>
+		<li id="nav_store"><a href="store"><i class="fas fa-folder-open"></i><span>TIENDA</span></a></li>
 	</ul>
 
 	<ul>
