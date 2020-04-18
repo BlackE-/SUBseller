@@ -7,7 +7,7 @@
 	$returnData = '';
 
 	if(isset($all)){
-		if($set->insertBrand()){
+		if($set->updateCategory($all['id_category'],$all['category_name'],$all['category_status'])){
 			$returnValue = true;
 		}
 	}

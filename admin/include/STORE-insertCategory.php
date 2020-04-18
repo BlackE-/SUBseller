@@ -7,11 +7,10 @@
 	$returnData = '';
 
 	if(isset($all)){
-		if($set->insertBrand()){
+		if($set->insertCategory()){
 			$returnValue = true;
 		}
 	}
-
 
 	//JSON RETURN
 	header('Content-Type: application/json');

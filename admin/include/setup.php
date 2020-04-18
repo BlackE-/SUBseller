@@ -311,6 +311,10 @@
 		/*
 			STORE
 		*/
+
+			/*
+				brand
+			*/
 		function getBrands(){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -326,7 +330,12 @@
 				}else{
 					$array_data = array();
 					while($row = $this->db->fetchArray($result)){
-						array_push($array_data, $row);
+						$img = $this->getMedia($row['id_brand'],'brand');
+						if(!$img){
+							array_push($array_data, array('brand'=>$row,'media'=>false));
+						}else{
+							array_push($array_data, array('brand'=>$row,'media'=>$img));
+						}
 					}
 					$returnValue = $array_data;
 
@@ -335,15 +344,44 @@
 			return $returnValue;
 		}
 
-		function insertBrand($brand){
+		function insertBrand(){
 			$returnValue = true;
+			$data = $_POST;
 			$this->checkDBLogin();
-			$qry = 'INSERT INTO brand(name,status) VALUES ("'.$brand.'",1) ';
+			$qry = 'INSERT INTO brand(name,status) VALUES ("'.$data['name'].'",1) ';
 			$result = $this->db->insertQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No se pudo guardar la marca');
 				$returnValue = false;
 			}
+
+			$id_brand = $this->db->lastInsertID();
+			
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+
+   //         			//nuevo nombre de la imagen que se sube
+           				$extension = explode(".",$archivo['name']);
+	           			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+           			//path a la carpeta de brands
+					$pathInsert = '../../img/brand/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/brand/';
+					$pathSave .= $name;
+					$img = $this->insertMedia('brand',$id_brand,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+			return $returnValue;
+
 			return $returnValue;
 		}
 
@@ -358,6 +396,288 @@
 			}
 			return $returnValue;
 		}
+
+
+		function updateBrandPhoto(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			
+			$id_media = $data['id_media'];
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+
+           				$extension = explode(".",$archivo['name']);
+	           			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+
+           			//path a la carpeta de category
+					$pathInsert = '../../img/brand/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/brand/';
+					$pathSave .= $name;
+			// 		//llamada a la funcion insertMedia
+					$img = $this->updateMedia('brand',$id_media,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+			return $returnValue;
+		}
+
+			/*
+				category
+			*/
+		function getCategories(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM category ORDER BY id_category';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No categorias aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No categorias aun');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						$img = $this->getMedia($row['id_category'],'category');
+						if(!$img){
+							array_push($array_data, array('category'=>$row,'media'=>false));
+						}else{
+							array_push($array_data, array('category'=>$row,'media'=>$img));
+						}
+					}
+					$returnValue = $array_data;
+
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertCategory(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'INSERT INTO category(name,status) VALUES ("'.$data['name'].'",1) ';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar la marca');
+				$returnValue = false;
+			}
+			$id_category = $this->db->lastInsertID();
+			
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+//         			//nuevo nombre de la imagen que se sube
+       				$extension = explode(".",$archivo['name']);
+           			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+           			// $name .= date('Y-m-d', time()). '.' . $extension[1];
+           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+           			//path a la carpeta de category
+					$pathInsert = '../../img/category/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/category/';
+					$pathSave .= $name;
+			// 		//llamada a la funcion insertMedia
+					$img = $this->insertMedia('category',$id_category,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						// $this->db->HandleError($path);
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+			return $returnValue;
+		}
+
+		function updateCategory($id_category,$category_name,$category_status){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE category SET name="'.$category_name.'", status="'.$category_status.'" WHERE id_category = '.$id_category;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo actualizar la categoria');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
+		function updateCategoryPhoto(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			
+			$id_media = $data['id_media'];
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+
+           				$extension = explode(".",$archivo['name']);
+	           			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+
+           			//path a la carpeta de category
+					$pathInsert = '../../img/category/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/category/';
+					$pathSave .= $name;
+			// 		//llamada a la funcion insertMedia
+					$img = $this->updateMedia('category',$id_media,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						// $this->db->HandleError($path);
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+			return $returnValue;
+		}
+
+		/*
+			TYPES
+		*/
+		function getTypes(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM product_type ORDER BY id_product_type';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tipos aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tipos aun');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						$img = $this->getMedia($row['id_product_type'],'type');
+						$img_mobile = $this->getMedia($row['id_product_type'],'type_mobile');
+						if(!$img && !$img2){
+							array_push($array_data, array('type'=>$row,'media'=>false));
+						}else{
+							$imgs = array($img,$img_mobile);
+							array_push($array_data, array('type'=>$row,'media'=>$imgs));
+						}
+					}
+					$returnValue = $array_data;
+
+				}
+			}
+			return $returnValue;
+		}
+		function insertType(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'INSERT INTO product_type(name,id_parent,status) VALUES ("'.$data['name'].'",0,1) ';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar la marca');
+				$returnValue = false;
+			}
+			$id_type = $this->db->lastInsertID();
+			
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+           			$extension = explode(".",$archivo['name']);
+	           		$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+	           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
+					$pathInsert = '../../img/type/';
+					$pathInsert .= $name;
+					$pathSave = '/img/type/';
+					$pathSave .= $name;
+					$img = $this->insertMedia('type',$id_type,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){						
+						$returnValue = false;
+					}
+           		}
+           	}
+
+           	if(!empty($_FILES['fileMobile']['name'])){
+           		$archivo = $_FILES['fileMobile'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+           			$extension = explode(".",$archivo['name']);
+	           		$name = $this->removeWhitespaces($this->Sanitize($data['name'] . 'mobile'));
+	           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
+					$pathInsert = '../../img/type/';
+					$pathInsert .= $name;
+					$pathSave = '/img/type/';
+					$pathSave .= $name;
+					$img = $this->insertMedia('type_mobile',$id_type,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+           		}	
+           	}
+			return $returnValue;
+		}
+		function updateType($id_type,$type_name,$type_status){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE product_type SET name="'.$type_name.'", status="'.$type_status.'" WHERE id_product_type = '.$id_type;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo actualizar la categoria');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+		function updateTypePhoto(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			
+			$id_media = $data['id_media'];
+			$type = $data['type'];
+
+			if(!empty($_FILES['file']['name'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+       				$extension = explode(".",$archivo['name']);
+       				if($type == 'type_mobile'){
+       					$name = $this->removeWhitespaces($this->Sanitize($data['name'] . 'mobile'));
+       				}else{
+       					$name = $this->removeWhitespaces($this->Sanitize($data['name']));
+       				}
+           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+					$pathInsert = '../../img/type/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/type/';
+					$pathSave .= $name;
+					$img = $this->updateMedia($type,$id_media,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+			return $returnValue;
+		}
+
 
 
 		/*
@@ -381,7 +701,6 @@
 			$this->db->closeAll();
 			return $returnValue;
 	    }
-
 		function setConfigData($data){
 			$returnValue['return'] = false;
 			$this->db->DBLogin();
@@ -419,6 +738,73 @@
 			return $returnValue;
 		}
 
+
+
+		/*
+
+			MEDIA
+
+		*/
+		function getMedia($id_type,$type){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM media WHERE type="'.$type.'" and id_type='.$id_type;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No categorias aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No categorias aun');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data, array('id_media'=>$row['id_media'],'url'=>$row['url']));
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertMedia($type,$id_type,$tmp_name,$pathInsert,$pathSave){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!move_uploaded_file($tmp_name, $pathInsert)){
+ 	            $this->db->HandleError("NO SE PUDO GUARDAR archivo ".$path);
+ 	            $returnValue = false;
+ 	        }else{
+ 	        	$qry = 'INSERT INTO media (url,type,id_type) VALUES("'.$pathSave.'","'.$type.'",'.$id_type.')';
+ 	        	$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar en tabla: MEDIA');
+					$returnValue = false;
+				}
+ 	        }
+ 	        return $returnValue;
+		}
+
+		function updateMedia($type,$id_media,$tmp_name,$pathInsert,$pathSave){
+			/*
+				change URL from MEDIA using id_media and new URL
+			*/
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!move_uploaded_file($tmp_name, $pathInsert)){
+ 	            $this->db->HandleError("NO SE PUDO GUARDAR archivo ");
+ 	            $returnValue = false;
+ 	        }else{
+ 	        	$qry = 'UPDATE media SET url="'.$pathSave.'" WHERE id_media='.$id_media;
+ 	        	$result = $this->db->updateQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo actualizar en tabla: MEDIA');
+					$returnValue = false;
+				}
+ 	        }
+ 	        return $returnValue;
+		}
+
 		/*
 		UTIL FUNCTIONS
 		*/
@@ -450,6 +836,10 @@
 
 
 		*/
+		function removeWhitespaces($str){
+			$str = str_replace(' ', '', $str);
+			return $str;
+		}
 	    function Sanitize($str,$remove_nl=true){
 	        $str = $this->StripSlashes($str);
 	        if($remove_nl){
@@ -467,11 +857,5 @@
 	        if(get_magic_quotes_gpc()){ $str = stripslashes($str);}
 	        return $str;
 	    }
-
-	    
-
-	    
-
 	}
-
 ?>

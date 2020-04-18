@@ -7,7 +7,7 @@
 	$returnData = '';
 
 	if(isset($all)){
-		if($set->insertBrand()){
+		if($set->updateCategoryPhoto()){
 			$returnValue = true;
 		}
 	}

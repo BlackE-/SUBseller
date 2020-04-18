@@ -7,7 +7,7 @@
 	$returnData = '';
 
 	if(isset($all)){
-		if($set->insertBrand()){
+		if($set->updateType($all['id_type'],$all['type_name'],$all['type_status'])){
 			$returnValue = true;
 		}
 	}

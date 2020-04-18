@@ -104,7 +104,7 @@
             else{return true;}
         }
         
-        function insertID(){
+        function lastInsertID(){
             return mysqli_insert_id($this->connection); 
         }
         function HandleError($err)   {      $this->error_message = $err."\r\n";}
@@ -202,6 +202,7 @@
                 $create = "CREATE TABLE product_type(
                                 id_product_type INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 name VARCHAR(30),
+                                status BOOLEAN,
                                 id_parent INT DEFAULT NULL
                             )";
                 $result = mysqli_query($this->connection,$create);
