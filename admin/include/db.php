@@ -265,6 +265,7 @@
                                 description TEXT, 
                                 fav BOOLEAN DEFAULT 0,
                                 out_of_stock BOOLEAN DEFAULT 0,
+                                product_related JSON COMMENT 'ARRAY OF PRODUCTS related TO THIS PRODUCT',
                                 brand_id_brand INT UNSIGNED NOT NULL,
                                 product_type_id_product_type INT UNSIGNED NOT NULL,
                                 

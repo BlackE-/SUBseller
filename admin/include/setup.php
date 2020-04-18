@@ -163,12 +163,7 @@
 				}
 
 
-				//mailchimp
-				$qry = "INSERT into settings (name,value,type) values 
-											('mailchimp_id_list','','email_mailchimp')";
-				if(!$this->db->insertQuery($qry)){
-					$returnValue = false;
-				}
+				
 				
 				//website_settings
 				$qry = "INSERT into settings (name,value,type) values 
@@ -186,17 +181,23 @@
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
-
-
-
-				//envios
 				$qry = "INSERT into settings (name,value,type) values 
-											('limit_free_delivery','1000','delivery_website')";
+											('limit_free_delivery','1000','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
-											('delivery_cost','250','delivery_website')";
+											('delivery_cost','250','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('mailchimp_id_list','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('facebook_app_id','','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
@@ -343,7 +344,6 @@
 			}
 			return $returnValue;
 		}
-
 		function insertBrand(){
 			$returnValue = true;
 			$data = $_POST;
@@ -363,7 +363,7 @@
            		if ($archivo["error"] == UPLOAD_ERR_OK) {
            			$tmp_name = $archivo["tmp_name"];
 
-   //         			//nuevo nombre de la imagen que se sube
+           			//nuevo nombre de la imagen que se sube
            				$extension = explode(".",$archivo['name']);
 	           			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
 	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
@@ -384,7 +384,6 @@
 
 			return $returnValue;
 		}
-
 		function updateBrand($id_brand,$brand_name,$brand_status){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -396,15 +395,11 @@
 			}
 			return $returnValue;
 		}
-
-
 		function updateBrandPhoto(){
 			$data = $_POST;
 			$returnValue = true;
 			$this->checkDBLogin();
-			
 			$id_media = $data['id_media'];
-
 			if(!empty($_FILES['file']['name'])){
            		$archivo = $_FILES['file'];
            		if ($archivo["error"] == UPLOAD_ERR_OK) {
@@ -420,7 +415,7 @@
 
 					$pathSave = '/img/brand/';
 					$pathSave .= $name;
-			// 		//llamada a la funcion insertMedia
+					//llamada a la funcion insertMedia
 					$img = $this->updateMedia('brand',$id_media,$tmp_name,$pathInsert,$pathSave);
 					if(!$img){
 						
@@ -432,9 +427,9 @@
 			return $returnValue;
 		}
 
-			/*
-				category
-			*/
+		/*
+			category
+		*/
 		function getCategories(){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -463,7 +458,6 @@
 			}
 			return $returnValue;
 		}
-
 		function insertCategory(){
 			$data = $_POST;
 			$returnValue = true;
@@ -475,13 +469,11 @@
 				$returnValue = false;
 			}
 			$id_category = $this->db->lastInsertID();
-			
-
 			if(!empty($_FILES['file']['name'])){
            		$archivo = $_FILES['file'];
            		if ($archivo["error"] == UPLOAD_ERR_OK) {
            			$tmp_name = $archivo["tmp_name"];
-//         			//nuevo nombre de la imagen que se sube
+        			//nuevo nombre de la imagen que se sube
        				$extension = explode(".",$archivo['name']);
            			$name = $this->removeWhitespaces($this->Sanitize($data['name']));
            			// $name .= date('Y-m-d', time()). '.' . $extension[1];
@@ -492,18 +484,16 @@
 
 					$pathSave = '/img/category/';
 					$pathSave .= $name;
-			// 		//llamada a la funcion insertMedia
+					//llamada a la funcion insertMedia
 					$img = $this->insertMedia('category',$id_category,$tmp_name,$pathInsert,$pathSave);
 					if(!$img){
 						// $this->db->HandleError($path);
 						$returnValue = false;
 					}
            		}
-           		
            	}
 			return $returnValue;
 		}
-
 		function updateCategory($id_category,$category_name,$category_status){
 			$returnValue = true;
 			$this->checkDBLogin();

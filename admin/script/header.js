@@ -3,4 +3,8 @@
 	const urlArray = newURL.split('/');
 	const urlActive = urlArray[urlArray.length-1];
 	const liActive = '#sidebar ul #nav_'+urlActive;
-	document.querySelector(liActive).classList.add('active');
+
+	const active = document.querySelector(liActive);
+	if(typeof liActive === null){
+		active.classList.add('active');
+	}

@@ -1,0 +1,4 @@
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 2fr 1fr;grid-template-rows: auto auto auto;grid-gap: 10px; }
+
+/*.mainContainer #main button{width:100%;max-width:250px;height:40px;background: #b7002a;border:1px solid transparent;border-radius:5px;color:#fff;transition:all 300ms ease-in; }*/
+/*.mainContainer #main button:hover{background: #fff;color:#b7002a;border:1px solid #b7002a;}*/

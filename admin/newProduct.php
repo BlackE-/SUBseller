@@ -13,8 +13,8 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<link rel="stylesheet" type="text/css" href="script/chosen/chosen.css" />
-	<link rel="stylesheet" type="text/css" href="css/product.css">
+	<link rel="stylesheet" type="text/css" href="script/selectr/selectr.css">
+	<link rel="stylesheet" type="text/css" href="css/productNew.css">
 </head>
 <body>
 	<?php include('header.php');?>
@@ -34,25 +34,35 @@
 			<div class="product_settings">
 				<p>Marca</p>
 				<?php
-					// echo '<select data-placeholder="Marca" class="chosen-select">';
-     //                while($prodR = mysql_fetch_array($prod)){
-     //                    echo '<option value="'.$prodR['id_producto'].'">'.$prodR['nombre'].'</option>';
-     //                }
-     //                echo '</select>';
+					$brands = $set->getBrands();
+					echo '<select id="brandSelect">';
+                    foreach ($brands as $key => $value) {
+                    	$brand = $value['brand'];
+                        echo '<option value="'.$brand['id_brand'].'">'.$brand['name'].'</option>';      
+                    }
+                    echo '</select>';
 				?>
 				<p>Categoría</p>
 				<div>
 					<?php
-						// echo '<select data-placeholder="Elegir tags" multiple class="chosen-select-categories">';
-      //                   while($prodR = mysql_fetch_array($prod)){
-      //                       echo '<option value="'.$prodR['id_tag'].'">'.$prodR['valor'].'</option>';
-      //                   }
-      //                   echo '</select>';
+						$categories = $set->getCategories();
+						echo '<select id="categorySelect">';
+	                    foreach ($categories as $key => $value) {
+	                    	$category = $value['category'];
+	                        echo '<option value="'.$category['id_category'].'">'.$category['name'].'</option>';      
+	                    }
+	                    echo '</select>';
 					?>
 				</div>
 				<p>Tipo</p>
 				<?php
-					//$type = $set->getType();
+					$types = $set->getTypes();
+					echo '<select id="typeSelect">';
+                    foreach ($types as $key => $value) {
+                    	$type = $value['type'];
+                        echo '<option value="'.$type['id_type'].'">'.$type['name'].'</option>';      
+                    }
+                    echo '</select>';
 				?>
 				<p>Unidad</p>
 				<select name="unit">
@@ -61,14 +71,45 @@
 					<option value="kg">Kilo</option>
 					<option value="lt">Litro</option>
 				</select>
-				
 			</div>
 			<div class="product_img"></div>
-			<div class="product_img"></div>
+			<div class="product_settings">
+				<div class="statusContainerDiv">
+					<p>Status</p>
+					<div class="statusContainer">
+						<input type="checkbox" class="status" id="status" checked>
+						<label for="status"></label>
+					</div>
+				</div>
+				<div class="favoriteContainerDiv">
+					<p>Favorito</p>
+					<div class="favoriteContainer">
+						<input type="checkbox" class="favorite" id="favorite">
+						<label for="favorite"></label>
+					</div>
+				</div>
+
+				<div class="productorRelacionadosContainerDiv">
+					<p>Productos relacionados</p>
+					<p>select multiple</p>
+				</div>
+
+				<div class="tagsContainerDiv">
+					<p>Tags</p>
+					<form action="">
+						<select name="" id="taggable">
+							<option value="foo">foo</option>
+						</select>			
+					</form>	
+				</div>
+
+
+
+			</div>
 		</div>
 	</div>
 	<?php include('footer.php');?>
-	<script src="script/chosen/chosen.jquery.js"></script>
-	<script type="text/javascript" src="newProduct.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/mobius1/selectr@latest/dist/selectr.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="script/newProduct.js"></script>
 </body>
 </html>
