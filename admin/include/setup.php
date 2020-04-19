@@ -172,6 +172,21 @@
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
+											('description','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('keywords','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('favicon_url','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
 											('from_email','".$formvars['email'] . "','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
@@ -665,6 +680,42 @@
            		}
            		
            	}
+			return $returnValue;
+		}
+
+		function getTags(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM tag ORDER BY id_tag';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tags aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tags aun');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data, array('id_tag'=>$row['id_tag'],'name'=>$row['name']));
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertTag($name){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'INSERT INTO tag (name) VALUES ("'.$name.'")';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar tag');
+				$returnValue = false;
+			}
+			$returnValue = $this->db->lastInsertID();
 			return $returnValue;
 		}
 

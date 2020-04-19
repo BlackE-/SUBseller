@@ -12,7 +12,6 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<link rel="stylesheet" type="text/css" href="script/datatables/datatables.min.css" />
 	<link rel="stylesheet" type="text/css" href="css/store.css" />
 </head>
 <body>
