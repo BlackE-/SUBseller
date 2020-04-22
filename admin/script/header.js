@@ -2,9 +2,12 @@
 	// console.log(newURL);
 	const urlArray = newURL.split('/');
 	const urlActive = urlArray[urlArray.length-1];
-	const liActive = '#sidebar ul #nav_'+urlActive;
-
-	const active = document.querySelector(liActive);
-	if(typeof liActive === null){
-		active.classList.add('active');
+	if(!urlActive.includes('?')){
+		const liActive = '#nav_'+urlActive;
+		const active = document.querySelector(liActive);
+		if(active !== null){
+			// console.log(typeof active);
+			active.classList.add('active');
+		}
 	}
+	

@@ -28,6 +28,15 @@
 					sendString += index +  '=' + value + '&';
 				}
 			}
+
+			const textarea = document.querySelectorAll('textarea');
+			for (const prop in textarea) {
+			  	if(!Object.is(textarea[prop].value,undefined)){
+			  		let index = textarea[prop].name;
+			  		let value = textarea[prop].value;
+					sendString += index +  '=' + value + '&';
+				}
+			}
 			// console.log(sendString);
 
 			let xmlhttp = new XMLHttpRequest();

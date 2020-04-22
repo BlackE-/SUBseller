@@ -22,7 +22,7 @@
 	  text-align: center;
 	}
 	.modal-header{height: 30px;background-color: #d6232e;position: relative;}
-	.modal-body{height: 70px;padding:20px 0;}
+	.modal-body{height: auto;padding:20px 0;}
 
 	/* The Close Button */
 	.closeModal {
@@ -69,7 +69,8 @@
 <div class="modal" id="modal">
 	<div class="modal-content">
     	<div class="modal-header">
-			<span class="closeModal">&times;</span>
+			<!-- <span class="closeModal">&times;</span> -->
+			<span class="closeModal"></span>
 		</div>
 		<div class="modal-body">
 			<div class="lds-dual-ring"></div>

@@ -13,16 +13,18 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<link rel="stylesheet" type="text/css" href="script/selectr/selectr.css">
+	<!-- <link rel="stylesheet" type="text/css" href="script/selectr/selectr.css"> -->
+	<link rel="stylesheet" type="text/css" href="script/chosen/chose.min.css">
 	<link rel="stylesheet" type="text/css" href="css/productNew.css">
 </head>
 <body>
 	<?php include('header.php');?>
 	<div class="mainContainer" id="mainContainer">
 		<?php include('sidebar.php');?>
+		<form id="newProductForm">
 		<div id="main" class="main">
 			<div class="returnDiv">
-				<a href="products.php"><i class="fas fa-angle-left"></i> Productos</a>
+				<a href="products"><i class="fas fa-angle-left"></i> Productos</a>
 				<h1>Nuevo Producto</h1>	
 			</div>
 			<div class="leftDiv">
@@ -91,8 +93,8 @@
 			</div>
 			<div class="rightDiv">
 				<div class="saveContainer">
-					<a href="products"><button id="cancel">Cancelar</button></a>
-					<button id="saveNewProduct">Guardar</button>
+					<a href="products" id="cancel">Cancelar</a>
+					<input type='submit' id="saveNewProduct" value="GUARDAR"/>
 				</div>
 				<div class="product_settings">
 					<h4>Organización</h4>
@@ -197,16 +199,16 @@
 						</select>	
 					</div>
 				</div>
-				
 			</div>
-			
-			
-			
 		</div>
+		</form>
 	</div>
 	<?php include ('modal.php');?>
 	<?php include('footer.php');?>
-	<script src="https://cdn.jsdelivr.net/gh/mobius1/selectr@latest/dist/selectr.min.js" type="text/javascript"></script>
+
+	<!-- <script src="https://cdn.jsdelivr.net/gh/mobius1/selectr@latest/dist/selectr.min.js" type="text/javascript"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="script/chose/chose..query.min.js"></script>
 	<script type="text/javascript" src="script/newProduct.js"></script>
 </body>
 </html>

@@ -6,7 +6,9 @@
 		header("Location: login"); 
 		exit;
 	}
-	$url = substr($_SERVER['REQUEST_URI'], 0, -12);
+	// $url = substr($_SERVER['REQUEST_URI'], 0, -13);
+	$path = explode('admin',$_SERVER['REQUEST_URI']);
+	$url = $path[0];
 ?>
 <!DOCTYPE html>
 <html>
@@ -153,5 +155,5 @@
 		</div>
 	</div>
 	<?php include('footer.php');?>
-	<script type="text/javascript" src="script/store.js"></script>
+	<script type="text/javascript" src="script/options.js"></script>
 </html>

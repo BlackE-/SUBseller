@@ -63,14 +63,22 @@
 								echo '<input type="password" name="'.$value['key'].'" value='.$value['value'].'>';
 							}
 							else{
-								echo '<input type="text" name="'.$value['key'].'" value='.$value['value'].'>';
+								if(strpos($value['key'], 'code') !== false){
+									echo '<textarea name="'.$value['key'].'">'.$value['value'].'</textarea>';
+								}else{
+									echo '<input type="text" name="'.$value['key'].'" value='.$value['value'].'>';
+								}
+								
 							}
 						}
 						$count++;
 					}
 				?>
 				</div>
-				<input type="submit" value="GUARDAR CAMBIOS" />
+				<div class="inputContainer">
+					<input type="submit" value="GUARDAR CAMBIOS" />
+				</div>
+				
 			</form>
 
 			    </div>

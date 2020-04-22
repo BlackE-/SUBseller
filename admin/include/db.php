@@ -199,8 +199,8 @@
                     $returnValue = false;
                     $this->HandleDBError('Error creating tables');
                 }
-                $create = "CREATE TABLE product_type(
-                                id_product_type INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                $create = "CREATE TABLE type(
+                                id_type INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 name VARCHAR(30),
                                 status BOOLEAN,
                                 id_parent INT DEFAULT NULL
@@ -241,7 +241,7 @@
                 $create = "CREATE TABLE settings(
                                 id_settings INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 name VARCHAR(45),
-                                value VARCHAR(100),
+                                value TEXT,
                                 type VARCHAR(50)
                             )";
                 $result = mysqli_query($this->connection,$create);
@@ -252,7 +252,7 @@
 
                 $create = "CREATE TABLE product(
                                 id_product INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                sku VARCHAR(50) NOT NULL COMMENT 'UNIQUE CODE FOR PRODUCT',
+                                sku VARCHAR(50) NOT NULL UNIQUE COMMENT 'UNIQUE CODE FOR PRODUCT',
                                 name VARCHAR(45),
                                 price_base DECIMAL(10,2) COMMENT 'UNIT PRICE',
                                 price_sale DECIMAL(10,2) NOT NULL COMMENT 'PRICE FOR SALE',
@@ -267,17 +267,17 @@
                                 out_of_stock BOOLEAN DEFAULT 0,
                                 product_related JSON COMMENT 'ARRAY OF PRODUCTS related TO THIS PRODUCT',
                                 brand_id_brand INT UNSIGNED NOT NULL,
-                                product_type_id_product_type INT UNSIGNED NOT NULL,
+                                type_id_type INT UNSIGNED NOT NULL,
                                 
                                 INDEX (brand_id_brand),
-                                INDEX (product_type_id_product_type),
+                                INDEX (type_id_type),
                                 
                                 FOREIGN KEY (brand_id_brand)
                                     REFERENCES brand(id_brand)
                                     ON DELETE NO ACTION ON UPDATE CASCADE,
                                 
-                                FOREIGN KEY (product_type_id_product_type)
-                                    REFERENCES product_type(id_product_type)
+                                FOREIGN KEY (type_id_type)
+                                    REFERENCES type(id_type)
                                     ON DELETE NO ACTION ON UPDATE CASCADE
                             )";
                 $result = mysqli_query($this->connection,$create);
@@ -286,8 +286,8 @@
                     $this->HandleDBError('Error creating tables');
                     exit();
                 }
-                $create = "CREATE TABLE tag_product(
-                            id_tag_product INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                $create = "CREATE TABLE product_tag(
+                            id_product_tag INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                             product_id_product INT UNSIGNED,
                             tag_id_tag INT UNSIGNED,
                             
@@ -331,6 +331,24 @@
                                 id_product_inventory INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 product_id_product INT UNSIGNED,
                                 stock INT DEFAULT 0,
+
+                                INDEX (product_id_product),
+                                
+                                FOREIGN KEY(product_id_product)
+                                    REFERENCES product(id_product)
+                                    ON DELETE NO ACTION ON UPDATE CASCADE
+                            )";
+                $result = mysqli_query($this->connection,$create);
+                if(!$result){
+                    $returnValue = false;
+                    $this->HandleDBError('Error creating tables');
+                }
+                $create = "CREATE TABLE product_movement(
+                                id_product_movement INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                product_id_product INT UNSIGNED,
+                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                stock INT,
+                                type VARCHAR(20),
 
                                 INDEX (product_id_product),
                                 

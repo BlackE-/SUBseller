@@ -7,7 +7,6 @@
 		header('Location: init.php');
 		exit;
 	}
-	
 	$CheckLogin = $set->CheckLogin();
 	if(!$CheckLogin){
 		echo $set->getErrorMessage();

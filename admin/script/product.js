@@ -1,24 +1,61 @@
-
 	const addTemporaryClass = (element, className,duration) =>{
         setTimeout(()=>{
             element.classList.remove(className);
         },duration);
         element.classList.add(className);
     }
-	let tagsSelect = [];
-	let tagsSelectMap = new Map();
-	
 	const brand = new Selectr('#brandSelect');
 	const category = new Selectr('#categorySelect');
 	const type = new Selectr('#typeSelect');
-	const productsSelect = document.querySelector('.productsSelect');
-	if(productsSelect !== null){const products = new Selectr('#productsSelect');}
-	const tags = new Selectr('#taggable',{taggable: true,tagSeperators: [",", "|"]});
+	const productsSelect = document.querySelector('#productsSelect');
+	if(productsSelect !== null){const products = new Selectr('#productsSelect',{multiple:true});}
+	// const tags = new Selectr('#taggable',{taggable: true,tagSeperators: [",", "|"]});
+	// const tags = new Selectr('#taggable',{taggable: true});
+	const tags = new Selectr('#taggable',{multiple:true});
+
+
+	function updateTag(id_tag,type){
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+				}else{
+					console.log(myObj.message);
+				}
+			}
+		}
+		xhttp.open("POST", "./include/PRODUCT-updateTag.php", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(`id_product=${document.querySelector('#id_product').value}&id_tag=${id_tag}&type=${type}`);
+	}
+	function updateCategory(id_category,type){
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+				}else{
+					console.log(myObj.message);
+				}
+			}
+		}
+		xhttp.open("POST", "./include/PRODUCT-updateTag.php", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(`id_product=${document.querySelector('#id_product').value}&id_category=${$id_category}&type=${type}`);
+	}
+
+
 	tags.on('selectr.select', function(option) {
 		const id_tag = option.value;
 		const name_tag = option.innerHTML;
 		if(Number.isInteger(parseInt(id_tag))){
-			tagsSelectMap.set(id_tag,id_tag);
+			//guardar el tag que ya existe en la tabla product_tag
+			console.log(id_tag);
+			updateTag(id_tag,'add');
 		}else{
 			let xhttp = new XMLHttpRequest();
 			xhttp.onreadystatechange = function() {
@@ -27,7 +64,9 @@
 					if(!myObj.return){
 						console.log(myObj.message);
 					}else{
-						tagsSelectMap.set(id_tag,myObj.return);
+						//guardarlo en la 
+						console.log(myObj.return);
+						updateTag(myObj.return,'add');
 					}
 				}
 			}
@@ -38,72 +77,114 @@
 	});
 	tags.on('selectr.deselect', function(option) {
 		const id_tag_2 = option.value;
-		tagsSelectMap.delete(id_tag_2);
+		console.log(id_tag_2);
+		updateTag(id_tag_2,'delete');
 	});
 	
 
 	const fileInput = document.getElementById('product_primary');
 	const fileInput2 = document.getElementById('product_secondary');
 	fileInput.addEventListener('change',function(e){
-		let input_ = this;
-		let label_ = input_.nextElementSibling;
-		let labelVal = label_.innerHTML;
+		const file = fileInput.files[0];
+		let id_product = this.getAttribute('title');
+		let id_media = this.getAttribute('name');
+		let sku = document.querySelector('#sku').value;
+		if(id_media === null){
+			id_media = 0;
+		}
+		let formData = new FormData();
+		formData.append('file', file);
+		formData.append('id_media', id_media);
+		formData.append('sku', sku);
+		formData.append('id_product', id_product);
+		formData.append('type', 'product');
 
-		let fileName;
-		if(this.files && this.files.length > 1){
-			fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}',this.files.length);
-		}else if(e.target.value)
-			fileName = e.target.value.split( '\\').pop();
-
-		if(fileName)
-			label_.innerHTML = fileName;
-		else
-			label_.innerHTML = labelVal;
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+				}else{
+					location.reload();
+				}
+			}
+		}
+		xhttp.open("POST", "./include/PRODUCT-setImage.php", true);
+    	// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(formData);
 	});
 
 	fileInput2.addEventListener('change',function(e){
-		let input_ = this;
-		let label_ = input_.nextElementSibling;
-		let labelVal = label_.innerHTML;
+		const file2 = fileInput2.files[0];
+		let id_product = this.getAttribute('title');
+		let sku = document.querySelector('#sku').value;
+		let formData = new FormData();
+		formData.append('file', file2);
+		formData.append('id_media', 0);
+		formData.append('sku', sku);
+		formData.append('id_product', id_product);
+		formData.append('type', 'product_secondary');
 
-		let fileName;
-		if(this.files && this.files.length > 1){
-			fileName = (this.getAttribute('data-multiple-caption') || '').replace('{count}',this.files.length);
-		}else if(e.target.value)
-			fileName = e.target.value.split( '\\').pop();
-
-		if(fileName)
-			label_.innerHTML = fileName;
-		else
-			label_.innerHTML = labelVal;
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+				}else{
+					location.reload();
+				}
+			}
+		}
+		xhttp.open("POST", "./include/PRODUCT-setImage.php", true);
+    	// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(formData);
 	});
+
+	const removeImages = document.querySelectorAll('.removeImage');
+	for (const removeImage of removeImages) {
+	  	removeImage.addEventListener('click', function(event) {
+			let id_media = this.getAttribute("id");
+			let id_product = this.getAttribute("name");
+
+			let xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.response);
+					myObj = JSON.parse(this.response);
+					if(!myObj.return){
+						console.log(myObj.message);
+					}else{
+						location.reload();
+					}
+				}
+			}
+			xhttp.open("POST", "./include/PRODUCT-removeImage.php", true);
+			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	    	xhttp.send(`id_media=${id_media}&id_product=${id_product}`);
+		});
+	}
 
 	const modalBody = document.querySelector('.modal-body');
 	const para = document.createElement("P");
 	para.setAttribute("id", "modalNote");
 	para.innerText = "Faltan datos"; 
-	modalBody.appendChild(para);
-
-	const a = document.createElement('a');
- 	a.href = "products";
- 	a.appendChild(document.createTextNode('Productos'));
- 	a.style.display = 'none'; 
-	modalBody.appendChild(a); 
+	modalBody.appendChild(para); 
 
 	const list = document.querySelector(".modal-body p"); 
-	const loading = document.querySelector(".lds-dual-ring"); 
 	errorMessage = (message) =>{
 		para.innerText = message;
 		list.style.opacity = '1';
-		// loading.style.opacity = '0';
 		setTimeout(function(){
 			list.style.opacity = '0';
-			// loading.style.opacity = '1';
 			closeModalFunction();
 		},2000);
 	}
 
-	document.querySelector('#newProductForm').addEventListener('submit',function(e){
+	document.querySelector('#productForm').addEventListener('submit',function(e){
 		e.preventDefault();
 		openModalFunction();
 		const name = document.querySelector('#name');
@@ -159,30 +240,11 @@
         else{
             discount = 0.0;
         }
-
-		const sku = document.querySelector('#sku');
-		if(sku.value.length === 0){
-			errorMessage("Falta SKU");
-			addTemporaryClass(sku ,'animated', 1000);
-            addTemporaryClass(sku ,'swing', 1000);
-			return false;
-		}
-
-		const stock = document.querySelector('#stock');
-		if(stock.value.length === 0){
-			errorMessage("Falta inventario (stock)");
-			addTemporaryClass(stock ,'animated', 1000);
-            addTemporaryClass(stock ,'swing', 1000);
-			return false;
-		}
-
 		const brandSelect = document.querySelector('#brandSelect').value;
 		const categorySelect = document.querySelector('#categorySelect').value;
 		const typeSelect = document.querySelector('#typeSelect').value;
+		console.log(typeSelect);
 		const unitSelect = document.querySelector('#unit').value;
-		for (let value of tagsSelectMap.values()) {
-		  tagsSelect.push(value);
-		}
         const status = document.querySelector("#status").checked; 
         const fav = document.querySelector("#favorite").checked; 
 		
@@ -191,24 +253,16 @@
 			productsRelated = document.querySelector('#productsSelect').value;
 		}
 		
-		
-		const file = fileInput.files[0];
-		if(!file){errorMessage("Falta imagen");return false;}
-		const file2 = fileInput2.files[0];
-		// if(!file2){return false;}
 
 		let formData = new FormData();
+		formData.append('id_product', document.querySelector('#id_product').value);
 		formData.append('name', name.value);
 		formData.append('description', description.value);
 		formData.append('description_short', description_short.value);
 		formData.append('tiempo_de_uso', tiempo_de_uso.value);
-		formData.append('file', file);
-		formData.append('file_secondary', file2);
 		formData.append('price_sale', price_sale.value);
 		formData.append('price_base', price_base.value);
 		formData.append('discount', discount);
-		formData.append('sku', sku.value);
-		formData.append('stock', stock.value);
 		formData.append('brand', brandSelect);
 		formData.append('category', categorySelect);
 		formData.append('type', typeSelect);
@@ -216,7 +270,6 @@
 		formData.append('status', status);
 		formData.append('fav', fav);
 		formData.append('productsRelated', productsRelated);
-		formData.append('tags', tagsSelect);
 
 		list.style.opacity = '0';
 		let xhttp = new XMLHttpRequest();
@@ -228,14 +281,14 @@
 					console.log(myObj.message);
 					para.innerText = myObj.message;
 				}else{
-					console.log('producto Guardado');
-					list.style.opacity = '1';
-					para.innerText = 'Producto Guardado';
-					a.style.display = 'block';
+					location.reload();
+					// console.log('producto Guardado');
+					// list.style.opacity = '1';
+					// para.innerText = 'Producto Guardado';
 				}
 			}
 		}
-		xhttp.open("POST", "./include/PRODUCT_NEW-insertProduct.php", true);
+		xhttp.open("POST", "./include/PRODUCT-updateProduct.php", true);
     	// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send(formData);
 	});

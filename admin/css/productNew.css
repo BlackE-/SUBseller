@@ -28,7 +28,7 @@ input[type=number] {  -moz-appearance: textfield;}
 */
 .mainContainer #main .saveContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 20px;border-radius: 2px;display: grid;grid-template-columns: 1fr 1fr;grid-gap:10px;}
 .mainContainer #main .saveContainer #saveNewProduct{background: #b7002a;color:#fff;border:0; width: 100%;padding: 5px;}
-.mainContainer #main .saveContainer #cancel{background: #fff;color:#000;border:1px solid; width: 100%;padding: 5px;}
+.mainContainer #main .saveContainer #cancel{background: #fff;color:#000;border:1px solid; padding: 5px;text-align: center;text-decoration: none;}
 /*
 	PRODUCT DATA
 */

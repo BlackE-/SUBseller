@@ -187,6 +187,11 @@
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
+											('tracking_code','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
 											('from_email','".$formvars['email'] . "','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
@@ -308,7 +313,7 @@
 		function getProducts(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM products ORDER BY id_products';
+			$qry = 'SELECT * FROM product ORDER BY id_product';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No productos');
@@ -323,6 +328,434 @@
 			}
 			return $returnValue;
 		}
+
+		function getProduct($id_product){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM product WHERE id_product='.$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No producto');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No producto');
+					$returnValue = false;
+				}else{
+					$returnValue = $this->db->fetchArray($result);
+				}
+			}
+			return $returnValue;
+
+		}
+
+		function getInventario($id_product){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT stock FROM product_inventory WHERE product_id_product='.$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No productos');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No productos');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['stock'];
+				}
+			}
+			return $returnValue;
+		}
+
+		function setProductStatus($id_product,$status){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE product SET status='.$status.' WHERE id_product ='.$id_product;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
+		function setProductFav($id_product,$fav){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE product SET fav='.$fav.' WHERE id_product ='.$id_product;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError('No update');
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
+		function importProducts(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$error = false;
+	        $archivo = $_FILES['file'];
+	        if ($archivo["error"] == UPLOAD_ERR_OK) {
+	            $folderName = "../files/";
+	            
+	            $coso = explode(".",$archivo['name']);
+	            $name = $coso[0].date("m-d-Y_hia").".".$coso[1];
+	            $tmp_name = $archivo["tmp_name"];
+	            $ruta = $folderName . $name;
+	            
+	            if(!move_uploaded_file($tmp_name, $ruta)){
+	                $this->HandleError("NO SE PUDO GUARDAR archivo ".$ruta);
+	                $error = true;
+	                $returnValue = false;
+	            }
+	        }
+	        if($error == false){
+	            $HANDLE = fopen($ruta,'r') or die ('CANT OPEN FILE');;
+	            $DATA = fread($HANDLE,filesize($ruta));
+	            fclose($HANDLE);
+	            $renglones = explode(PHP_EOL,$DATA);
+	            foreach($renglones as $key=>$value){
+	            	if($key != 0){
+		                $error1 = false;
+		                $data = explode(",",$value);
+		                if(sizeof($data)>1){
+							$name = $data[0];
+			                $description = $data[1];
+			                $description_short = $data[2];
+			                $tiempo_de_uso = $data[3];
+			                $unidad = $data[4];
+			                $price_base = $data[5];
+			                $price_sale = $data[6];
+			                $sku = $data[7];
+			                $stock = $data[8];
+			                
+				            $qry = 'INSERT INTO product (name,description,description_short,tiempo_de_uso,price_base,price_sale,discount,sku,out_of_stock,brand_id_brand,type_id_type,unit,status,fav,product_related) 
+							VALUES(
+							"'.$this->Sanitize($name).'",
+							"'.$this->Sanitize($description).'",
+							"'.$this->Sanitize($description_short).'",
+							"'.$this->Sanitize($tiempo_de_uso).'",
+							'.(double)$price_base.',
+							'.(double)$price_sale.',
+							0,
+							"'.$this->removeWhitespaces($sku).'",
+							0,
+							1,
+							1,
+							"'.$unidad.'",
+							"1",
+							"0",
+							"0")';
+
+							$result = $this->db->insertQuery($qry);
+							if(!$result){
+								$this->db->HandleError('No INSERT');
+								$returnValue = false;
+								break;
+							}else{
+								$id_product = $this->db->lastInsertID();
+								$qry = 'INSERT INTO product_inventory (product_id_product,stock) VALUES ('.$id_product.','.$stock.')';
+								$result = $this->db->insertQuery($qry);
+								if(!$result){
+									$this->db->HandleDBError('No insert');
+									$returnValue = false;
+								}
+
+								$qry = 'INSERT INTO product_movement (product_id_product,stock,date_created,type) VALUES ('.$id_product.','.$stock.',NOW(),"INGRESO")';
+								$result = $this->db->insertQuery($qry);
+								if(!$result){
+									$this->db->HandleDBError('No insert');
+									$returnValue = false;
+								}
+							}
+						}
+					}
+				}
+	        }
+	        return $returnValue;
+		}
+
+
+
+		/*	NEW PRODUCT 	*/
+		function insertProduct(){
+			$data = $_POST;
+			$returnValue = true;
+
+			$this->checkDBLogin();
+			$qry = 'INSERT INTO product (name,description,description_short,tiempo_de_uso,price_base,price_sale,discount,sku,out_of_stock,brand_id_brand,type_id_type,unit,status,fav,product_related) 
+				VALUES(
+				"'.$this->Sanitize($data['name']).'",
+				"'.$this->Sanitize($data['description']).'",
+				"'.$this->Sanitize($data['description_short']).'",
+				"'.$this->Sanitize($data['tiempo_de_uso']).'",
+				'.(double)$data['price_base'].',
+				'.(double)$data['price_sale'].',
+				'.(double)$data['discount'].',
+				"'.$this->removeWhitespaces($data['sku']).'",
+				0,
+				"'.$data['brand'].'",
+				"'.$data['type'].'",
+				"'.$data['unit'].'",
+				"'.$data['status'].'",
+				"'.$data['fav'].'",
+				"'.$data['productsRelated'].'")';
+
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError('No se pudo guardar el producto');
+				$returnValue = false;
+				return $returnValue;
+			}
+
+			$id_product = $this->db->lastInsertID();
+
+			//producto inventario
+	        $qry = 'INSERT INTO product_inventory (product_id_product,stock) VALUES ("'.$id_product.'",'.$data['stock'].')';
+	        $result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar el inventario');
+				$returnValue = false;
+			}	
+	    	
+	    	//relacion producto categoria
+	    	$categoryList = explode(',', $data['category']);
+	    	foreach ($categoryList as $key => $value) {
+	    		$qry = "INSERT INTO product_category (category_id_category,  product_id_product ) VALUES (".$value.",".$id_product.")";
+		        $result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar la categoria');
+					$returnValue = false;
+				} 
+	    	}
+	    	
+	    	//tags
+	    	if(isset($data['tags']) && !empty($data['tags'])){
+	    	    $allCheck = true;
+	        	$tag = explode(",", $data['tags']);
+	        	foreach($tag as $key3 => $value3){
+	        	    $ins = "INSERT INTO product_tag (product_id_product,tag_id_tag) VALUES (".$id_product.",".$value3.")";
+	            	$result = $this->db->insertQuery($qry);
+					if(!$result){
+						$this->db->HandleError('No se pudo guardar la tags');
+						$returnValue = false;
+					} 
+	        	}
+	    	    
+	    	}
+	    	if(isset($_FILES['file']) && !empty($_FILES['file'])){
+           		$archivo = $_FILES['file'];
+           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+           			$tmp_name = $archivo["tmp_name"];
+
+           			//nuevo nombre de la imagen que se sube
+           				$extension = explode(".",$archivo['name']);
+	           			$name = $this->removeWhitespaces($this->Sanitize($data['sku']));
+	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+           			//path a la carpeta de brands
+					$pathInsert = '../../img/product/';
+					$pathInsert .= $name;
+
+					$pathSave = '/img/product/';
+					$pathSave .= $name;
+					$img = $this->insertMedia('product',$id_product,$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+           		}
+           		
+           	}
+
+           	if (isset($_FILES['file_secondary']) && !empty($_FILES['file_secondary'])) {
+	            $numFiles = count($_FILES["file_secondary"]['name']);
+	            for ($i = 0; $i < $numfiles; $i++) {
+	                if ($_FILES["file_secondary"]["error"][$i] == UPLOAD_ERR_OK) {
+	                    $tmp_name = $archivo["tmp_name"];
+
+	           			//nuevo nombre de la imagen que se sube
+	           				$extension = explode(".",$archivo['name']);
+		           			$name = $this->removeWhitespaces($this->Sanitize($data['sku'].'-'.$i));
+		           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+	           			//path a la carpeta de brands
+						$pathInsert = '../../img/product/';
+						$pathInsert .= $name;
+
+						$pathSave = '/img/product/';
+						$pathSave .= $name;
+						$img = $this->insertMedia('product_secondary',$id_product,$tmp_name,$pathInsert,$pathSave);
+						if(!$img){
+							$returnValue = false;
+						}
+	                }
+	            }
+	        }
+			return $returnValue;
+		}
+
+		/*
+			PRODUCT
+		*/
+		function getProductCategories($id_product){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM  product_category WHERE product_id_product ='.$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No marcas');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No marcas');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data, $row['id_category']);
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getProductTags($id_product){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM  product_tag WHERE product_id_product ='.$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tags');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tags');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,$row['tag_id_tag']);
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function setImage(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+       		$archivo = $_FILES['file'];
+       		if ($archivo["error"] == UPLOAD_ERR_OK) {
+       			$tmp_name = $archivo["tmp_name"];
+
+       			//nuevo nombre de la imagen que se sube
+       				$extension = explode(".",$archivo['name']);
+           			$name = $this->removeWhitespaces($this->Sanitize($data['sku']));
+           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+       			//path a la carpeta de brands
+				$pathInsert = '../../img/product/';
+				$pathInsert .= $name;
+
+				$pathSave = '/img/product/';
+				$pathSave .= $name;
+
+
+				if($data['id_media'] == 0){
+					$img = $this->insertMedia($data['type'],$data['id_product'],$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+				}else{
+					// function updateMedia($type,$id_media,$tmp_name,$pathInsert,$pathSave){
+					$img = $this->updateMedia($data['type'],$data['id_media'],$tmp_name,$pathInsert,$pathSave);
+					if(!$img){
+						$returnValue = false;
+					}
+				}
+       		}
+			return $returnValue;
+		}
+
+		function updateProduct(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE  product SET name = "'.$this->Sanitize($data['name']).'",
+										description="'.$this->Sanitize($data['description']).'",
+										description_short="'.$this->Sanitize($data['description_short']).'",
+										tiempo_de_uso="'.$this->Sanitize($data['tiempo_de_uso']).'",
+										price_base='.(double)$data['price_base'].',
+										price_sale='.(double)$data['price_sale'].',
+										discount='.(double)$data['discount'].', 
+										brand_id_brand="'.$data['brand'].'",
+										type_id_type="'.$data['type'].'",
+										unit="'.$data['unit'].'",
+										status="'.$data['status'].'",
+										fav="'.$data['fav'].'",
+										product_related = "'.$data['productsRelated'].'" WHERE id_product = '.$data['id_product'];
+			$returnValue = false;
+			$this->db->HandleError($qry);
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError('No se pudo actualizar el producto');
+				$returnValue = false;
+				return $returnValue;
+			}
+			return $returnValue;
+		}
+
+		function updateCategoryProduct($id_product,$id_category,$type){
+			$returnValue = true;
+			$this->checkDBLogin();
+			switch ($type) {
+				case 'add':
+					$qry = 'INSERT INTO product_category (product_id_product,category_id_category) VALUES ('.$id_product.','.$id_category.')';
+					$result = $this->db->insertQuery($qry);
+					if(!$result){
+						$this->db->HandleError('No se guardo category');
+						$returnValue = false;
+					}
+					break;
+				case 'delete':
+					$qry = 'DELETE FROM product_category WHERE category_id_category='.$id_category . ' AND product_id_product='.$id_product;
+					$result = $this->db->deleteQuery($qry);
+					if(!$result){
+						$this->db->HandleError('No se elimino category');
+						$returnValue = false;
+					}
+					break;
+			}
+			return $returnValue;
+		}
+
+		function updateTagProduct($id_product,$id_tag,$type){
+			$returnValue = true;
+			$this->checkDBLogin();
+			switch ($type) {
+				case 'add':
+					$qry = 'INSERT INTO product_tag (product_id_product,tag_id_tag) VALUES ('.$id_product.','.$id_tag.')';
+					$result = $this->db->insertQuery($qry);
+					if(!$result){
+						$this->db->HandleDBError('No se guardo tag'.$qry);
+						$returnValue = false;
+					}
+					break;
+				case 'delete':
+					$qry = 'DELETE FROM product_tag WHERE tag_id_tag='.$id_tag . ' AND product_id_product='.$id_product;
+					$result = $this->db->deleteQuery($qry);
+					if(!$result){
+						$this->db->HandleDBError('No se elimino tag'.$qry);
+						$returnValue = false;
+					}
+					break;
+			}
+			return $returnValue;
+		}
+
 
 		/*
 			STORE
@@ -395,8 +828,6 @@
            		}
            		
            	}
-			return $returnValue;
-
 			return $returnValue;
 		}
 		function updateBrand($id_brand,$brand_name,$brand_status){
@@ -520,7 +951,6 @@
 			}
 			return $returnValue;
 		}
-
 		function updateCategoryPhoto(){
 			$data = $_POST;
 			$returnValue = true;
@@ -554,14 +984,13 @@
            	}
 			return $returnValue;
 		}
-
 		/*
 			TYPES
 		*/
 		function getTypes(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM product_type ORDER BY id_product_type';
+			$qry = 'SELECT * FROM type ORDER BY id_type';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No tipos aun');
@@ -573,8 +1002,8 @@
 				}else{
 					$array_data = array();
 					while($row = $this->db->fetchArray($result)){
-						$img = $this->getMedia($row['id_product_type'],'type');
-						$img_mobile = $this->getMedia($row['id_product_type'],'type_mobile');
+						$img = $this->getMedia($row['id_type'],'type');
+						$img_mobile = $this->getMedia($row['id_type'],'type_mobile');
 						if(!$img && !$img2){
 							array_push($array_data, array('type'=>$row,'media'=>false));
 						}else{
@@ -592,7 +1021,7 @@
 			$data = $_POST;
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'INSERT INTO product_type(name,id_parent,status) VALUES ("'.$data['name'].'",0,1) ';
+			$qry = 'INSERT INTO type(name,id_parent,status) VALUES ("'.$data['name'].'",0,1) ';
 			$result = $this->db->insertQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No se pudo guardar la marca');
@@ -641,10 +1070,10 @@
 		function updateType($id_type,$type_name,$type_status){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'UPDATE product_type SET name="'.$type_name.'", status="'.$type_status.'" WHERE id_product_type = '.$id_type;
+			$qry = 'UPDATE type SET name="'.$type_name.'", status="'.$type_status.'" WHERE id_type = '.$id_type;
 			$result = $this->db->updateQuery($qry);
 			if(!$result){
-				$this->db->HandleError('No se pudo actualizar la categoria');
+				$this->db->HandleError('No se pudo actualizar tipo');
 				$returnValue = false;
 			}
 			return $returnValue;
@@ -718,9 +1147,6 @@
 			$returnValue = $this->db->lastInsertID();
 			return $returnValue;
 		}
-
-
-
 		/*
 			SETTINGS
 		*/
@@ -761,7 +1187,7 @@
 		function getConfigData(){
 			$returnValue['return'] = false;
 			$this->db->DBLogin();
-			$qry = 'SELECT * FROM settings ORDER by id_settings DESC';
+			$qry = 'SELECT * FROM settings ORDER by id_settings ASC';
 			$data = $this->db->selectQuery($qry);
 			if(!$data){
 				$this->db->HandleDBError($qry);
@@ -778,9 +1204,6 @@
 			$this->db->closeAll();
 			return $returnValue;
 		}
-
-
-
 		/*
 
 			MEDIA
@@ -819,13 +1242,12 @@
  	        	$qry = 'INSERT INTO media (url,type,id_type) VALUES("'.$pathSave.'","'.$type.'",'.$id_type.')';
  	        	$result = $this->db->insertQuery($qry);
 				if(!$result){
-					$this->db->HandleError('No se pudo guardar en tabla: MEDIA');
+					$this->db->HandleError('No se pudo guardar en tabla: MEDIA'.$qry);
 					$returnValue = false;
 				}
  	        }
  	        return $returnValue;
 		}
-
 		function updateMedia($type,$id_media,$tmp_name,$pathInsert,$pathSave){
 			/*
 				change URL from MEDIA using id_media and new URL
@@ -844,6 +1266,17 @@
 				}
  	        }
  	        return $returnValue;
+		}
+		function deleteMedia($id_media,$id_type){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'DELETE FROM media WHERE id_media='.$id_media;
+			$result = $this->db->deleteQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo eliminar de la tabla: MEDIA');
+				$returnValue = false;
+			}
+			return $returnValue;
 		}
 
 		/*
