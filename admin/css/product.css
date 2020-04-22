@@ -34,22 +34,12 @@ input[type=number] {  -moz-appearance: textfield;}
 */
 .mainContainer #main .product_data input[type='text']{width:calc(100% - 10px);}
 .mainContainer #main .product_data textarea{width:calc(100% - 10px);height:200px;resize:none;border:1px solid #aaa;}
-
-/*
-	PRODUCT IMAGES
-*/
-/*.secondaryContainerDiv{display: grid;}*/
-.secondaryContainer{position: relative;width: 50%;display: inline-block;margin: 20px 0 0 0;}
-.secondaryContainer .secondary{width: 90%;}
-.secondaryContainer .removeImage{position: absolute;top:-20px;right: 0;border:0;background: transparent;font-size:20px;}
-.secondaryContainer .removeImage:hover{cursor: pointer;}
-
 /*
 
 	ORGANIZACION
 
 */
-#unit{width:100%;padding: 7px 28px 7px 14px;    font-size: 13px;cursor: pointer;border: 1px solid #999;border-radius: 3px;background-color: #fff;}
+#brandSelect,#typeSelect,#unit{width:100%;padding: 7px 28px 7px 14px;    font-size: 13px;cursor: pointer;border: 1px solid #999;border-radius: 3px;background-color: #fff;}
 #unit option{padding: 7px;}
 
 /*
@@ -83,7 +73,7 @@ input[type=number] {  -moz-appearance: textfield;}
 .pickSecundary:hover + label {cursor: pointer;}
 
 
-
+.product_settings select{width:100%;}
 .product_settings_2 table{width: 100%;}
 .product_settings_2 table p {display: inline-block;margin: 0;}
 
@@ -113,3 +103,14 @@ input[type=number] {  -moz-appearance: textfield;}
 .product_inventory div label{position: absolute;top:4px;left:5px;}
 .product_inventory div input{padding: 3px;outline: 0;width:90%;border:1px solid #aaa;}
 
+
+
+
+/*
+
+*/
+.productorRelacionadosContainerDiv select{width: 100%;}
+
+.tagsContainerDiv select{width:100%;}
+.tagsContainerDiv .addTag{display: grid;grid-template-columns: 80% 20px;grid-template-rows: 30px;grid-gap:10px;align-items: center;}
+.tagsContainerDiv .addTag .saveTag:hover{cursor: pointer;}

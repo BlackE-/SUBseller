@@ -39,7 +39,7 @@ input[type=number] {  -moz-appearance: textfield;}
 	ORGANIZACION
 
 */
-#unit{width:100%;padding: 7px 28px 7px 14px;    font-size: 13px;cursor: pointer;border: 1px solid #999;border-radius: 3px;background-color: #fff;}
+#brandSelect,#typeSelect,#unit{width:100%;padding: 7px 28px 7px 14px;    font-size: 13px;cursor: pointer;border: 1px solid #999;border-radius: 3px;background-color: #fff;}
 #unit option{padding: 7px;}
 
 /*
@@ -73,7 +73,7 @@ input[type=number] {  -moz-appearance: textfield;}
 .pickSecundary:hover + label {cursor: pointer;}
 
 
-
+.product_settings select{width:100%;}
 .product_settings_2 table{width: 100%;}
 .product_settings_2 table p {display: inline-block;margin: 0;}
 
@@ -103,3 +103,14 @@ input[type=number] {  -moz-appearance: textfield;}
 .product_inventory div label{position: absolute;top:4px;left:5px;}
 .product_inventory div input{padding: 3px;outline: 0;width:90%;border:1px solid #aaa;}
 
+
+
+
+/*
+
+*/
+.productorRelacionadosContainerDiv select{width: 100%;}
+
+.tagsContainerDiv select{width:100%;}
+.tagsContainerDiv .addTag{display: grid;grid-template-columns: 80% 20px;grid-template-rows: 30px;grid-gap:10px;align-items: center;}
+.tagsContainerDiv .addTag .saveTag:hover{cursor: pointer;}

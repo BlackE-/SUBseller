@@ -1,45 +1,57 @@
-
 	const addTemporaryClass = (element, className,duration) =>{
         setTimeout(()=>{
             element.classList.remove(className);
         },duration);
         element.classList.add(className);
     }
-	let tagsSelect = [];
-	let tagsSelectMap = new Map();
+$(document).ready(function(){
+	$("#categorySelect").chosen({no_results_text: "Oops, nothing found!"}); 
+		if(productsSelect != 'null'){
+			$("#productsSelect").chosen({no_results_text: "Oops, nothing found!"}); 
+		}
 	
-	const brand = new Selectr('#brandSelect');
-	const category = new Selectr('#categorySelect');
-	const type = new Selectr('#typeSelect');
-	const productsSelect = document.querySelector('.productsSelect');
-	if(productsSelect !== null){const products = new Selectr('#productsSelect');}
-	const tags = new Selectr('#taggable',{taggable: true,tagSeperators: [",", "|"]});
-	tags.on('selectr.select', function(option) {
-		const id_tag = option.value;
-		const name_tag = option.innerHTML;
-		if(Number.isInteger(parseInt(id_tag))){
-			tagsSelectMap.set(id_tag,id_tag);
-		}else{
-			let xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					myObj = JSON.parse(this.response);
-					if(!myObj.return){
-						console.log(myObj.message);
-					}else{
-						tagsSelectMap.set(id_tag,myObj.return);
-					}
+    $("#taggable").chosen({no_results_text: "Oops, nothing found!"}); 
+
+    document.querySelector(".saveTag").addEventListener('click',function(){
+    	let tagInput = document.querySelector("#addTag");
+    	if(tagInput.value.length === 0){
+    		addTemporaryClass(tagInput ,'animated', 1000);
+            addTemporaryClass(tagInput ,'swing', 1000);
+			return false;
+    	}
+
+    	let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+					para.innerText = myObj.message;
+				}else{
+					$("#taggable").append("<option value='"+myObj.return+"'>"+tagInput.value+"</option>");
+                    var valoresTags = $("#taggable").val();
+                    valoresTags.push(myObj.return);
+                    $("#taggable").val(valoresTags); // if you want it to be automatically selected
+                    $("#taggable").trigger("chosen:updated");
+                    tagInput.value = '';
+                    // console.log(valoresTags);
+
 				}
 			}
-			xhttp.open("POST", "./include/TAG-insertTag.php", true);
-        	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        	xhttp.send(`name=${name_tag}`);
 		}
-	});
-	tags.on('selectr.deselect', function(option) {
-		const id_tag_2 = option.value;
-		tagsSelectMap.delete(id_tag_2);
-	});
+		xhttp.open("POST", "./include/TAG-insertTag.php", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(`name=${tagInput.value}`);
+    });
+
+});
+	
+
+
+
+
+	
 	
 
 	const fileInput = document.getElementById('product_primary');
@@ -180,22 +192,16 @@
 		const categorySelect = document.querySelector('#categorySelect').value;
 		const typeSelect = document.querySelector('#typeSelect').value;
 		const unitSelect = document.querySelector('#unit').value;
-		for (let value of tagsSelectMap.values()) {
-		  tagsSelect.push(value);
-		}
-        const status = document.querySelector("#status").checked; 
-        const fav = document.querySelector("#favorite").checked; 
-		
-		let productsRelated = 0; 
-		if(productsSelect !== null){
-			productsRelated = document.querySelector('#productsSelect').value;
-		}
-		
+		const tagsSelect = document.querySelector('#taggable').value;
+
+        const status = (document.querySelector("#status").checked) ? 1 : 0; 
+        const fav = (document.querySelector("#favorite").checked) ? 1 : 0; 
+        
+		let productsRelated = document.querySelector('#productsSelect').value;
 		
 		const file = fileInput.files[0];
 		if(!file){errorMessage("Falta imagen");return false;}
 		const file2 = fileInput2.files[0];
-		// if(!file2){return false;}
 
 		let formData = new FormData();
 		formData.append('name', name.value);

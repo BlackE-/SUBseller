@@ -519,6 +519,13 @@
 			if(!$result){
 				$this->db->HandleError('No se pudo guardar el inventario');
 				$returnValue = false;
+			}
+
+			$qry = 'INSERT INTO product_movement (product_id_product,stock,date_created,type) VALUES ('.$id_product.','.$data['stock'].',NOW(),"INGRESO")';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No insert');
+				$returnValue = false;
 			}	
 	    	
 	    	//relacion producto categoria
@@ -613,7 +620,7 @@
 				}else{
 					$array_data = array();
 					while($row = $this->db->fetchArray($result)){
-						array_push($array_data, $row['id_category']);
+						array_push($array_data, $row['category_id_category']);
 					}
 					$returnValue = $array_data;
 				}
@@ -695,10 +702,25 @@
 										type_id_type="'.$data['type'].'",
 										unit="'.$data['unit'].'",
 										status="'.$data['status'].'",
-										fav="'.$data['fav'].'",
-										product_related = "'.$data['productsRelated'].'" WHERE id_product = '.$data['id_product'];
-			$returnValue = false;
-			$this->db->HandleError($qry);
+										fav="'.$data['fav'].'"
+					WHERE id_product = '.$data['id_product'];
+			// $returnValue = false;
+			// $this->db->HandleError($qry);
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError('No se pudo actualizar el producto');
+				$returnValue = false;
+				return $returnValue;
+			}
+			return $returnValue;
+		}
+
+		function updateProductRelated(){
+			$data = $_POST;
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE  product SET product_related="'.$data['product_related'].'"
+					WHERE id_product = '.$data['id_product'];
 			$result = $this->db->updateQuery($qry);
 			if(!$result){
 				$this->db->HandleDBError('No se pudo actualizar el producto');
@@ -756,6 +778,29 @@
 			return $returnValue;
 		}
 
+		/*
+
+			INVENTORY
+
+		*/
+		function updateInventory($id_product,$stock){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE product_inventory SET stock=stock+'.$stock.' WHERE product_id_product='.$id_product;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update');
+				$returnValue = false;
+			}else{
+				$qry = 'INSERT INTO product_movement (product_id_product,stock,date_created,type) VALUES ('.$id_product.','.$stock.',NOW(),"INGRESO")';
+				$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No insert');
+					$returnValue = false;
+				}
+			}
+			return $returnValue;
+		}
 
 		/*
 			STORE

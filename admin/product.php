@@ -16,7 +16,8 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<link rel="stylesheet" type="text/css" href="script/selectr/selectr.css">
+
+	<link rel="stylesheet" type="text/css" href="script/chosen/chosen.min.css">
 	<link rel="stylesheet" type="text/css" href="css/product.css">
 </head>
 <body>
@@ -26,7 +27,7 @@
 		<form id="productForm">
 		<div id="main" class="main">
 			<div class="returnDiv">
-				<a href="products.php"><i class="fas fa-angle-left"></i> Productos</a>
+				<a href="products"><i class="fas fa-angle-left"></i> Productos</a>
 				<h1>Producto</h1>	
 			</div>
 			<?php
@@ -161,7 +162,7 @@
 					<p>Categoría</p>
 					<div>
 						<?php
-							echo '<select id="categorySelect">';
+							echo '<select id="categorySelect" multiple data-placeholder="Elegir categoria">';
 							$product_categories = $set->getProductCategories($id_product);
 							$categories = $set->getCategories();
 							if(!$product_categories){
@@ -172,15 +173,13 @@
 							}else{
 								foreach ($categories as $key => $value) {
 			                    	$category = $value['category'];
-			                    	if(in_array($value['id_category'], $product_categories)){
+			                    	if(in_array($category['id_category'], $product_categories)){
 			                    		echo '<option value="'.$category['id_category'].'" selected>'.$category['name'].'</option>';
 			                    	}else{
 			                    		echo '<option value="'.$category['id_category'].'">'.$category['name'].'</option>'; 
 			                    	}    
 			                    }
-							}
-							
-		                    
+							}						
 		                    echo '</select>';
 						?>
 					</div>
@@ -285,20 +284,22 @@
 							if(!$products){
 								echo '<p>No hay productos dados de alta</p>';
 							}else{
-								echo '<select id="productsSelect">';
+								echo '<select id="productsSelect" multiple data-placeholder="Elegir productos relacionados">';
 								if($product['product_related'] == 0){
 									foreach ($products as $key => $value) {
 										if($value['id_product'] != $id_product){echo '<option value="'.$value['id_product'].'">'.$value['name'].'</option>';}      
 			                    	}	
 								}else{
+									$product_related = explode(',', $product['product_related']);
 									foreach ($products as $key => $value) {
 										if($value['id_product'] != $id_product){
-											if(in_array($value['id_product'], $product['product_related'])){
-				                        		echo '<option value="'.$value['id_product'].'" selected>'.$value['name'].'</option>';  
-				                        	}else{
-				                        		echo '<option value="'.$value['id_product'].'">'.$value['name'].'</option>';  
-				                        	}
-										}  
+											if(in_array($value['id_product'], $product_related)){
+					                        	echo '<option value="'.$value['id_product'].'" selected>'.$value['name'].'</option>';  
+					                        }else{
+					                        	echo '<option value="'.$value['id_product'].'">'.$value['name'].'</option>';  
+					                        }  
+										}
+										
 			                    	}
 								}
 			                    
@@ -309,7 +310,7 @@
 
 					<div class="tagsContainerDiv">
 						<p>Tags</p>
-						<select name="" id="taggable">
+						<select name="" id="taggable" multiple data-placeholder="Elegir tags">
 						<?php
 							$tags = $set->getTags();
 							$product_tags = $set->getProductTags($id_product);
@@ -333,6 +334,10 @@
 
 						?>
 						</select>
+						<div class="addTag">
+							<input type="text" id="addTag" placeholder="Agregar Tag"/>
+							<p class="saveTag"><i class="fas fa-save"></i></p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -341,7 +346,8 @@
 	</div>
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
-	<!-- <script src="script/selectr/selectr-unminify.js" type="text/javascript"></script> -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="script/chosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="script/product.js"></script>
 </body>
 </html>

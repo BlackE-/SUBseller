@@ -1,20 +1,11 @@
-	const addTemporaryClass = (element, className,duration) =>{
+		const addTemporaryClass = (element, className,duration) =>{
         setTimeout(()=>{
             element.classList.remove(className);
         },duration);
         element.classList.add(className);
     }
-	const brand = new Selectr('#brandSelect');
-	const category = new Selectr('#categorySelect');
-	const type = new Selectr('#typeSelect');
-	const productsSelect = document.querySelector('#productsSelect');
-	if(productsSelect !== null){const products = new Selectr('#productsSelect',{multiple:true});}
-	// const tags = new Selectr('#taggable',{taggable: true,tagSeperators: [",", "|"]});
-	// const tags = new Selectr('#taggable',{taggable: true});
-	const tags = new Selectr('#taggable',{multiple:true});
 
-
-	function updateTag(id_tag,type){
+    function updateTag(id_tag,type){
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
@@ -35,6 +26,7 @@
 		let xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
 				myObj = JSON.parse(this.response);
 				if(!myObj.return){
 					console.log(myObj.message);
@@ -43,43 +35,127 @@
 				}
 			}
 		}
-		xhttp.open("POST", "./include/PRODUCT-updateTag.php", true);
+		xhttp.open("POST", "./include/PRODUCT-updateCategory.php", true);
     	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    	xhttp.send(`id_product=${document.querySelector('#id_product').value}&id_category=${$id_category}&type=${type}`);
+    	xhttp.send(`id_product=${document.querySelector('#id_product').value}&id_category=${id_category}&type=${type}`);
 	}
-
-
-	tags.on('selectr.select', function(option) {
-		const id_tag = option.value;
-		const name_tag = option.innerHTML;
-		if(Number.isInteger(parseInt(id_tag))){
-			//guardar el tag que ya existe en la tabla product_tag
-			console.log(id_tag);
-			updateTag(id_tag,'add');
-		}else{
-			let xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (this.readyState == 4 && this.status == 200) {
-					myObj = JSON.parse(this.response);
-					if(!myObj.return){
-						console.log(myObj.message);
-					}else{
-						//guardarlo en la 
-						console.log(myObj.return);
-						updateTag(myObj.return,'add');
-					}
+	function updateProductRelated(products){
+		let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+				}else{
+					console.log(myObj.message);
 				}
 			}
-			xhttp.open("POST", "./include/TAG-insertTag.php", true);
-        	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        	xhttp.send(`name=${name_tag}`);
 		}
-	});
-	tags.on('selectr.deselect', function(option) {
-		const id_tag_2 = option.value;
-		console.log(id_tag_2);
-		updateTag(id_tag_2,'delete');
-	});
+		xhttp.open("POST", "./include/PRODUCT-updateProductRelated.php", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(`id_product=${document.querySelector('#id_product').value}&product_related=${products}`);
+	}
+$(document).ready(function(){
+
+    $("#productsSelect").chosen({no_results_text: "Oops, nothing found!"}); 
+    $("#categorySelect").chosen({no_results_text: "Oops, nothing found!"}); let product_category = $("#categorySelect").val();
+    $("#taggable").chosen({no_results_text: "Oops, nothing found!"}); let product_tags = $("#taggable").val();
+
+    $("#categorySelect").chosen().change(function(e){
+        var nuevo = $(this).val();
+        let id_category,type = 'add';
+        
+        if(nuevo.length > product_category.length){
+            //insertar nuevo PRODUCTO
+            for(var i=0;i<nuevo.length;i++){
+                if(product_category.indexOf(nuevo[i]) == -1){
+                    id_category = nuevo[i];
+                    break;
+                }
+            }
+        }
+        else{
+            //borrar un PRODUCTO
+            type = 'delete';
+            for(var i=0;i<product_category.length;i++){
+                if(nuevo.indexOf(product_category[i]) == -1){
+                    id_category = product_category[i];
+                    break;
+                }
+            }
+        }
+        updateCategory(id_category,type);
+    });
+
+    $("#taggable").chosen().change(function(e){
+        var nuevo = $(this).val();
+        let id_tag,type = 'add';
+        
+        if(nuevo.length > product_tags.length){
+            //insertar nuevo PRODUCTO
+            for(var i=0;i<nuevo.length;i++){
+                if(product_tags.indexOf(nuevo[i]) == -1){
+                    id_category = nuevo[i];
+                    break;
+                }
+            }
+        }
+        else{
+            //borrar un PRODUCTO
+            type = 'delete';
+            for(var i=0;i<product_tags.length;i++){
+                if(nuevo.indexOf(product_tags[i]) == -1){
+                    id_category = product_tags[i];
+                    break;
+                }
+            }
+        }
+        updateTag(id_category,type);
+    });
+
+    $("#productsSelect").chosen().change(function(e){
+        var nuevo = $(this).val();
+        console.log(nuevo);
+        updateProductRelated(nuevo);
+    });
+
+    document.querySelector(".saveTag").addEventListener('click',function(){
+    	let tagInput = document.querySelector("#addTag");
+    	if(tagInput.value.length === 0){
+    		addTemporaryClass(tagInput ,'animated', 1000);
+            addTemporaryClass(tagInput ,'swing', 1000);
+			return false;
+    	}
+
+    	let xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					console.log(myObj.message);
+					para.innerText = myObj.message;
+				}else{
+					$("#taggable").append("<option value='"+myObj.return+"'>"+tagInput.value+"</option>");
+                    var valoresTags = $("#taggable").val();
+                    valoresTags.push(myObj.return);
+                    $("#taggable").val(valoresTags); // if you want it to be automatically selected
+                    $("#taggable").trigger("chosen:updated");
+                    tagInput.value = '';
+                    updateTag(myObj.return,'add');
+
+				}
+			}
+		}
+		xhttp.open("POST", "./include/TAG-insertTag.php", true);
+    	xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    	xhttp.send(`name=${tagInput.value}`);
+    });
+
+});
+
+	
 	
 
 	const fileInput = document.getElementById('product_primary');
@@ -112,7 +188,6 @@
 			}
 		}
 		xhttp.open("POST", "./include/PRODUCT-setImage.php", true);
-    	// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send(formData);
 	});
 
@@ -140,7 +215,6 @@
 			}
 		}
 		xhttp.open("POST", "./include/PRODUCT-setImage.php", true);
-    	// xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     	xhttp.send(formData);
 	});
 
@@ -245,13 +319,8 @@
 		const typeSelect = document.querySelector('#typeSelect').value;
 		console.log(typeSelect);
 		const unitSelect = document.querySelector('#unit').value;
-        const status = document.querySelector("#status").checked; 
-        const fav = document.querySelector("#favorite").checked; 
-		
-		let productsRelated = 0; 
-		if(productsSelect !== null){
-			productsRelated = document.querySelector('#productsSelect').value;
-		}
+        const status = (document.querySelector("#status").checked) ? 1 : 0; 
+        const fav = (document.querySelector("#favorite").checked) ? 1 : 0; 
 		
 
 		let formData = new FormData();
@@ -269,7 +338,6 @@
 		formData.append('unit', unitSelect);
 		formData.append('status', status);
 		formData.append('fav', fav);
-		formData.append('productsRelated', productsRelated);
 
 		list.style.opacity = '0';
 		let xhttp = new XMLHttpRequest();
@@ -282,9 +350,6 @@
 					para.innerText = myObj.message;
 				}else{
 					location.reload();
-					// console.log('producto Guardado');
-					// list.style.opacity = '1';
-					// para.innerText = 'Producto Guardado';
 				}
 			}
 		}

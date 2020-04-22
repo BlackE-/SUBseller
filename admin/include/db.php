@@ -220,9 +220,9 @@
                                 free_shipping BOOLEAN,
                                 date_expires DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                 usage_count INT DEFAULT 0,
-                                product_ids JSON COMMENT 'ARRAY OF PRODUCTS INCLUDED TO BE DISCOUNT',
-                                product_ids_excluded JSON COMMENT 'ARRAY OF PRODUCTS NOT INCLUDED IN THE DISCOUNT',
-                                used_by JSON COMMENT 'ARRAY OF CLIENTS HOW HAVE USED THE COUPON'
+                                product_ids TEXT COMMENT 'ARRAY OF PRODUCTS INCLUDED TO BE DISCOUNT',
+                                product_ids_excluded TEXT COMMENT 'ARRAY OF PRODUCTS NOT INCLUDED IN THE DISCOUNT',
+                                used_by TEXT COMMENT 'ARRAY OF CLIENTS HOW HAVE USED THE COUPON'
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){
@@ -265,7 +265,7 @@
                                 description TEXT, 
                                 fav BOOLEAN DEFAULT 0,
                                 out_of_stock BOOLEAN DEFAULT 0,
-                                product_related JSON COMMENT 'ARRAY OF PRODUCTS related TO THIS PRODUCT',
+                                product_related TEXT COMMENT 'ARRAY OF PRODUCTS related TO THIS PRODUCT',
                                 brand_id_brand INT UNSIGNED NOT NULL,
                                 type_id_type INT UNSIGNED NOT NULL,
                                 

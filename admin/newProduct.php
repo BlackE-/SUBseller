@@ -14,7 +14,7 @@
 <head>
 	<?php include('header_meta.php');?>
 	<!-- <link rel="stylesheet" type="text/css" href="script/selectr/selectr.css"> -->
-	<link rel="stylesheet" type="text/css" href="script/chosen/chose.min.css">
+	<link rel="stylesheet" type="text/css" href="script/chosen/chosen.min.css">
 	<link rel="stylesheet" type="text/css" href="css/productNew.css">
 </head>
 <body>
@@ -112,7 +112,7 @@
 					<div>
 						<?php
 							$categories = $set->getCategories();
-							echo '<select id="categorySelect">';
+							echo '<select id="categorySelect" multiple data-placeholder="Elegir categoria">';
 		                    foreach ($categories as $key => $value) {
 		                    	$category = $value['category'];
 		                        echo '<option value="'.$category['id_category'].'">'.$category['name'].'</option>';      
@@ -126,7 +126,7 @@
 						echo '<select id="typeSelect">';
 	                    foreach ($types as $key => $value) {
 	                    	$type = $value['type'];
-	                        echo '<option value="'.$type['id_product_type'].'">'.$type['name'].'</option>';      
+	                        echo '<option value="'.$type['id_type'].'">'.$type['name'].'</option>';      
 	                    }
 	                    echo '</select>';
 					?>
@@ -171,9 +171,11 @@
 						<?php
 							$products = $set->getProducts();
 							if(!$products){
-								echo '<p>No hay productos dados de alta</p>';
+								// echo '<p>No hay productos dados de alta</p>';
+								echo '<select id="productsSelect" disabled multiple data-placeholder="No Hay productos dados de alta">';
+			                    echo '</select>';
 							}else{
-								echo '<select id="productsSelect">';
+								echo '<select id="productsSelect" multiple data-placeholder="Elegir productos relacionados">';
 			                    foreach ($products as $key => $value) {
 			                        echo '<option value="'.$value['id_product'].'">'.$value['name'].'</option>';      
 			                    }
@@ -184,7 +186,7 @@
 
 					<div class="tagsContainerDiv">
 						<p>Tags</p>
-						<select name="" id="taggable">
+						<select name="" id="taggable" multiple data-placeholder="Elegir tags">
 						<?php
 							$tags = $set->getTags();
 							if(!$tags){
@@ -194,9 +196,12 @@
 									echo '<option value="'.$value['id_tag'].'">'.$value['name'].'</option>';
 								}
 							}
-
 						?>
 						</select>	
+						<div class="addTag">
+							<input type="text" id="addTag" placeholder="Agregar Tag"/>
+							<p class="saveTag"><i class="fas fa-save"></i></p>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -206,9 +211,8 @@
 	<?php include ('modal.php');?>
 	<?php include('footer.php');?>
 
-	<!-- <script src="https://cdn.jsdelivr.net/gh/mobius1/selectr@latest/dist/selectr.min.js" type="text/javascript"></script> -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-	<script type="text/javascript" src="script/chose/chose..query.min.js"></script>
+	<script type="text/javascript" src="script/chosen/chosen.jquery.min.js"></script>
 	<script type="text/javascript" src="script/newProduct.js"></script>
 </body>
 </html>

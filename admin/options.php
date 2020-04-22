@@ -127,13 +127,13 @@
 							                    echo '<div class="typeRow">';
 								                    echo $key +1;
 								                   	
-								                    echo '<input type="text" value="'.$type['name'].'" id="type_'.$type['id_product_type'].'"/>';
-								                    echo '<i class="fas fa-save saveType" title="Actualizar?" id="type_update_'.$type['id_product_type'].'"></i>';
+								                    echo '<input type="text" value="'.$type['name'].'" id="type_'.$type['id_type'].'"/>';
+								                    echo '<i class="fas fa-save saveType" title="Actualizar?" id="type_update_'.$type['id_type'].'"></i>';
 								                    if($type['status'] == 0){
-	    												echo '<div class="statusContainer"><input type="checkbox" class="statusType" id="type_id_'.$type['id_product_type'].'"><label for="type_id_'.$type['id_product_type'].'"></label></div>';
+	    												echo '<div class="statusContainer"><input type="checkbox" class="statusType" id="type_id_'.$type['id_type'].'"><label for="type_id_'.$type['id_type'].'"></label></div>';
 								                    }
 								                    else{
-								                        echo '<div class="statusContainer"><input type="checkbox" checked class="statusType" id="type_id_'.$type['id_product_type'].'"><label for="type_id_'.$type['id_product_type'].'"></label></div>';
+								                        echo '<div class="statusContainer"><input type="checkbox" checked class="statusType" id="type_id_'.$type['id_type'].'"><label for="type_id_'.$type['id_type'].'"></label></div>';
 								                    }
 								                echo '</div>';
 							                    foreach ($type_img as $key2 => $value2) {
