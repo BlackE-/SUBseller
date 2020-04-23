@@ -23,7 +23,7 @@
 		<form id="newCouponForm">
 		<div id="main" class="main">
 			<div class="returnDiv">
-				<a href="discounts"><i class="fas fa-angle-left"></i> Cupones</a>
+				<a href="coupons"><i class="fas fa-angle-left"></i> Cupones</a>
 				<h1>Nuevo Cupón</h1>	
 			</div>
 			<div class="leftDiv">

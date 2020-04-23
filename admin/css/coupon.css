@@ -1,0 +1,21 @@
+input,textarea{border:1px solid #aaa;font-size:13px;padding: 5px;}
+input:focus,textarea:focus{outline: none; box-shadow: 0 0 0 2px rgba(200, 0, 0, 0.2);}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none; margin: 0;}
+input[type=number] {  -moz-appearance: textfield;}
+
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 2fr 1fr;grid-template-rows: 80px auto;grid-gap: 10px; background:rgba(232, 232, 232, 0.5);}
+.mainContainer #main .detailsContainer,
+.mainContainer #main .settingContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 0 20px 20px 20px;border-radius: 2px;}
+
+
+.productContainer{display: grid;grid-template-columns: 100px auto; grid-gap: 10px;}
+/*
+
+	return div
+
+*/
+.mainContainer #main .returnDiv{grid-column-start: 1;grid-column-end: 3;background: transparent;;border:0;}
+.mainContainer #main .returnDiv a{color:#aaa;text-decoration: none;}
+.mainContainer #main .returnDiv a:hover{color:#b7002a;}
+.thumb{width: 100px;}
+.title{border-bottom:1px solid #b7002a;display: table;}

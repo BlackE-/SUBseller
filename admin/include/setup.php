@@ -831,6 +831,20 @@
 			return $returnValue;
 		}
 
+		function getCoupon($id_coupon){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM coupon WHERE id_coupon='.$id_coupon;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No coupons');
+				$returnValue = false;
+			}else{
+				$returnValue = $this->db->fetchArray($result);
+			}
+			return $returnValue;
+		}
+
 		function insertCoupon(){
 			$returnValue = true;
 			$this->checkDBLogin();

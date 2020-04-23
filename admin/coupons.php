@@ -15,7 +15,7 @@
 	<?php include('header_meta.php');?>
 	<link rel="stylesheet" type="text/css" href="script/datatables/datatables.min.css" />
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="css/discounts.css">
+	<link rel="stylesheet" type="text/css" href="css/coupons.css">
 </head>
 <body>
 	<?php include('header.php');?>
@@ -36,15 +36,17 @@
 				<?php
 					}else{
 					 echo '<table id="example" class="display " style="width:100%">';
-		                echo '<thead><tr><th>Código</th><th>Status</th><th>Tipo</th><th>Fecha</th><th>Uso</th></tr></thead><tbody>';
+		                echo '<thead><tr><th>Código</th><th>Status</th><th>Tipo</th><th>Fecha Expirar</th><th>Uso</th></tr></thead><tbody>';
 		                foreach ($coupons as $key => $row){
 		                    echo '<tr>';
-		                   	echo '<td><a href="discount?id_coupon'.$row['id_coupon'].'">'.$row['code'].'</a></td>';
+		                   	echo '<td><a class="link_coupon" href="coupon?id_coupon='.$row['id_coupon'].'">'.$row['code'].'</a></td>';
 		                   	echo '<td>';
 		                    if($row['status']){echo '<p class="activo">Activo</p>';}
 		                    else{echo '<p class="expirado">Expirado</p>';}
 		                    echo '</td>';
-		                    echo '<td><p>'.$row['date_expires'].'</p></td>';
+		                    echo '<td><p>'.$row['discount_type'].'</p></td>';
+		                    $date = date_create($row['date_expires']);
+		                    echo '<td><p>'.date_format($date, 'Y-m-d').'</p></td>';
 		                    echo '<td><p>'.$row['usage_count'].'</p></td>';
 		                    echo '</tr>';
 		                }
@@ -60,11 +62,6 @@
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 		<script src="script/datatables/datatables.min.js"></script>
-		<script src="script/datatables/dataTables.buttons.min.js"></script>
-		<script src="script/datatables/buttons.html5.min.js"></script>
-		<script src="script/datatables/jszip/jszip.min.js"></script>
-		<script src="script/datatables/pdfmaker/pdfmake.min.js"></script>
-		<script src="script/datatables/pdfmaker/vfs_fonts.js"></script>
 		<script type="text/javascript">
 			$(document).ready(function(){
 			    $('#example').DataTable( {

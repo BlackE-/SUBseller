@@ -231,6 +231,7 @@
                 }
                 $create = "CREATE TABLE carousel(
                                 id_carousel INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                name VARCHAR(45),
                                 status BOOLEAN
                             )";
                 $result = mysqli_query($this->connection,$create);
