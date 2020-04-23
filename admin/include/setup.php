@@ -803,6 +803,89 @@
 		}
 
 		/*
+	
+			COUPONS
+	
+		*/
+
+		function getCoupons(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM coupon ORDER BY id_coupon DESC';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No coupons');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No coupons');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,$row);
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertCoupon(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$data = $_POST;
+			$qry = 'INSERT INTO coupon (date_created,code,description,discount_type,amount,status,date_expires,product_ids) 
+								VALUES (NOW(),
+								"'.$data['code'].'",
+								"'.$data['description'].'",
+								"'.$data['type'].'",
+								'.(double)$data['amount'].',
+								1,
+								"'.$data['date_expires'].'",
+								"'.$data['product_ids'].'"
+							)';
+			$result = $this->db->insertQuery($qry);
+
+			if(!$result){
+				$this->db->HandleError('No insert coupon');
+				$returnValue = false;
+			}
+			return $returnValue;	
+		}
+
+
+		function codeIsValid($code){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = "SELECT id_coupon FROM coupon WHERE code = '".$code."'";
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = true;
+			}else{
+				if($this->db->numRows($result)){
+					$returnValue = false;
+				}
+			}
+			return $returnValue;
+		}
+
+	    function generateCode(){
+	    	$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	        $charactersLength = strlen($characters);
+	        do
+	        {
+	            $code = '';
+	            $codeLength = 8;
+	            for ($i = 0; $i < $codeLength; $i++)
+	            {
+	                $code .= $characters[rand(0, $charactersLength - 1)];
+	            }
+	        } while (!$this->codeIsValid($code));
+	        return $code;
+	    }
+
+		/*
 			STORE
 		*/
 

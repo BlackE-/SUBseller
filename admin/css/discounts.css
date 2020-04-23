@@ -1,0 +1,12 @@
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 1fr;  grid-template-rows: 50px auto;  grid-gap: 10px;background: rgba(238, 238, 238, 0.5);}
+.mainContainer #main #newProductContainer{display: grid;grid-template-columns: 200px 200px;justify-content: space-between;}
+.mainContainer #main #newProductContainer .newProduct{width:100%;max-width:250px;height:40px;background: #b7002a;border:1px solid transparent;border-radius:5px;color:#fff;transition:all 300ms ease-in; }
+.mainContainer #main #newProductContainer .newProduct:hover{background: #fff;color:#b7002a;border:1px solid #b7002a;}
+
+.productDiscounts{color: #9f9e9e;line-height: 40px;border:0;background: transparent;}
+.productDiscounts:hover{color: #000;}
+.couponsContainer .dataTables_wrapper{background: #fff;}
+
+.couponsContainer .dataTables_wrapper .dataTables_filter{padding:20px;float:none;text-align: left;}
+.couponsContainer .dataTables_wrapper .dataTables_filter input{width: calc(100% - 75px);}
+.couponsContainer .dataTable{padding:20px;}

@@ -213,16 +213,16 @@
                 $create = "CREATE TABLE coupon(
                                 id_coupon INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                                code VARCHAR(20) NOT NULL,
+                                code VARCHAR(20) UNIQUE NOT NULL,
                                 description TEXT,
-                                discount_type VARCHAR(15) COMMENT 'PERCENTAGE(%),FIXED_CART($),FIXED_PRODUCT($ EACH PRODUCT)',
+                                discount_type VARCHAR(15) COMMENT 'PERCENTAGE(%),FIXED($),FIXED_PRODUCT($ EACH PRODUCT),PERCENTAGE_PRODUCTS(% EACH PRODUCT),FREE_SHIPPING',
                                 amount DECIMAL(10,2),
-                                free_shipping BOOLEAN,
+                                status BOOLEAN,
                                 date_expires DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                 usage_count INT DEFAULT 0,
                                 product_ids TEXT COMMENT 'ARRAY OF PRODUCTS INCLUDED TO BE DISCOUNT',
                                 product_ids_excluded TEXT COMMENT 'ARRAY OF PRODUCTS NOT INCLUDED IN THE DISCOUNT',
-                                used_by TEXT COMMENT 'ARRAY OF CLIENTS HOW HAVE USED THE COUPON'
+                                used_by TEXT COMMENT 'ARRAY OF CLIENTS WHO HAVE USED THE COUPON'
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){

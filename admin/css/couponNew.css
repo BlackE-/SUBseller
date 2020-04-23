@@ -1,0 +1,55 @@
+input,textarea{border:1px solid #aaa;font-size:13px;padding: 5px;}
+input:focus,textarea:focus{outline: none; box-shadow: 0 0 0 2px rgba(200, 0, 0, 0.2);}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none; margin: 0;}
+input[type=number] {  -moz-appearance: textfield;}
+
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 2fr 1fr;grid-template-rows: 80px auto;grid-gap: 10px; background:rgba(232, 232, 232, 0.5);}
+.mainContainer #main .codeContainer,
+.mainContainer #main .typeContainer,
+.mainContainer #main .amountContainer,
+.mainContainer #main .settingContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 0 20px 20px 20px;border-radius: 2px;}
+
+/*
+
+	return div
+
+*/
+.mainContainer #main .returnDiv{grid-column-start: 1;grid-column-end: 3;background: transparent;;border:0;}
+.mainContainer #main .returnDiv a{color:#aaa;text-decoration: none;}
+.mainContainer #main .returnDiv a:hover{color:#b7002a;}
+
+.codeContainer{display: grid;grid-template-columns: 100px auto 150px;}
+.codeContainer input{grid-column-start: 1;grid-column-end: 4;}
+.codeGenerator{color:#aaa;grid-column-start: 3;grid-column-end: 4;text-align: right;}
+.codeGenerator:hover{color:#b7002a;cursor: pointer;}
+/*
+	
+	save 
+
+*/
+.mainContainer #main .saveContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 20px;border-radius: 2px;display: grid;grid-template-columns: 1fr 1fr;grid-gap:10px;}
+.mainContainer #main .saveContainer #saveNewProduct{background: #b7002a;color:#fff;border:0; width: 100%;padding: 5px;}
+.mainContainer #main .saveContainer #cancel{background: #fff;color:#000;border:1px solid; padding: 5px;text-align: center;text-decoration: none;}
+/*
+	PRODUCT DATA
+*/
+.mainContainer #main .codeContainer input[type='text']{width:calc(100% - 10px);}
+.mainContainer #main .settingContainer textarea{width:calc(100% - 10px);height:200px;resize:none;border:1px solid #aaa;}
+.thumb{width: 100px;}
+
+.mainContainer .typeContainer{display:grid;grid-template-columns: 10px auto;grid-gap: 10px;}
+.mainContainer .typeContainer p{grid-column-start:1;grid-column-end:3;}
+
+.mainContainer .amountContainer{opacity: 0;}
+.mainContainer .amountContainer .amountDiv{width: 100%;position: relative;}
+.mainContainer .amountContainer .amountDiv input[type="number"]{padding:5px 5px 5px 30px;}
+.mainContainer .amountContainer .amountDiv label{position: absolute;left:5px;top:7px;font-size: 13px;}
+.mainContainer .amountContainer .amountDiv .percetage{display: none;}
+.mainContainer .amountContainer .amountDiv .fixed{display: none;}
+.mainContainer .amountContainer #example_wrapper{display: none;}
+
+.mainContainer .amountContainer .appliesToContainer{display:grid;grid-template-columns: 10px auto;grid-gap: 10px;}
+.mainContainer .amountContainer .appliesToContainer p{grid-column-start:1;grid-column-end:3;}
+.mainContainer .amountContainer #example th,.mainContainer .amountContainer #example td{ text-align: left; }
+
+#date_expires{width: calc(100% - 10px);}
