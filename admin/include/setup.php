@@ -1146,7 +1146,7 @@
 					while($row = $this->db->fetchArray($result)){
 						$img = $this->getMedia($row['id_type'],'type');
 						$img_mobile = $this->getMedia($row['id_type'],'type_mobile');
-						if(!$img && !$img2){
+						if(!$img && !$img_mobile){
 							array_push($array_data, array('type'=>$row,'media'=>false));
 						}else{
 							$imgs = array($img,$img_mobile);
@@ -1346,6 +1346,224 @@
 			$this->db->closeAll();
 			return $returnValue;
 		}
+
+		/*
+			THEME
+		*/
+			/*		CAROUSEL 	*/
+			function getCarousels(){
+				$returnValue = true;
+				$this->db->DBLogin();
+				$qry = 'SELECT * FROM carousel ORDER by id_carousel DESC';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('NO CAROUSELS');
+					$returnValue=false;
+				}else{
+					$array_data = [];
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,$row);
+					}
+					$returnValue = $array_data;
+				}
+				return $returnValue;
+			}
+			function getCarousel($id_carousel){
+				$returnValue = true;
+				$this->db->DBLogin();
+				$qry = 'SELECT * FROM carousel_slide WHERE carousel_id_carousel='.$id_carousel .' ORDER BY number_slide ASC';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('NO slides');
+					$returnValue=false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						$img = $this->getMedia($row['id_carousel_slide'],'carousel');
+						$img_mobile = $this->getMedia($row['id_carousel_slide'],'carousel_mobile');
+						if(!$img && !$img_mobile){
+							array_push($array_data, array('carousel'=>$row,'media'=>false));
+						}else{
+							$imgs = array($img,$img_mobile);
+							array_push($array_data, array('carousel'=>$row,'media'=>$imgs));
+						}
+					}
+					$returnValue = $array_data;
+				}
+				return $returnValue;
+			}
+			function insertCarousel(){
+				$returnValue = true;
+				$data = $_POST;
+				$this->checkDBLogin();
+				$qry = 'INSERT INTO carousel(name,status) VALUES ("'.$data['name'].'",1) ';
+				$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar la marca');
+					$returnValue = false;
+				}
+
+				$id_carousel = $this->db->lastInsertID();
+				$returnValue = $id_carousel;
+				return $returnValue;
+			}
+
+			function insertCarouselSlide(){
+				$returnValue = true;
+				$data = $_POST;
+				$this->checkDBLogin();
+				$qry = 'INSERT INTO carousel_slide(number_slide,url,text,carousel_id_carousel) 
+											VALUES ("'.$data['number'].'",
+													"'.$this->SanitizeForSQL($data['url']).'",
+													"'.$this->SanitizeForSQL($data['text']).'",
+													'.$data['id_carousel'].')';
+				$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar la marca');
+					$returnValue = false;
+				}
+				$id_slider = $this->db->lastInsertID();
+				// $id_slider = $data['id_carousel'];
+				
+
+				if(!empty($_FILES['file']['name'])){
+	           		$archivo = $_FILES['file'];
+	           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+	           			$tmp_name = $archivo["tmp_name"];
+	           			$extension = explode(".",$archivo['name']);
+		           		$name = $this->removeWhitespaces($this->Sanitize($extension[0]));
+		           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
+						$pathInsert = '../../img/carousel/';
+						$pathInsert .= $name;
+						$pathSave = '/img/carousel/';
+						$pathSave .= $name;
+						$img = $this->insertMedia('carousel',$id_slider,$tmp_name,$pathInsert,$pathSave);
+						if(!$img){						
+							$returnValue = false;
+						}
+	           		}
+	           	}
+
+	           	if(!empty($_FILES['fileMobile']['name'])){
+	           		$archivo = $_FILES['fileMobile'];
+	           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+	           			$tmp_name = $archivo["tmp_name"];
+	           			$extension = explode(".",$archivo['name']);
+		           		$name = $this->removeWhitespaces($this->Sanitize($extension[0] . 'mobile'));
+		           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
+						$pathInsert = '../../img/carousel/';
+						$pathInsert .= $name;
+						$pathSave = '/img/carousel/';
+						$pathSave .= $name;
+						$img = $this->insertMedia('carousel_mobile',$id_slider,$tmp_name,$pathInsert,$pathSave);
+						if(!$img){
+							$returnValue = false;
+						}
+	           		}	
+	           	}
+				return $returnValue;
+			}
+
+			function updateSlidesNumber(){
+				$data = $_POST;
+				$returnValue = true;
+				$this->checkDBLogin();
+				$lista = json_decode($_POST['lista']);
+				foreach($lista as $key=>$value){
+		            $qry = "UPDATE carousel_slide SET number_slide = ".$value[1]." WHERE id_carousel_slide=".$value[0];
+					$result = $this->db->updateQuery($qry);
+					if(!$result){
+						$this->db->HandleError('No se pudo guardar la marca');
+						$returnValue = false;
+					}
+		        }
+				return $returnValue;
+			}
+
+			function updateSlide(){
+				$data = $_POST;
+				$returnValue = true;
+				$this->checkDBLogin();
+				$qry = 'UPDATE carousel_slide SET url="'.$data['url'].'", text="'.$this->SanitizeForSQL($data['text']).'" WHERE id_carousel_slide='.$data['id_carousel_slide'];
+				$result = $this->db->updateQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo actualizar slide');
+					$returnValue = false;
+				}
+				return $returnValue;
+			}
+
+			function updateCarouselPhoto(){
+				$data = $_POST;
+				$returnValue = true;
+				$this->checkDBLogin();
+				
+				$id_media = $data['id_media'];
+				$type = $data['type'];
+
+				if(!empty($_FILES['file']['name'])){
+	           		$archivo = $_FILES['file'];
+	           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+	           			$tmp_name = $archivo["tmp_name"];
+	       				$extension = explode(".",$archivo['name']);
+	       				if($type == 'carousel_mobile'){
+	       					$name = $this->removeWhitespaces($this->Sanitize($extension[0] . 'mobile'));
+	       				}else{
+	       					$name = $this->removeWhitespaces($this->Sanitize($extension[0]));
+	       				}
+	           			$name .= date("m-d-Y_hia") . '.' . $extension[1];
+						$pathInsert = '../../img/carousel/';
+						$pathInsert .= $name;
+
+						$pathSave = '/img/carousel/';
+						$pathSave .= $name;
+						$img = $this->updateMedia($type,$id_media,$tmp_name,$pathInsert,$pathSave);
+						if(!$img){
+							$returnValue = false;
+						}
+	           		}
+	           		
+	           	}
+				return $returnValue;
+
+			}
+
+			function deleteSlide(){
+				$data = $_POST;
+				$returnValue = true;
+				$this->checkDBLogin();
+				$id_carousel = $data['id_carousel'];
+				$img = $this->getMedia($data['id_carousel_slide'],'carousel');
+				$img_mobile = $this->getMedia($data['id_carousel_slide'],'carousel_mobile');
+				if(is_array($img) && is_array($img_mobile)){
+					$this->deleteMedia($img[0]['id_media']);
+					$this->deleteMedia($img_mobile[0]['id_media']);
+				
+				}
+				$qry = 'DELETE FROM carousel_slide WHERE id_carousel_slide='.$data['id_carousel_slide'];
+				$result = $this->db->deleteQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('No se pudo eliminar slide'.$qry);
+					$returnValue = false;
+				}
+
+
+				$lista = $this->getCarousel($id_carousel);
+		        $cont = 1;
+		        
+		        foreach ($lista as $key => $value) {
+		        	$carousel = $value['carousel'];
+		        	$qry = "UPDATE carousel_slide SET number_slide = ".$cont." WHERE id_carousel_slide=".$carousel['id_carousel_slide']; 
+					$returnValue = $qry;
+		            $result = $this->db->deleteQuery($qry);
+					if(!$result){
+						$this->db->HandleDBError('No se pudo eliminar slide'.$qry);
+						$returnValue = false;
+					}
+		            $cont++;
+		        }
+				return $returnValue;
+			}
 		/*
 
 			MEDIA
@@ -1357,11 +1575,11 @@
 			$qry = 'SELECT * FROM media WHERE type="'.$type.'" and id_type='.$id_type;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
-				$this->db->HandleError('No categorias aun');
+				$this->db->HandleError('No media aun'.$qry);
 				$returnValue = false;
 			}else{
 				if(!$this->db->numRows($result)){
-					$this->db->HandleError('No categorias aun');
+					$this->db->HandleError('No media aun'.$qry);
 					$returnValue = false;
 				}else{
 					$array_data = array();
@@ -1409,7 +1627,7 @@
  	        }
  	        return $returnValue;
 		}
-		function deleteMedia($id_media,$id_type){
+		function deleteMedia($id_media){
 			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'DELETE FROM media WHERE id_media='.$id_media;

@@ -1,10 +1,8 @@
 <?php
 	require_once "setup.php";
 	$set = new Setup();
-	$all = $_POST;
-	$returnValue = false;
-	$returnValue = $set->deleteMedia($all['id_media']);
-	
+	$returnValue = $set->deleteSlide();
+
 	//JSON RETURN
 	header('Content-Type: application/json');
 	$json_return['return'] = $returnValue;

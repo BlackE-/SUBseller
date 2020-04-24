@@ -6,7 +6,7 @@
 		<li id="nav_inventory"><a href="inventory"><i class="fas fa-book-open"></i> <span>INVENTARIO</span></a></li>
 		<li id="nav_clients"><a href="clients"><i class="fas fa-users"></i> <span>CLIENTS</span></a></li>
 		<li id="nav_coupons"><a href="coupons"><i class="fas fa-gift"></i> <span>DISCOUNTS</span></a></li>
-		<li id="nav_options"><a href="options"><i class="fas fa-folder-open"></i><span>OPCIONES</span></a></li>
+		<li id="nav_options"><a href="options"><i class="fas fa-folder-open"></i><span>OPTIONS</span></a></li>
 	</ul>
 
 	<ul>

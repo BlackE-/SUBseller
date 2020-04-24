@@ -1,0 +1,43 @@
+.mainContainer #main {padding: 20px;}
+.mainContainer #main .returnDiv{grid-column-start: 1;grid-column-end: 3;background: transparent;;border:0;}
+.mainContainer #main .returnDiv a{color:#aaa;text-decoration: none;}
+.mainContainer #main .returnDiv a:hover{color:#b7002a;}
+
+
+.carouselContainer #carouselSlideForm{border:1px solid;margin: 0 auto;padding: 10px;text-align: center; display: grid;
+grid-template-rows: 1fr 1fr 40px 50px;grid-template-columns: 100px auto 100px ; grid-gap: 5px;}
+
+.carouselContainer #carouselSlideForm div{grid-column-start: 1;grid-column-end: 4;display: grid;grid-template-rows: 1fr;grid-template-columns: 100px auto;align-items: center;}
+
+.carouselContainer #carouselSlideForm input[type='number']{text-align: center;}
+.carouselContainer #carouselSlideForm input[type='text']{padding: 10px;width: calc(100% - 25px);grid-column-start: 2;grid-column-end: 4;}
+.carouselContainer #carouselSlideForm textarea{grid-column-start: 1;grid-column-end: 3;resize: none;padding:10px;}
+.carouselContainer #carouselSlideForm input[type='submit']{background: #b7002a;color:#fff;border:0;grid-column-start: 3;grid-column-end: 4; }
+
+
+
+#sortable{list-style: none;padding: 0;}
+.slide .row{display: grid;grid-template-columns: 30px auto auto 450px 30px;padding:10px;grid-gap: 10px;align-items: center;text-align: center;}
+.slide{background: rgba(255,255,255, 0.1);}
+.slide:nth-child(odd){background: rgba(183, 0, 42, 0.1);}
+.slide .row .editText{text-align: left;display: grid;grid-template-rows: 1fr 2fr;grid-template-columns: auto 30px;grid-gap:10px;    align-items: center;}
+.slide .row input{border:1px solid #aaa;outline:none;padding: 5px;font-size: 12px;}
+.slide .row input:focus{border:1px solid #b7002a;}
+.slide .row input ~ .saveText{opacity: 0;transition:300ms all ease-in;}
+.slide .row input:focus ~ .saveText{opacity: 1;}
+.slide .row textarea{border:1px solid #aaa;outline:none;resize: none;height: 100%;padding: 5px; font-size: 12px;}
+.slide .row textarea:focus{border:1px solid #b7002a;}
+.slide .row textarea ~ .saveText{opacity: 0;transition:300ms all ease-in;}
+.slide .row textarea:focus ~ .saveText{opacity: 1;}
+.saveText{grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 3;}
+.saveText:hover{cursor:pointer;}
+
+
+.rowImg{display: grid;    grid-template-columns: 1fr;    grid-gap: 10px;   padding: 10px;grid-template-rows: 1fr 25px;grid-template-rows: 1fr;}
+.rowImg img{width: 100%;}
+
+.changeFotocarousel {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
+.changeFotocarousel + label {font-size: 13px; font-weight: 700;color: black;display: inline-block;}
+.changeFotocarousel + label {cursor: pointer; /* "hand" cursor */}
+
+.delete:hover{cursor: pointer;}

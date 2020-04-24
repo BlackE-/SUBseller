@@ -348,11 +348,8 @@
 
 					let id_ = this.getAttribute("id").split("_");
 					let id_type = id_[2];
-					let type_name = document.querySelector('#type_'+id_type).value;
+					let type = this.getAttribute("name");
 
-					let type_status = 1;
-       				if (!this.checked){type_status=0;}
-       				
 					let xmlhttp = new XMLHttpRequest();
 					xmlhttp.onreadystatechange = function() {
 						if (this.readyState == 4 && this.status == 200) {

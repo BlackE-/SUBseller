@@ -1,9 +1,7 @@
 <?php
 	require_once "setup.php";
 	$set = new Setup();
-	$all = $_POST;
-	$returnValue = false;
-	$returnValue = $set->deleteMedia($all['id_media']);
+	$returnValue = $set->updateCarouselPhoto();
 	
 	//JSON RETURN
 	header('Content-Type: application/json');

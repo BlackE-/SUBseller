@@ -14,7 +14,7 @@
 <html>
 <head>
 	<?php include('header_meta.php');?>
-	<link rel="stylesheet" type="text/css" href="css/store.css" />
+	<link rel="stylesheet" type="text/css" href="css/options.css" />
 </head>
 <body>
 	<?php include('header.php');?>
