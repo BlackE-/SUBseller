@@ -109,7 +109,7 @@
 					}
 				}
 			}
-			xhr.open('POST', './include/CAROUSEL-updateCarouselPhoto.php', true);
+			xhr.open('POST', './include/CAROUSEL-updateSlidePhoto.php', true);
 			xhr.send(formData);
 		});
 	}

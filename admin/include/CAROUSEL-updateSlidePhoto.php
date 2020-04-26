@@ -1,7 +1,7 @@
 <?php
 	require_once "setup.php";
 	$set = new Setup();
-	$returnValue = $set->updateCarouselPhoto();
+	$returnValue = $set->updateSlidePhoto();
 	
 	//JSON RETURN
 	header('Content-Type: application/json');

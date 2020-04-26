@@ -41,7 +41,7 @@
 									}else{
 										foreach ($carousels as $key => $value) {
 											echo '<div class="row">';
-							                    echo '<a href="carousel?id_carousel='.$value['id_carousel'].'">'.$value['id_carousel'].'</a>';
+							                    echo '<a href="carousel?id_carousel='.$value['id_carousel'].'"><button>'.$value['id_carousel'].'</button></a>';
 							                    echo '<input type="text" value="'.$value['name'].'" id="carousel_'.$value['id_carousel'].'"/>';
 							                    echo '<i class="fas fa-save save" title="Actualizar?" id="carousel_update_'.$value['id_carousel'].'"></i>';
 							                    if($value['status'] == 0){
@@ -60,15 +60,47 @@
 					</div>
 					<div class="option html">
 						<div class="categoriasContainer">
-							<form id="categoryForm">
-								<input type="text" name="url" placeholder="URL PAGINA">
-								<input type="file" id="categoryFile">
-								<textarea id="html_content_text"></textarea>
-								<input type="submit" name="" value="GUARDAR">
+							<form id="htmlForm">
+								<select id="type">
+									<option value="1" selected="">Opción 1 - Background</option>
+								</select>
+									<div id="div_1">
+										<select id="url_page_1">
+											<option value="index">Home</option>
+										</select>
+										<input type="file" id="file_1">
+										<input type="text" id="text1_1" placeholder="Texto 1">
+										<input type="text" id="text2_1" placeholder="Texto 2">
+										<input type="text" id="textButton1" placeholder="Texto Button">
+										<input type="text" id="url_1" placeholder="URL button">
+									</div>
+								<div>
+									<input type="submit" name="" value="GUARDAR">
+								</div>
 							</form>
 							<div>
 								<h2>HTML Contenido</h2>
-								
+								<?php
+									$htmls = $set->getHTML();
+									if(!$htmls){
+										echo 'Sin contenido aún';
+									}else{
+										foreach ($htmls as $key => $value) {
+											// print_r($value);
+											echo '<div class="htmlDiv">';
+											if($value['status'] == 0){
+												echo '<div class="statusContainer"><input type="checkbox" class="statusHTML" id="html_id_'.$value['id_html_content'].'"><label for="html_id_'.$value['id_html_content'].'"></label></div>';
+						                    }
+						                    else{
+						                        echo '<div class="statusContainer"><input type="checkbox" checked class="statusHTML" id="html_id_'.$value['id_html_content'].'"><label for="html_id_'.$value['id_html_content'].'"></label></div>';
+						                    }
+											// echo '<textarea disabled>'.$value['text'].'</textarea>';
+											echo '<div style="border:1px solid #ccc;">'.$value['text'].'</div>';
+											// echo '<i class="fas fa-save saveHTML" title="Actualizar?" id="'.$value['id_html_content'].'"></i>';
+											echo '</div>';
+										}
+									}
+								?>
 							</div>
 						</div>
 					</div>
@@ -77,5 +109,6 @@
 		</div>
 	</div>
 	<?php include('footer.php');?>
+	<?php include('modal.php');?>
 	<script type="text/javascript" src="script/theme.js"></script>
 </html>

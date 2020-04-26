@@ -1392,6 +1392,17 @@
 				}
 				return $returnValue;
 			}
+			function updateCarousel($id_carousel,$name,$status){
+				$returnValue = true;
+				$this->checkDBLogin();
+				$qry = 'UPDATE carousel SET name="'.$name.'", status='.$status.' WHERE id_carousel='.$id_carousel;
+				$result = $this->db->updateQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo actualizar'.$qry);
+					$returnValue = false;
+				}
+				return $returnValue;
+			}
 			function insertCarousel(){
 				$returnValue = true;
 				$data = $_POST;
@@ -1407,7 +1418,6 @@
 				$returnValue = $id_carousel;
 				return $returnValue;
 			}
-
 			function insertCarouselSlide(){
 				$returnValue = true;
 				$data = $_POST;
@@ -1463,7 +1473,6 @@
 	           	}
 				return $returnValue;
 			}
-
 			function updateSlidesNumber(){
 				$data = $_POST;
 				$returnValue = true;
@@ -1479,7 +1488,6 @@
 		        }
 				return $returnValue;
 			}
-
 			function updateSlide(){
 				$data = $_POST;
 				$returnValue = true;
@@ -1492,8 +1500,7 @@
 				}
 				return $returnValue;
 			}
-
-			function updateCarouselPhoto(){
+			function updateSlidePhoto(){
 				$data = $_POST;
 				$returnValue = true;
 				$this->checkDBLogin();
@@ -1525,9 +1532,7 @@
 	           		
 	           	}
 				return $returnValue;
-
 			}
-
 			function deleteSlide(){
 				$data = $_POST;
 				$returnValue = true;
@@ -1562,6 +1567,89 @@
 					}
 		            $cont++;
 		        }
+				return $returnValue;
+			}
+			/*
+
+					HTML
+
+			*/
+			function getHTML(){
+				$returnValue = true;
+				$this->db->DBLogin();
+				$qry = 'SELECT * FROM html_content ORDER by id_html_content DESC';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('NO HTML');
+					$returnValue=false;
+				}else{
+					$array_data = [];
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,$row); 
+					}
+					$returnValue = $array_data;
+				}
+				return $returnValue;
+			}
+
+			function insertHTMLContent(){
+				$returnValue = true;
+				$this->db->DBLogin();
+				$data = $_POST;
+				switch ($data['type']) {
+					case '1':
+						//insert HTML empty to get last_id_inserted
+						$qry = 'INSERT INTO html_content (page,status) VALUES ("'.$data['url_page'].'",1)';
+						$result = $this->db->insertQuery($qry);
+						if(!$result){
+							$this->db->HandleError('No se pudo guardar html content');
+							$returnValue = false;
+						}
+						$id_html = $this->db->lastInsertID();
+						
+						//insertar img in MEDIA
+						if(!empty($_FILES['file']['name'])){
+			           		$archivo = $_FILES['file'];
+			           		if ($archivo["error"] == UPLOAD_ERR_OK) {
+			           			$tmp_name = $archivo["tmp_name"];
+			           			$extension = explode(".",$archivo['name']);
+				           		$name = $this->removeWhitespaces($this->Sanitize($extension[0]));
+				           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
+								$pathInsert = '../../img/html/';
+								$pathInsert .= $name;
+								$pathSave = '/img/html/';
+								$pathSave .= $name;
+								$img = $this->insertMedia('html',$id_html,$tmp_name,$pathInsert,$pathSave);
+								if(!$img){						
+									$returnValue = false;
+								}
+			           		}
+			           	}
+
+				        //create HTML OF type 1
+				        $html = '<div class="contenidoBox" style="background-image:url('.$pathSave.');background-size:cover;">';
+				        $html .= '<div class="container">';
+						$html .= '<h1>'.$data['text1'].'</h1>';  
+                        $html .= '<p>'.$data['text2'].'</p>';
+                        $html .= '<a href="'.$data['url'].'"><button>'.$data['textButton'].'</button></a>';
+                    	$html .= '</div>';
+                    	$html .= '</div>';
+				    	//update 
+
+                    	$qry = "UPDATE html_content 
+                    					SET text='$html'
+                    					WHERE id_html_content='$id_html'";
+						$result = $this->db->updateQuery($qry);
+						if(!$result){
+							$this->db->HandleDBError('No se pudo actualizar HTML CONTENT'.$qry);
+							$returnValue = false;
+						}
+
+						break;
+					default:
+						# code...
+						break;
+				}
 				return $returnValue;
 			}
 		/*
