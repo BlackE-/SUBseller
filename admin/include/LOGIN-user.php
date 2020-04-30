@@ -1,7 +1,6 @@
 <?php
 	require_once "setup.php";
 	$set = new Setup();
-	$set->checkDBLogin();
 	$all = $_POST;
 	$returnValue = true;
 	if(isset($all['email']) && isset($all['password'])){

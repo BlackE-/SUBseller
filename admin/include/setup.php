@@ -28,6 +28,7 @@
 	    function loginAdmin($email,$password){
 	    	$returnValue = true;
 	    	$formvars = array();
+	    	$this->checkDBLogin();
 			$formvars['email'] = $this->Sanitize($email);	
 			$qry = "SELECT id_user,_password FROM _user WHERE email='".$formvars['email']."'";
 			$result = $this->db->selectQuery($qry);
@@ -167,22 +168,32 @@
 				
 				//website_settings
 				$qry = "INSERT into settings (name,value,type) values 
-											('website_url','','website_settings')";
+											('website_url','http://studio-sub.com','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
-											('description','','website_settings')";
+											('website_title','SUBselller','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
-											('keywords','','website_settings')";
+											('website_logo','img/logo.png','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
-											('favicon_url','','website_settings')";
+											('description','Sitio Ecommerce para vender tu marca','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('keywords','Ecommerce,SUBseller,tienda online','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('favicon_url','favicon/favicon.png','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
@@ -291,7 +302,7 @@
 		function getTypeTransation($id_order){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT type FROM transaction WHERE order_id_order = '.$id_order;
+			$qry = 'SELECT type FROM _transaction WHERE order_id_order = '.$id_order;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$returnValue = false;
