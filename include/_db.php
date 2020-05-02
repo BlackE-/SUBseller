@@ -103,6 +103,10 @@
             if(mysqli_num_rows($result)<=0){return false;}
             else{return true;}
         }
+
+        function getNumRows($result){
+            return mysqli_num_rows($result);
+        }
         
         function lastInsertID(){
             return mysqli_insert_id($this->connection); 

@@ -192,6 +192,7 @@
                                 id_html_content INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 text TEXT,
                                 status BOOLEAN COMMENT '0-show 1-hidden',
+                                type VARCHAR(30) COMMENT '1-BACKGROUND',
                                 page VARCHAR(30) COMMENT 'PAGE URL OF HTML CONTENT'
                             )";
                 $result = mysqli_query($this->connection,$create);
@@ -349,7 +350,7 @@
                                 product_id_product INT UNSIGNED,
                                 date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                                 stock INT,
-                                type VARCHAR(20),
+                                type VARCHAR(20) COMMENT 'INGRESO,EGRESO',
 
                                 INDEX (product_id_product),
                                 

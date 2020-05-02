@@ -240,6 +240,61 @@
 			return $returnValue;
 
 		}
+
+		function getBestSellers(){
+			$returnValue = false;
+			$this->checkDBLogin();
+			$qry = 'SELECT product.id_product,product.status,
+							product_movement.product_id_product,product_movement.type,COUNT(*) AS count
+					FROM product,product_movement
+					WHERE product_movement.type="EGRESO"
+					AND product.status=1
+					AND product.id_product = product_movement.product_id_product
+					GROUP BY product_movement.product_id_product ORDER BY count DESC LIMIT 4';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$qry = 'SELECT * FROM product WHERE status=1 ORDER BY RAND() LIMIT 4';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleError('NO HAY PRODUCTOS');
+					$returnValue = false;
+				}
+			}else{
+				if($this->db->getNumRows($result) < 4){
+					$qry = 'SELECT * FROM product WHERE status=1 ORDER BY RAND() LIMIT 4';
+					$result = $this->db->selectQuery($qry);
+					if(!$result){
+						$this->db->HandleError('NO HAY PRODUCTOS');
+						$returnValue = false;
+					}else{
+						$this->db->HandleError('HAY PRODUCTOS');
+						$array_data = [];
+						while($row = $this->db->fetchArray($result)){
+							$media = $this->getMedia($row['id_product'],'product');
+							if(!$media){
+								array_push($array_data, array('product'=>$row,'media'=>''));
+							}else{
+								array_push($array_data, array('product'=>$row,'media'=>$media));
+							}
+						}
+						$returnValue = $array_data;
+					}
+				}else{
+					$this->db->HandleError('HAY PRODUCTOS');
+					$array_data = [];
+					while($row = $this->db->fetchArray($result)){
+						$media = $this->getMedia($row['id_product'],'product');
+						if(!$media){
+							array_push($array_data, array('product'=>$row,'media'=>''));
+						}else{
+							array_push($array_data, array('product'=>$row,'media'=>$media));
+						}
+					}
+					$returnValue = $array_data;
+				}	
+			}
+			return $returnValue;
+		}
 		/*
 			PRODUCT
 		*/
@@ -349,7 +404,7 @@
 		function getBrands(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM brand ORDER BY id_brand';
+			$qry = 'SELECT * FROM brand WHERE status=1 ORDER BY id_brand';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No marcas');
@@ -380,7 +435,7 @@
 		function getCategories(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM category ORDER BY id_category';
+			$qry = 'SELECT * FROM category WHERE status=1 ORDER BY id_category ';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No categorias aun');
@@ -438,10 +493,56 @@
 			}
 			return $returnValue;
 		}
+		function getProductTypeName($id_type){
+	        $returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM type WHERE id_type='.$id_type;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tipos aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tipos aun');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['name'];
+
+				}
+			}
+			return $returnValue;
+	    }
+		/*
+			TAGS
+		*/
 		function getTags(){
 			$returnValue = true;
 			$this->checkDBLogin();
 			$qry = 'SELECT * FROM tag ORDER BY id_tag';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tags aun');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tags aun');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data, array('id_tag'=>$row['id_tag'],'name'=>$row['name']));
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getFavouriteTags(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM tag ORDER BY RAND() LIMIT 5';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No tags aun');
@@ -545,17 +646,14 @@
 							$img = $this->getMedia($row['id_carousel_slide'],'carousel');
 							$img_mobile = $this->getMedia($row['id_carousel_slide'],'carousel_mobile');
 							if(!$img && !$img_mobile){
-								array_push($array_data, array('carousel'=>$row,'media'=>false));
+								array_push($array_data, array('carousel'=>$row,'media'=>false,'media_mobile'=>false));
 							}else{
-								$imgs = array($img,$img_mobile);
-								array_push($array_data, array('carousel'=>$row,'media'=>$imgs));
+								array_push($array_data, array('carousel'=>$row,'media'=>$img,'media_mobile'=>$img_mobile));
 							}
 						}
 						$returnValue = $array_data;
 					}
 				}
-
-				
 				return $returnValue;
 			}
 
@@ -564,6 +662,23 @@
 					HTML
 
 			*/
+			function getHTMLContentIndex(){
+				$returnValue = true;
+				$this->db->DBLogin();
+				$qry = 'SELECT * FROM html_content WHERE page="index" AND status=1';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('NO HTML');
+					$returnValue=false;
+				}else{
+					$array_data = [];
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,$row); 
+					}
+					$returnValue = $array_data;
+				}
+				return $returnValue;
+			}
 			function getHTML(){
 				$returnValue = true;
 				$this->db->DBLogin();

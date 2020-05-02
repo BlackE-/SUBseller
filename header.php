@@ -1,10 +1,12 @@
 <header>
 	<div class="container">
 		<div id="logoContainer">
+			<a href="index">
 		<?php
 			$logo = $set->getWebsiteSetting('website_logo');
 			echo $logo;
 		?>
+			</a>
 		</div>
 		<div id="topContainer">
 			<p>Envío nacional gratis en compras mayores a $500</p>
@@ -19,8 +21,8 @@
 			</div>
 			<div id="userContainer">
 		        <?php
-		            if(!$login){echo '<a href="login.php"><i class="far fa-user" aria-hidden="true"></i><span>INICIAR SESIÓN</span></a>';}
-		            else{echo '<a href="cliente/index.php"><i class="far fa-user" aria-hidden="true"></i><span>MI CUENTA</span></a>';}
+		            if(!$login){echo '<a href="login"><i class="far fa-user" aria-hidden="true"></i><span>INICIAR SESIÓN</span></a>';}
+		            else{echo '<a href="cliente/index"><i class="far fa-user" aria-hidden="true"></i><span>MI CUENTA</span></a>';}
 		        ?>
 		    </div>
 	        <div id="cartContainer">

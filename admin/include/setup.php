@@ -1610,7 +1610,7 @@
 				switch ($data['type']) {
 					case '1':
 						//insert HTML empty to get last_id_inserted
-						$qry = 'INSERT INTO html_content (page,status) VALUES ("'.$data['url_page'].'",1)';
+						$qry = 'INSERT INTO html_content (page,status,type) VALUES ("'.$data['url_page'].'",1,"'.$data['type'].'")';
 						$result = $this->db->insertQuery($qry);
 						if(!$result){
 							$this->db->HandleError('No se pudo guardar html content');
@@ -1638,10 +1638,10 @@
 			           	}
 
 				        //create HTML OF type 1
-				        $html = '<div class="contenidoBox" style="background-image:url('.$pathSave.');background-size:cover;">';
+				        $html = '<div class="contenidoBox" style="background-image:url('.$pathSave.');">';
 				        $html .= '<div class="container">';
-						$html .= '<h1>'.$data['text1'].'</h1>';  
-                        $html .= '<p>'.$data['text2'].'</p>';
+						$html .= '<p class="text1">'.$data['text1'].'</h1>';  
+                        $html .= '<p class="text2">'.$data['text2'].'</p>';
                         $html .= '<a href="'.$data['url'].'"><button>'.$data['textButton'].'</button></a>';
                     	$html .= '</div>';
                     	$html .= '</div>';

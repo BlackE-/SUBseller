@@ -1,5 +1,5 @@
-html{scroll-behavior: smooth;}
 @import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
+html{scroll-behavior: smooth;}
 body{font-family: 'Lato', sans-serif;}
 .container{width:90%;max-width: 1280px;margin: 0 auto;display: grid;}
 header {background: 	linear-gradient(to bottom, #2361f0 40px,#2361f0 40px,#2361f0 40px,#eff4ff 40px,#eff4ff 40px);box-shadow: 1px 1px 10px #000;}
@@ -49,8 +49,27 @@ header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none
 }
 
 @media only screen and (max-width: 500px) {
-	header .container{grid-template-rows: 40px auto auto;    grid-template-columns: auto;}
-	header .container #logoContainer{grid-row-start: 2;grid-row-end: 3;width: 80%;margin: 0 auto;}
-	header .container #topContainer{grid-row-start: 1;grid-row-end: 2;    justify-content: center;}
-	header #menuContainer{grid-template-columns: auto;grid-template-rows: auto auto;grid-gap: 10px;padding: 10px;}
+	header .container{grid-template-rows: 40px auto;    grid-template-columns:100px auto;}
+	header .container #logoContainer{grid-row-start: 1;grid-row-end: 2;grid-column-start:1;grid-column-end:2;width: 80%;margin: 0 auto;}
+	header .container #topContainer{ justify-content: center;}
+	header .container #logoContainer{padding:0 10px;}
+	header #menuContainer{grid-column-start:1;grid-column-end:3;grid-template-columns: auto;grid-template-rows: auto auto;grid-gap: 5px;padding: 10px;}
+}
+
+
+
+footer{background: #2361f0;padding: 50px 0;}
+footer .container{grid-template-columns:1fr 1fr 1fr 1fr;}
+footer .container .column a{display:block;padding:0 0 15px 0;color:#fff;text-decoration: none;text-transform: uppercase;	}
+footer .container .column .title{font-weight: 700;}
+footer .container .column p{color:#fff;font-size: 14px;}
+footer .container .column svg{border:1px solid #fff;}
+footer .container .column p a{display:inline-block;text-decoration: underline;}
+footer .container #column3 #socialMediaContainer{display:grid;grid-template-columns:1fr 1fr;align-items: center;width: 100px;font-size: 25px;}
+
+@media only screen and (max-width: 940px) {
+	footer .container{grid-template-columns:1fr 1fr; }
+}
+@media only screen and (max-width: 460px) {
+	footer .container{grid-template-columns:1fr; }
 }
