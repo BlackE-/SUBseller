@@ -7,6 +7,12 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<script>
+         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            // some code..
+            window.location.replace("phone/index");
+        }
+     </script>  
 	<?php
 		require_once('header_meta.php');
 	?>
@@ -264,11 +270,7 @@
 		console.log("no intersectionobserver");
 	}
 
-	new Selectr('#productDrop', {
-		    searchable: true,
-		    defaultSelected:false,
-		    placeholder:"Buscar condición visual o producto"
-		});
+	
 
 		new Glide('#glideCarousel',{
 			type: 'slide',

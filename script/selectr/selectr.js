@@ -459,8 +459,8 @@
             this.opened = !1;
             this.config.taggable && (this.config.searchable = !1);
             this.mobileDevice = this.navigating = !1;
-            /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent) &&
-                (this.mobileDevice = !0);
+            // /Android|webOS|iPhone|iPad|BlackBerry|Windows Phone|Opera Mini|IEMobile|Mobile/i.test(navigator.userAgent) &&
+                // (this.mobileDevice = !0);
             this.customOption = this.config.hasOwnProperty("renderOption") && "function" === typeof this.config.renderOption;
             this.customSelected = this.config.hasOwnProperty("renderSelection") && "function" === typeof this.config.renderSelection;
             this.supportsEventPassiveOption = this.detectEventPassiveOption();

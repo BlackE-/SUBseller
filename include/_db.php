@@ -10,7 +10,9 @@
 
         
         function __construct(){
-            $array_ini = parse_ini_file('admin/include/setup.ini', true);
+            $path = dirname(__DIR__).'/admin/include/setup.ini';
+            // $array_ini = parse_ini_file('admin/include/setup.ini', true);
+            $array_ini = parse_ini_file($path, true);
             $this->InitDB(
                 $array_ini['host'],
                 $array_ini['username'],
