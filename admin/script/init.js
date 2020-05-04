@@ -54,7 +54,8 @@
                     }
                 }
             }
-            xmlhttp.open("POST", "http://localhost/subseller/admin/include/INIT-subseller.php", true);
+            // xmlhttp.open("POST", "http://localhost/subseller/admin/include/INIT-subseller.php", true);
+            xmlhttp.open("POST", "./include/INIT-subseller.php", true);
             xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
             xmlhttp.send(`host=${host.value}&database=${database.value}&username=${username.value}&password=${pass_element.value}`);
     }

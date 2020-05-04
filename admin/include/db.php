@@ -192,8 +192,10 @@
                                 id_html_content INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 text TEXT,
                                 status BOOLEAN COMMENT '0-show 1-hidden',
+                                mobile BOOLEAN COMMENT '0-desktop 1-mobile',
                                 type VARCHAR(30) COMMENT '1-BACKGROUND',
-                                page VARCHAR(30) COMMENT 'PAGE URL OF HTML CONTENT'
+                                page VARCHAR(30) COMMENT 'PAGE URL OF HTML CONTENT',
+                                id_html_content_parent INT COMMENT 'id_html of PARENT (only mobile has data)'
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){

@@ -662,10 +662,14 @@
 					HTML
 
 			*/
-			function getHTMLContentIndex(){
+			function getHTMLContentIndex($type){
 				$returnValue = true;
 				$this->db->DBLogin();
-				$qry = 'SELECT * FROM html_content WHERE page="index" AND status=1';
+				if($type === 'mobile'){
+					$qry = 'SELECT * FROM html_content WHERE page="index" AND status=1 AND mobile=1';
+				}else{
+					$qry = 'SELECT * FROM html_content WHERE page="index" AND status=1 AND mobile=0';
+				}
 				$result = $this->db->selectQuery($qry);
 				if(!$result){
 					$this->db->HandleDBError('NO HTML');

@@ -32,10 +32,6 @@
 				</svg>
 			</a>
 		</div>
-
-		
-
-
 		<!--	MENU	-->
 		<div id="menu">
 			<ul class="menuList">
@@ -63,7 +59,7 @@
 				<li>
 					<div class="detailsContainer" id="brandDropdown">
 						<details>
-						  <summary>Categorias</summary>
+						  <summary>Marcas</summary>
 							<?php
 				                $brands = $set->getBrands();
 				                if(!$brands){
@@ -102,7 +98,6 @@
 				</li>
 			</ul>
 		</div>
-
 		<!-- search -->
 		<div id="search">
 			<div id="searchContainer">
@@ -125,6 +120,4 @@
 	<div class="container" id="caption">
 		<p>Envio nacional gratis en compras mayores a $500</p>
 	</div>
-	
-	
 </header>

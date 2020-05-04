@@ -2,7 +2,7 @@
 html{scroll-behavior: smooth;}
 body{font-family: 'Lato', sans-serif;}
 .container{width:90%;max-width: 360px;margin: 0 auto;display: grid;}
-header {background: linear-gradient(to bottom, #fff 50px,#fff 50px,#fff 50px,#fff 50px,#2361f0 50px);box-shadow: 1px 1px 10px #000;position: relative;}
+header {background: linear-gradient(to bottom, #fff 50px,#fff 50px,#fff 50px,#fff 50px,#2361f0 50px);box-shadow: 1px 1px 10px #000;position: relative;z-index: 1;}
 header #navbar{grid-template-columns:1fr 1fr 2fr 1fr 1fr ;grid-template-rows:50px;    align-items: center;text-align: center;position: relative;}
 
 
@@ -17,16 +17,16 @@ header #menuIcon{width:30px;height: 25px;position: relative;z-index:100;-webkit-
 #menuIcon.open span:nth-child(3) {top: 10px;width:30px;-webkit-transform: rotate(-135deg);-moz-transform: rotate(-135deg);-o-transform: rotate(-135deg);  transform: rotate(-135deg);}
 
 
-header #menu{position: absolute;top:50px;left:-9999px;opacity: 0;background: #fff;width: 105%;text-align: left;}
-header #menu.open{left:0;opacity: 1;animation-duration: 300ms;animation-name: smoothOpen;left:0;opacity: 1;}
+header #menu{position: absolute;top:50px;left:-9999px;opacity: 0;background: #fff;width: 112%;text-align: left;z-index: 100;}
+header #menu.open{left:0;opacity: 1;animation-duration: 300ms;animation-name: smoothOpen;left:-6%;opacity: 1;}
 header #menu.close{animation-duration: 300ms;animation-name: smoothClose;left:-9999px;opacity: 0;}
 @keyframes smoothOpen {
   0% { left: -9999px;  }
   50% {	left: -100px; opacity: 0.5;}
-  100% {left: 0; opacity: 1;}
+  100% {left: -6%; opacity: 1;}
 }@keyframes smoothClose {
-  0% { left: 0; }
-  50% {	left: -100px; opacity: 0.5;}
+  0% { left: -6%;opacity: 0.5}
+  50% { left:-100px;}
   100% {left: -9999px; opacity: 0;}
 }
 
@@ -48,90 +48,41 @@ header #searchIcon.open svg{display: none;animation-name: searchOpen;}
 header #searchIcon.open p{display: block;}
 header #searchIcon.close svg{display: block;animation-name: searchClose;}
 header #searchIcon.close p{display: none;}
-header #search{position: absolute;top:50px;left:-9999px;opacity: 0;background: #fff;width: 105%;text-align: left;padding: 10px;}
-header #search.open{left:0;opacity: 1;animation-duration: 300ms;animation-name: smoothOpen;left:0;opacity: 1;}
-header #search.close{animation-duration: 300ms;animation-name: smoothClose;left:-9999px;opacity: 0;}
+header #search{position: absolute;top:50px;left:-9999px;opacity: 0;background: #fff;width: 106%;text-align: left;padding: 10px;z-index: 100;}
+header #search.open{left:-6%;opacity: 1;animation-duration: 300ms;animation-name: searchOpen;left:-6%;opacity: 1;}
+header #search.close{animation-duration: 300ms;animation-name: searchClose;left:-9999px;opacity: 0;}
 @keyframes searchOpen {
-  0% { opacity: 1;  }
-  /*50% {}*/
-  100% {opacity: 0;}
-}@keyframes searchClose {
-  0% { left: 0; }
+  0% { left:-9999px;}
   50% {	left: -100px; opacity: 0.5;}
+  100% {opacity: 1;left:-6%;}
+}@keyframes searchClose {
+  0% { left: -6%; opacity: 0.5;}
+  50% { left:-100px;}
   100% {left: -9999px; opacity: 0;}
 }
-
-
-
-
 header #navbar #logoContainer{padding:10px;}
 header #navbar #logoContainer svg{display: block;}
-
 header #caption p{font-size: 12px;color:#fff;text-align: center;}
 
 
 
 
-/*header .container #logoContainer{grid-row-start: 1;grid-row-end: 3;padding: 10px;background: #fff;    display: grid;align-items: center;}
-header .container #logoContainer svg{display: block;}
-header .container #topContainer{background:#2361f0; display: grid;grid-template-columns: auto 100px 160px 160px;align-items: center;text-align: right;}
-header .container #topContainer p{margin:0;color:#fff;font-size: 12px;}
-header .container #topContainer a{color:#fff;text-decoration: none;font-size: 12px;}
-header .container #topContainer #socialMediaHeader{display: grid;align-items: center;grid-template-columns: 30px 30px ;text-align: center;    justify-content: center;}
-header .container #topContainer #socialMediaHeader i{font-size: 20px;}
-header .container #topContainer #userContainer{border-right: 1px solid #fff;border-left: 1px solid #fff;padding:0 10px;text-align: center;height: 100%;    display: grid;align-items: center;}
-header .container #topContainer #userContainer i{margin: 0 10px 0 0;font-size: 16px;}
-header .container #topContainer #cartContainer {display: grid;align-items: center;}
-header .container #topContainer #cartContainer table{margin:0 auto;}
-header .container #topContainer #cartContainer i{margin: 0 10px 0 0;font-size: 16px;}
 
-@media only screen and (max-width: 830px) {
-	header .container #topContainer{grid-template-columns: auto 60px 40px 40px;}
-	header .container #topContainer #userContainer span{display: none;}
-	header .container #topContainer #cartContainer span{display: none;}
-}
+footer{background: #2361f0;padding: 25px 0;}
+footer #menuFooter .container{grid-template-columns: 1fr 1fr;grid-gap: 15px;}
+footer #menuFooter .container a{color:#fff;text-decoration: none;font-size: 10px;}
 
-@media only screen and (max-width: 690px) {
-	header .container #topContainer{grid-template-columns: 60px 40px 40px;justify-content: end;}
-	#topContainer p{display: none;}
-}
+footer #newsletter {padding: 25px 0;}
+footer #newsletter .container{border-bottom: 1px solid #c4c4c4;border-top: 1px solid #c4c4c4;}
 
+footer #newsletter .container .boletinBox{display: grid;grid-template-columns: 50px auto;align-items: center;margin: 0 auto;}
+footer #newsletter .container .boletinBox p{color:#fff;text-transform: uppercase;text-align: center;font-size:14px;}
+footer #newsletter .container .boletinBox p b{font-size: 16px;}
 
-header #menuContainer{background:#eff4ff;display: grid;grid-template-columns: auto auto auto auto;align-self: center;}
-header #menuContainer select{display: block;padding: 2px 25px 2px 2px;outline: none;height:30px; color:#2361f0;border: none;margin: 0 auto;	background: url("../img/selectArrow.svg") right center no-repeat; 	appearance: none; -webkit-appearance: none;-moz-appearance: none; }
-header #menuContainer #tiendaLinkContainer{display:none;text-align: center;align-items: center;}
-header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none;}
+footer #newsletter .container form{display: grid;grid-template-columns: auto 60px;height: 30px;}
+footer #newsletter .container form input[type='text']{border:1px solid #c4c4c4;border-right:0;outline:none;padding:5px 10px;font-size: 14px;border-radius: 0;}
+footer #newsletter .container form .sendNewsletter{border:0;outline:none;background: rgb(18,249,231);color:#2361f0;font-size: 12px;border-radius: 0;}
 
-@media only screen and (max-width: 940px) {
-	header #menuContainer{grid-template-columns:auto auto;}
-	header #menuContainer #categoriesDropdown,
-	header #menuContainer #brandDropdown,
-	header #menuContainer #typeDropdown{display: none;}
-	header #menuContainer #tiendaLinkContainer{display:grid;}
-}
-
-@media only screen and (max-width: 500px) {
-	header .container{grid-template-rows: 40px auto;    grid-template-columns:100px auto;}
-	header .container #logoContainer{grid-row-start: 1;grid-row-end: 2;grid-column-start:1;grid-column-end:2;width: 80%;margin: 0 auto;}
-	header .container #topContainer{ justify-content: center;}
-	header .container #logoContainer{padding:0 10px;}
-	header #menuContainer{grid-column-start:1;grid-column-end:3;grid-template-columns: auto;grid-template-rows: auto auto;grid-gap: 5px;padding: 10px;}
-}
-
-
-
-footer{background: #2361f0;padding: 50px 0;}
-footer .container{grid-template-columns:1fr 1fr 1fr 1fr;}
-footer .container .column a{display:block;padding:0 0 15px 0;color:#fff;text-decoration: none;text-transform: uppercase;	}
-footer .container .column .title{font-weight: 700;}
-footer .container .column p{color:#fff;font-size: 14px;}
-footer .container .column svg{border:1px solid #fff;}
-footer .container .column p a{display:inline-block;text-decoration: underline;}
-footer .container #column3 #socialMediaContainer{display:grid;grid-template-columns:1fr 1fr;align-items: center;width: 100px;font-size: 25px;}
-
-@media only screen and (max-width: 940px) {
-	footer .container{grid-template-columns:1fr 1fr; }
-}
-@media only screen and (max-width: 460px) {
-	footer .container{grid-template-columns:1fr; }
-}*/
+footer #copyRight{text-align: center;}
+footer #copyRight p{color:#fff;font-size:12px;padding: 0;margin: 0;}
+footer #copyRight a{color:#fff;}

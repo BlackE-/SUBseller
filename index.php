@@ -9,7 +9,6 @@
 <head>
 	<script>
          if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            // some code..
             window.location.replace("phone/index");
         }
      </script>  
@@ -144,10 +143,12 @@
 					foreach ($categories as $key => $value) {
 						$category = $value['category'];
 						$category_img = $value['media'];
+						echo '<a href="store/category/'.$category['id_category'].'">';
 						echo '<div class="box">';
 						echo '<img src="'.$path.$category_img[0]['url'].'"/>';
-						echo '<a href="store/category/'.$category['id_category'].'">'.$category['name'].'</a>';
+						echo '<p>'.$category['name'].'</p>';
 						echo '</div>';
+						echo '</a>';
 					}
 				}
 			?>
@@ -185,7 +186,7 @@
     </div>
     <div id="htmlContentContainer">
     	<?php
-    		$htmlContent = $set->getHTMLContentIndex();
+    		$htmlContent = $set->getHTMLContentIndex('desktop');
     		if(!$htmlContent){
 
     		}else{
@@ -244,66 +245,6 @@
 
 	<?php include('footer.php');?>
 	<script src="node_modules/@glidejs/glide/dist/glide.min.js"></script>
-	<script type="text/javascript">
-		
-
-
-
-	if("IntersectionObserver" in window){	
-		let observerIMG = new IntersectionObserver((entries, observer) => { 
-			entries.forEach(entry => {
-				if(entry.isIntersecting){
-					let src = entry.target.getAttribute('data-src');
-					if (!src) { return; }
-  					entry.target.src = src;
-					// entry.target.classList.add('animated');
-					// entry.target.classList.add('zoomIn');
-				}
-		  	});
-		}, {threshold:1});
-		// document.querySelectorAll('.slideImg').forEach( p => { observerIMG.observe(p) });
-		// document.querySelectorAll('.slideImgMobile').forEach( p => { observerIMG.observe(p) });
-		document.querySelectorAll('.bestSellersImg').forEach( p => { observerIMG.observe(p) });
-
-	}
-	else{
-		console.log("no intersectionobserver");
-	}
-
-	
-
-		new Glide('#glideCarousel',{
-			type: 'slide',
-			autoplay: 2000,
-  			hoverpause: true,
-		}).mount();
-
-		const glideBestSellers = document.getElementById('glideBestSellers');
-		if(glideBestSellers !== 'undefined'){
-			new Glide('#glideBestSellers',{
-				type: 'slide',
-				breakpoints:{
-					// 640:{perView: 1},
-					990: {	perView: 2},
-			  		2000: { perView: 3}
-				}
-			}).mount();
-		}
-
-		const glideBrands = document.getElementById('glideBrands');
-		if(glideBrands !== 'undefined'){
-			new Glide('#glideBrands',{
-				type: 'carousel',
-				breakpoints:{
-					440:{perView: 1},
-					640:{perView: 2},
-					990: {	perView: 4},
-			  		2000: { perView: 6}
-				}
-			}).mount();
-		}
-
-
-	</script>
+	<script type="text/javascript" src="script/index.js"></script>
 </body>
 </html>

@@ -44,10 +44,4 @@
 	</div>
 </footer>
 <script type="text/javascript" src="script/selectr/selectr.min.js"></script>
-<script type="text/javascript">
-	new Selectr('#productDrop', {
-		    searchable: true,
-		    defaultSelected:false,
-		    placeholder:"Buscar condición visual o producto"
-		});
-</script>
+<script type="text/javascript" src="script/header.js"></script>

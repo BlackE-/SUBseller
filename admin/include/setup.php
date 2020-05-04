@@ -1588,7 +1588,7 @@
 			function getHTML(){
 				$returnValue = true;
 				$this->db->DBLogin();
-				$qry = 'SELECT * FROM html_content ORDER by id_html_content DESC';
+				$qry = 'SELECT * FROM html_content WHERE mobile=1 ORDER by id_html_content DESC';
 				$result = $this->db->selectQuery($qry);
 				if(!$result){
 					$this->db->HandleDBError('NO HTML');
@@ -1610,7 +1610,7 @@
 				switch ($data['type']) {
 					case '1':
 						//insert HTML empty to get last_id_inserted
-						$qry = 'INSERT INTO html_content (page,status,type) VALUES ("'.$data['url_page'].'",1,"'.$data['type'].'")';
+						$qry = 'INSERT INTO html_content (page,status,type,mobile) VALUES ("'.$data['url_page'].'",1,"'.$data['type'].'",0)';
 						$result = $this->db->insertQuery($qry);
 						if(!$result){
 							$this->db->HandleError('No se pudo guardar html content');
@@ -1628,7 +1628,7 @@
 				           		$name .= date("m-d-Y_hia") . '.' . $extension[1];
 								$pathInsert = '../../img/html/';
 								$pathInsert .= $name;
-								$pathSave = '/img/html/';
+								$pathSave = './img/html/';
 								$pathSave .= $name;
 								$img = $this->insertMedia('html',$id_html,$tmp_name,$pathInsert,$pathSave);
 								if(!$img){						
@@ -1655,6 +1655,34 @@
 							$this->db->HandleDBError('No se pudo actualizar HTML CONTENT'.$qry);
 							$returnValue = false;
 						}
+
+
+						//insert mobile version
+						$qryMobile = 'INSERT INTO html_content (page,status,type,mobile,id_html_content_parent) VALUES ("'.$data['url_page'].'",1,"'.$data['type'].'",1,'.$id_html.')';
+						$result = $this->db->insertQuery($qryMobile);
+						if(!$result){
+							$this->db->HandleDBError('No se pudo guardar html content'.$qryMobile);
+							$returnValue = false;
+						}
+
+						$id_html_mobile = $this->db->lastInsertID();
+						//create HTML OF type 1
+				        $html = '<div class="contenidoBox" style="background-image:url(.'.$pathSave.');">';
+				        $html .= '<div class="container">';
+						$html .= '<p class="text1">'.$data['text1'].'</h1>';  
+                        $html .= '<p class="text2">'.$data['text2'].'</p>';
+                        $html .= '<a href="'.$data['url'].'"><button>'.$data['textButton'].'</button></a>';
+                    	$html .= '</div>';
+                    	$html .= '</div>';
+						$qry = "UPDATE html_content 
+                    					SET text='$html'
+                    					WHERE id_html_content='$id_html_mobile'";
+						$result = $this->db->updateQuery($qry);
+						if(!$result){
+							$this->db->HandleDBError('No se pudo actualizar HTML CONTENT'.$qry);
+							$returnValue = false;
+						}
+
 
 						break;
 					default:

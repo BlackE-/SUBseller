@@ -84,8 +84,9 @@
 #categoriesContainer{background: #edf3fd;padding:50px 0; }
 #categoriesContainer .container:nth-child(2){display:grid;grid-template-columns:1fr 1fr 1fr;max-width: 800px;}
 #categoriesContainer h1{text-align: center;}
+#categoriesContainer a{text-decoration: none;}
 #categoriesContainer .box{display:grid;    text-align: center;margin: 0 auto;max-width: 150px;}
-#categoriesContainer .box a{color:#616060;font-size:16px;text-decoration:none;text-transform: uppercase;font-weight: 700;}
+#categoriesContainer .box p{color:#616060;font-size:16px;text-decoration:none;text-transform: uppercase;font-weight: 700;}
 #categoriesContainer .box img{margin:0 auto;}
 @media only screen and (max-width: 580px) {
 	#categoriesContainer .container:nth-child(2){grid-template-columns: 1fr;grid-gap:30px;}
