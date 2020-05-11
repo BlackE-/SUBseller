@@ -13,10 +13,10 @@
 			<div id="socialMediaHeader">
 				<?php
 					$fb = $set->getWebsiteSetting('facebook');
-					echo '<a href="'.$fb.'"><i class="fab fa-facebook-square"></i></a>';
+					echo '<a target="_blank" href="'.$fb.'"><i class="fab fa-facebook-square"></i></a>';
 
 					$ig = $set->getWebsiteSetting('instagram');
-					echo '<a href="'.$ig.'"><i class="fab fa-instagram"></i></a>'; 
+					echo '<a target="_blank" href="'.$ig.'"><i class="fab fa-instagram"></i></a>'; 
 				?>
 			</div>
 			<div id="userContainer">
@@ -45,51 +45,21 @@
 			<div id="tiendaLinkContainer">
 				<a href="store">Tienda</a>
 			</div>
-			<div id="categoriesDropdown">
-				<?php
-	                $categories = $set->getCategories();
-	                if(!$categories){
+			<?php
+                $categories = $set->getCategories();
+                if(!$categories){
 
-	                }else{
-		                echo '<select id="categoryDrop">';
-		                foreach ($categories as $key => $value) {
-		                	$category = $value['category'];
-		                	echo '<option value="'.$category['id_category'].'">'.$category['name'].'</option>';
-		                }
-		                echo '</select>';
-		            }
-	            ?>
-			</div>
-			<div id="brandDropdown">
-				<?php
-	                $brands = $set->getBrands();
-	                if(!$brands){
-
-	                }else{
-		                echo '<select id="brandsDrop">';
-		                foreach ($brands as $key => $value) {
-		                	$brand = $value['brand'];
-		                	echo '<option value="'.$brand['id_brand'].'">'.$brand['name'].'</option>';
-		                }
-		                echo '</select>';
-		            }
-	            ?>
-			</div>
-			<div id="typeDropdown">
-				<?php
-	                $types = $set->getTypes();
-	                if(!$types){
-
-	                }else{
-		                echo '<select id="typeDrop">';
-		                foreach ($types as $key => $value) {
-		                	$type = $value['type'];
-		                	echo '<option value="'.$type['id_type'].'">'.$type['name'].'</option>';
-		                }
-		                echo '</select>';
-		            }
-	            ?>
-			</div>
+                }else{
+	                foreach ($categories as $key => $value) {
+	                	echo '<div class="categoryDiv">';
+	                	$category = $value['category'];
+	                	echo '<a href="store?page=category&id='.$category['id_category'].'">'.$category['name'].'</a>';
+	                	//echo '<a href="store/category/'.$category['id_category'].'">'.$category['name'].'</a>';
+	                	echo '</div>';
+	                }
+	                
+	            }
+            ?>
 			<div id="searchContainer">
 				<?php
 	                $products = $set->getProducts();
@@ -99,7 +69,7 @@
 		                echo '<select id="productDrop">';
 		                foreach ($products as $key => $value) {
 		                	$product = $value['product'];
-		                	echo '<option value="'.$product['id_product'].'">'.$product['name'].'</option>';
+		                	echo '<option value="product?id='.$product['id_product'].'">'.$product['name'].'</option>';
 		                }
 		                echo '</select>';
 		            }

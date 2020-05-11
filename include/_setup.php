@@ -295,13 +295,120 @@
 			}
 			return $returnValue;
 		}
+
+		function filterProducts(){
+			$returnValue = false;
+			$this->checkDBLogin();
+
+			$category = $_POST['category'];
+			$brand = $_POST['brand'];
+			$type = $_POST['type'];
+			$min_price = $_POST['min_price'];
+			$max_price = $_POST['max_price'];
+
+			$finalArray = [];
+        	$tempArray = [];        //1ra busqueda
+        	$tempArray2 = [];       //2da busqueda filtrado
+
+			$qry = "SELECT id_product FROM product WHERE price_sale>=".$min_price." AND price_sale <=".$max_price;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->HandleError('no products filter');
+				$returnValue = false;
+			}else{
+				$array_data = [];
+				while($row = $this->db->fetchArray($result)){
+					array_push($tempArray, $row['id_product']);
+				}
+
+				if($type != ""){
+		            $selectTipo = "SELECT id_product FROM product WHERE type_id_type=".$type;
+		            $resultType = mysql_query($selectTipo,$this->connection);
+		            $result = $this->db->selectQuery($resultType);
+					if(!$result){
+						$this->HandleError('no products filter');
+						$returnValue = false;
+					}else{
+						while($row = $this->db->fetchArray($result)){
+		                	array_push($tempArray2, $row['id_product']);
+		            	}
+		            	foreach($tempArray as  $key=>$value){if(!in_array($value, $tempArray2)){unset($tempArray[$key]);}}
+					}
+		            $tempArray2 = [];
+		        }
+
+
+		        if($category != ""){
+		            $selectCategory = "SELECT product_id_product FROM product_category WHERE category_id_category=".$category;
+		            $result = $this->db->selectQuery($selectCategory);
+					if(!$result){
+						$this->HandleError('no products filter');
+						$returnValue = false;
+					}else{
+			            while($row = $this->db->fetchArray($result)){
+			                array_push($tempArray2, $row['product_id_product']);
+			            }
+			            foreach($tempArray as  $key=>$value){if(!in_array($value, $tempArray2)){unset($tempArray[$key]);}}
+			        }
+		            $tempArray2 = [];
+		        }
+
+		        if($brand != ""){
+		            $selectBrands = "SELECT id_product FROM products WHERE brand_id_brand=".$brand;
+		            $result = $this->db->selectQuery($selectBrands);
+					if(!$result){
+						$this->HandleError('no products filter');
+						$returnValue = false;
+					}else{
+			            while($row = $this->db->fetchArray($result)){
+			                array_push($tempArray2, $row['id_product']);
+			            }
+			            foreach($tempArray as  $key=>$value){if(!in_array($value, $tempArray2)){unset($tempArray[$key]);}}
+			        }
+		            $tempArray2 = [];
+		        }
+
+		   //      if(gettype($brand) == "array"){
+		   //          $sizeBrands = sizeof($brand);
+		   //          $selectBrands = "SELECT id_producto FROM product WHERE ";
+		   //          foreach ($brand as $key => $value) {
+		   //              if($key == $sizeBrands-1){
+		   //                  $selectBrands .= 'brand_id_brand='.$value;
+		   //              }else{
+		   //                  $selectBrands .= 'brand_id_brand='.$value . " OR ";           
+		   //              }
+		   //          }
+					// $result = $this->db->selectQuery($selectBrands);
+		   //          if(!$result){
+					// 	$this->HandleError('no products filter');
+					// 	$returnValue = false;
+					// }else{
+			  //           while($row = $this->db->fetchArray($result)){
+			  //               array_push($tempArray2, $row['id_product']);
+			  //           }
+
+			  //           foreach($tempArray as  $key=>$value){if(!in_array($value, $tempArray2)){unset($tempArray[$key]);}}
+			  //           $tempArray2 = [];
+			  //       }
+		   //      }
+			}
+			$returnValue = $tempArray;
+			return $returnValue;
+		}
 		/*
 			PRODUCT
 		*/
 		function getProductCategories($id_product){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM  product_category WHERE product_id_product ='.$id_product;
+			$qry = 'SELECT product.id_product,
+							product_category.product_id_product,product_category.category_id_category,
+							category.id_category,category.name as CATEGORY_NAME,
+					 FROM  product,product_category,category
+					 WHERE product.id_product = product_category.product_id_product
+					 		AND product_category.category_id_category = category.id_category
+					 		AND product.product_id_product ='.$id_product;
+
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No marcas');
@@ -313,7 +420,7 @@
 				}else{
 					$array_data = array();
 					while($row = $this->db->fetchArray($result)){
-						array_push($array_data, $row['category_id_category']);
+						array_push($array_data, $row['CATEGORY_NAME']);
 					}
 					$returnValue = $array_data;
 				}
@@ -425,6 +532,26 @@
 					}
 					$returnValue = $array_data;
 
+				}
+			}
+			return $returnValue;
+		}
+
+		function getProductBrand($id_brand){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT name FROM brand WHERE id_brand='.$id_brand;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No marcas');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No marcas');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['name'];
 				}
 			}
 			return $returnValue;

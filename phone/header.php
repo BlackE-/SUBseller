@@ -35,67 +35,19 @@
 		<!--	MENU	-->
 		<div id="menu">
 			<ul class="menuList">
-				<li><a href="store">Tienda</a></li>
-				<li>
-					<div class="detailsContainer" id="categoriesDropdown">
-						<details>
-						  <summary>Categorias</summary>
-						  <?php
-				                $categories = $set->getCategories();
-				                if(!$categories){
+				<!-- <li><a href="store">Tienda</a></li> -->
+				<?php
+                $categories = $set->getCategories();
+	                if(!$categories){
 
-				                }else{
-				                	echo '<ul>';
-					                foreach ($categories as $key => $value) {
-					                	$category = $value['category'];
-					                	echo '<li><a href="store/category/'.$category['id_category'].'/">'.$category['name'].'</a></li>';
-					                }
-					                echo '</ul>';
-					            }
-				            ?>
-						</details>
-					</div>
-				</li>
-				<li>
-					<div class="detailsContainer" id="brandDropdown">
-						<details>
-						  <summary>Marcas</summary>
-							<?php
-				                $brands = $set->getBrands();
-				                if(!$brands){
-
-				                }else{
-					                echo '<ul>';
-					                foreach ($brands as $key => $value) {
-					                	$brand = $value['brand'];
-					                	echo '<li><a href="store/brand/'.$brand['id_brand'].'">'.$brand['name'].'</a></li>';
-					                }
-					                echo '</ul>';
-					            }
-				            ?>
-				        </details>
-					</div>
-				</li>
-				<li>
-					<div class="detailsContainer" id="typeDropdown">
-						<details>
-						  <summary>Tipo</summary>
-							<?php
-				                $types = $set->getTypes();
-				                if(!$types){
-
-				                }else{
-					                echo '<ul>';
-					                foreach ($types as $key => $value) {
-					                	$type = $value['type'];
-					                	echo '<li><a href="store/type/'.$type['id_type'].'">'.$type['name'].'</a></li>';
-					                }
-					                echo '</ul>';
-					            }
-				            ?>
-			        	</details>
-					</div>
-				</li>
+	                }else{
+		                foreach ($categories as $key => $value) {
+		                	$category = $value['category'];
+		                	echo '<li><a href="store?page=category&id='.$category['id_category'].'">'.$category['name'].'</a></li>';
+		                }
+		                
+		            }
+	            ?>
 			</ul>
 		</div>
 		<!-- search -->

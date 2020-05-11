@@ -73,7 +73,7 @@
 .contenidoBox{width:100%;text-align:center;padding:25px 0;background-position: 50%;background-size: cover;}
 .contenidoBox .text1{font-size:1.3em;color:#fff;margin:0;font-weight: 700;}
 .contenidoBox .text2{font-size:0.9em;color:#2361f0;margin:0;font-weight: 700;line-height: 45px;text-transform: uppercase;}
-.contenidoBox button{font-weight:800;background: #2361f0;border: 0;color: #fff;padding: 10px 15px;border-radius:50px;-webkit-box-shadow: 0px 2px 7px 0px rgba(0,0,0,1);-moz-box-shadow: 0px 2px 7px 0px rgba(0,0,0,1);box-shadow: 0px 2px 7px 0px rgba(0,0,0,1);transition:all 300ms linear;}
+.contenidoBox button{background: #2361f0;border: 0;color: #fff;padding: 5px 25px; font-size: 16	px;   margin:0;border-radius:50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition:all 300ms linear;}
 .contenidoBox button:hover{cursor:pointer;}
 
 

@@ -3,15 +3,12 @@ html{scroll-behavior: smooth;}
 body{font-family: 'Lato', sans-serif;}
 .container{width:90%;max-width: 1280px;margin: 0 auto;display: grid;}
 header {background: 	linear-gradient(to bottom, #2361f0 40px,#2361f0 40px,#2361f0 40px,#eff4ff 40px,#eff4ff 40px);box-shadow: 1px 1px 10px #000;}
-header .container{display:grid;grid-template-columns: 265px auto;grid-template-rows: 40px 80px;}
-@media only screen and (max-width: 1060px) {
-	header .container{grid-template-columns: 200px auto;}
-}
-@media only screen and (max-width: 690px) {
-	header .container{display:grid;grid-template-columns: 30% auto;grid-template-rows: 40px 80px;}
-}
+header .container{display:grid;grid-template-columns: 250px auto;grid-template-rows: 40px 80px;max-width: none;width: 100%;}
+@media only screen and (max-width: 1060px) {header .container{grid-template-columns: 200px auto;}}
+@media only screen and (max-width: 690px) {header .container{display:grid;grid-template-columns: 30% auto;grid-template-rows: 40px 80px;}}
 header .container #logoContainer{grid-row-start: 1;grid-row-end: 3;padding: 10px;background: #fff;    display: grid;align-items: center;}
 header .container #logoContainer svg{display: block;}
+@media only screen and (max-width: 1060px) {header .container #logoContainer{padding: 0 10px;}}
 header .container #topContainer{background:#2361f0; display: grid;grid-template-columns: auto 100px 160px 160px;align-items: center;text-align: right;}
 header .container #topContainer p{margin:0;color:#fff;font-size: 12px;}
 header .container #topContainer a{color:#fff;text-decoration: none;font-size: 12px;}
@@ -22,32 +19,26 @@ header .container #topContainer #userContainer i{margin: 0 10px 0 0;font-size: 1
 header .container #topContainer #cartContainer {display: grid;align-items: center;}
 header .container #topContainer #cartContainer table{margin:0 auto;}
 header .container #topContainer #cartContainer i{margin: 0 10px 0 0;font-size: 16px;}
-
 @media only screen and (max-width: 830px) {
 	header .container #topContainer{grid-template-columns: auto 60px 40px 40px;}
 	header .container #topContainer #userContainer span{display: none;}
 	header .container #topContainer #cartContainer span{display: none;}
 }
-
 @media only screen and (max-width: 690px) {
 	header .container #topContainer{grid-template-columns: 60px 40px 40px;justify-content: end;}
 	#topContainer p{display: none;}
 }
 
-
-header #menuContainer{background:#eff4ff;display: grid;grid-template-columns: auto auto auto auto;align-self: center;}
-header #menuContainer select{display: block;padding: 2px 25px 2px 2px;outline: none;height:30px; color:#2361f0;border: none;margin: 0 auto;	background: url("../img/selectArrow.svg") right center no-repeat; 	appearance: none; -webkit-appearance: none;-moz-appearance: none; }
+header #menuContainer{background:#eff4ff;display: grid;grid-template-columns: auto auto auto auto;align-self: center;max-width: 99%;}
+header #menuContainer .categoryDiv{display: grid;padding: 2px 25px 2px 2px;outline: none;height:30px;    align-items: center; border: none;margin: 0 auto;	background: url("../img/selectArrow.svg") right center no-repeat; 	appearance: none; -webkit-appearance: none;-moz-appearance: none; }
+header #menuContainer .categoryDiv a{color:#2361f0;text-decoration: none; }
 header #menuContainer #tiendaLinkContainer{display:none;text-align: center;align-items: center;}
 header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none;}
-
 @media only screen and (max-width: 940px) {
 	header #menuContainer{grid-template-columns:auto auto;}
-	header #menuContainer #categoriesDropdown,
-	header #menuContainer #brandDropdown,
-	header #menuContainer #typeDropdown{display: none;}
+	header #menuContainer .categoryDiv{display: none;}
 	header #menuContainer #tiendaLinkContainer{display:grid;}
 }
-
 @media only screen and (max-width: 500px) {
 	header .container{grid-template-rows: 40px auto;    grid-template-columns:100px auto;}
 	header .container #logoContainer{grid-row-start: 1;grid-row-end: 2;grid-column-start:1;grid-column-end:2;width: 80%;margin: 0 auto;}
@@ -55,9 +46,10 @@ header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none
 	header .container #logoContainer{padding:0 10px;}
 	header #menuContainer{grid-column-start:1;grid-column-end:3;grid-template-columns: auto;grid-template-rows: auto auto;grid-gap: 5px;padding: 10px;}
 }
+@media only screen and (max-width: 360px) {header .container #topContainer{justify-content: right;}}
 
 
-
+/*			FOOTER 					*/
 footer{background: #2361f0;padding: 50px 0;}
 footer .container{grid-template-columns:1fr 1fr 1fr 1fr;}
 footer .container .column a{display:block;padding:0 0 15px 0;color:#fff;text-decoration: none;text-transform: uppercase;	}

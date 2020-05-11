@@ -4,6 +4,7 @@
 	$login = $set->checkLogin();
 	$path = '/subseller';
 ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -36,10 +37,13 @@
 						$img = $value['media'];
 						$imgMobile = $value['media_mobile'];
 						echo '<li class="glide__slide">';
+						if($slide['url'] != ''){
+							echo '<a href="'.$slide['url'].'">';'</a>';
+						}
 						echo '<img class="slideImg" src="'.$path.$img[0]['url'].'"/>';
 						echo '<img class="slideImgMobile" src="'.$path.$imgMobile[0]['url'].'"/>';
 						if($slide['url'] != ''){
-							echo '<div class="buttonContainer"><div class="container"><a href="'.$slide['url'].'"><button>'.$slide['text'].'</button></a></div></div>';
+							echo '</a>';
 						}
 						echo '</li>';
 						$count++;
@@ -105,7 +109,9 @@
 			                		if(!$product['discount']){
 			                			$price_sale = $product['price_sale'] * $product['discount'];
 			                		}
-			                		echo '<div class="priceContainer">$'.number_format($price_sale, 2).'</div>';
+			                		// echo '<div class="priceContainer">$'.number_format($price_sale, 2).'</div>';
+			                		$price = explode('.',$price_sale);
+			                		echo '<div class="priceContainer">$'.$price[0].'.<sup>'.$price[1].'</sup></div>';
 			                		echo '<div class="addCartContainer"><a href="product/'.$product['id_product'].'"><i class="fas fa-plus"></i> Agregar al carrito</a></div>';
 		                		echo '</div>';
 		                		echo '</div>';
