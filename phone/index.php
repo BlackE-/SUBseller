@@ -16,7 +16,7 @@
     <?php
 		require_once('header_meta.php');
 	?>
-	<link rel="stylesheet" href="../node_modules/@glidejs/glide/dist/css/glide.core.min.css">
+	<link rel="stylesheet" href="/subseller/node_modules/@glidejs/glide/dist/css/glide.core.min.css">
 	<link rel="stylesheet" type="text/css" href="css/index.css">
 </head>
 <body>
@@ -84,7 +84,7 @@
 		                		echo '<div class="box">';
 		                		echo '<div class="typeContainer"><p>'.$type.'</p></div>';
 		                		echo '<div class="boxBorder">';
-			                		echo '<div class="thumbContainer"><a href="product/'.$product['id_product'].'"><img class="bestSellersImg" data-src="'.$pathImg.$product_img[0]['url'].'"/></a></div>';
+			                		echo '<div class="thumbContainer"><a href="product?id='.$product['id_product'].'"><img class="bestSellersImg" data-src="'.$pathImg.$product_img[0]['url'].'"/></a></div>';
 			                		echo '<div class="textContainer"><p>Tiempo de uso:'.$product['tiempo_de_uso'].'</p><p class="title">'.$product['name'].'<br>'.$product['description_short'].'</p></div>';
 			                		$price_sale = $product['price_sale'];
 			                		if(!$product['discount']){
@@ -92,7 +92,7 @@
 			                		}
 			                		$price = explode('.',$price_sale);
 			                		echo '<div class="priceContainer">$'.$price[0].'.<sup>'.$price[1].'</sup></div>';
-			                		echo '<div class="addCartContainer"><a href="product/'.$product['id_product'].'"><i class="fas fa-plus"></i> Agregar al carrito</a></div>';
+			                		echo '<div class="addCartContainer"><a href="product?id='.$product['id_product'].'"><i class="fas fa-plus"></i> Agregar al carrito</a></div>';
 		                		echo '</div>';
 		                		echo '</div>';
 		                		echo '</li>';
@@ -129,7 +129,7 @@
 					foreach ($categories as $key => $value) {
 						$category = $value['category'];
 						$category_img = $value['media'];
-						echo '<a href="store/category/'.$category['id_category'].'">';
+						echo '<a href="store?page=category&id='.$category['id_category'].'">';
 						echo '<div class="box">';
 						echo '<img src="'.$pathImg.$category_img[0]['url'].'"/>';
 						echo '<p>'.$category['name'].'</p>';
@@ -155,7 +155,7 @@
 								$brand_img = $value['media'];
 								echo '<li class="glide__slide">';
 								echo '<div>';
-								echo '<a href="store/brand/'.$brand['id_brand'].'"><img src="'.$pathImg.$brand_img[0]['url'].'"/></a>';
+								echo '<a href="store?page=brand&id='.$brand['id_brand'].'"><img src="'.$pathImg.$brand_img[0]['url'].'"/></a>';
 								echo '</div>';
 								echo '</li>';
 							}

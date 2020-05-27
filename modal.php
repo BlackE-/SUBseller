@@ -1,75 +1,36 @@
 <style type="text/css">
-	.modal {
-	  display: none; /* Hidden by default */
-	  position: fixed; /* Stay in place */
-	  z-index: 1; /* Sit on top */
-	  left: 0;
-	  top: 0;
-	  width: 100%; /* Full width */
-	  height: 100%; /* Full height */
-	  overflow: auto; /* Enable scroll if needed */
-	  background-color: rgb(0,0,0); /* Fallback color */
-	  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+	.modal {position: fixed;z-index: 100;top:-9999px;padding-top: 100px;opacity:0;width: 100%;height: 100%;overflow: auto;background: rgba(0,0,0,0.5);overflow: hidden;}
+	.modal.openModal{animation-duration: 300ms;animation-name: smoothOpenModal;opacity: 1;top:0;}
+	.modal.closeModal{animation-duration: 300ms;animation-name: smoothCloseModal;opacity: 0;top:-9999px;}
+	@keyframes smoothOpenModal {
+	  0% { opacity: 0;}
+	  50%{opacity: 1;top:-9999px; }
+	  100% {top:0;}
+	}@keyframes smoothCloseModal {
+	  0% { opacity: 1;}
+	  50%{ opacity: 0;top:0; }
+	  100% {top:-9999px;}
 	}
+	.modal-content {background-color: #fefefe;  margin: auto; border: 1px solid #fdfdfd;align-items:center;text-align:center;border-radius:20px;width: 70%;position: relative;overflow: hidden;padding:20px 20px 50px 20px;transform-origin: 50% 0;}
 
-	/* Modal Content/Box */
-	.modal-content {
-	  background-color: #fefefe;
-	  margin: 15% auto; /* 15% from the top and centered */
-	  border: 1px solid #888;
-	  width: 80%; /* Could be more or less, depending on screen size */
-	  max-width: 540px;
-	  text-align: center;
-	}
-	.modal-header{height: 30px;background-color: #d6232e;position: relative;}
+	.modal-header{height: 30px;border-bottom:1px solid #2361f0; position: relative;text-align: right;}
 	.modal-body{height: auto;padding:20px 0;}
-
-	/* The Close Button */
-	.closeModal {
-		position: absolute;top:0;right:5px;
-	  color: #000;
-	  font-size: 28px;
-	  font-weight: bold;
-	}
-
-	.closeModal:hover,
-	.closeModal:focus {
-	  color: black;
-	  text-decoration: none;
-	  cursor: pointer;
-	}
-
-	.lds-dual-ring {
-	  display: inline-block;
-	  width: 50px;
-	  height: 50px;
-	}
-	.lds-dual-ring:after {
-	  content: " ";
-	  display: block;
-	  width: 46px;
-	  height: 46px;
-	  margin: 1px;
-	  border-radius: 50%;
-	  border: 5px solid #d6282f;
-	  border-color: #d6282f transparent #d6282f transparent;
-	  animation: lds-dual-ring 1.2s linear infinite;
-	}
+	.closeModal:hover,.closeModal:focus {cursor: pointer;}
+	.lds-dual-ring {display: inline-block;width: 50px;height: 50px;}
+	.lds-dual-ring:after {content: " ";display: block;width: 46px;height: 46px;margin: 1px;border-radius: 50%;border: 5px solid #2361f0;border-color: #2361f0 transparent #2361f0 transparent;animation: lds-dual-ring 1.2s linear infinite;}
 	@keyframes lds-dual-ring {
-	  0% {
-	    transform: rotate(0deg);
-	  }
-	  100% {
-	    transform: rotate(360deg);
-	  }
+	  0% {transform: rotate(0deg);}
+	  100% {transform: rotate(360deg);}
 	}
-
-
 </style>
 <div class="modal" id="modal">
 	<div class="modal-content">
     	<div class="modal-header">
-			<span class="closeModal"></span>
+			<span class="closeModal">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16.97" height="17" viewBox="0 0 16.97 17">
+				  <path class="cls-1" d="M1174.51,159.4l-12.91-12.954a2.007,2.007,0,1,1,2.83-2.847l12.91,12.954a2.019,2.019,0,0,1,.01,2.85A1.975,1.975,0,0,1,1174.51,159.4Zm-12.87-.011a2.019,2.019,0,0,1-.01-2.85l12.92-12.96a2.012,2.012,0,0,1,2.84,2.852l-12.88,12.931a2.013,2.013,0,0,1-2.87.027h0Z" transform="translate(-1161.03 -143)"/>
+				</svg>
+			</span>
 		</div>
 		<div class="modal-body">
 			<div class="lds-dual-ring"></div>
@@ -78,14 +39,17 @@
 </div>
 <script type="text/javascript">
 	const modal = document.getElementById("modal");
-    const closeModal = document.getElementsByClassName("closeModal")[0];
-    // When the user clicks on <span> (x), close the modal
-    openModalFunction = () =>{ modal.style.display = "block"; }
-    closeModalFunction = () =>{ modal.style.display = "none"; }
-    closeModal.onclick = closeModalFunction();
+    const span = document.getElementsByClassName("closeModal")[0];
+    span.onclick = function() {   closeModal();}
     window.onclick = function(event) {
-      if (event.target === modal) {
-        closeModalFunction();
-      }
+      if (event.target == modal) {closeModal();}
+    }   
+    openModal = ()=>{
+        modal.classList.remove('closeModal');
+        modal.classList.add('openModal');
+    }
+    closeModal = () =>{
+      modal.classList.remove('openModal');
+      modal.classList.add('closeModal');
     }
 </script>

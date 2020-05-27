@@ -1,10 +1,10 @@
 <?php
-	// $page = '';
-	// $id = '';
-	// if(isset($_GET['page'])){	
-	// 	$page = $_GET['page'];
-	// 	$id = $_GET['id'];
-	// }	
+	$page = '';
+	$id = '';
+	if(isset($_GET['page'])){	
+		$page = $_GET['page'];
+		$id = $_GET['id'];
+	}	
 
 	require_once "include/_setup.php";
 	$set = new Setup();
@@ -22,7 +22,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-
 	<link rel="stylesheet" href="node_modules/nouislider/distribute/nouislider.css">
 	<link rel="stylesheet" type="text/css" href="css/store.css">
 </head>
@@ -42,13 +41,21 @@
 	                    <div id="ordenContainer">
 	                        <p class="ordenText">Ordenar:</p>
 	                        <div class="ordenSelect">
-	                            <select class="orderTienda">
+	                            <select class="orderTienda" id="sortList">
 	                                <option value="1">Lo último</option>
 	                                <option value="2">Precio menor a mayor</option>
 	                                <option value="3">Precio mayor a menor</option>
 	                            </select>
 	                        </div>
 	                    </div>
+	            </div>
+	            <div id="tagContainer">
+	            	<?php
+	            		if($page == 'tag'){
+	            			$tagName = $set->getTag($id);
+	            			echo '<p>Mostrando los elementos que contienen el tag: <b><i>'.$tagName.'</i></b></p>';
+	            		}
+	            	?>
 	            </div>
 				<div id="bottomProductsContainer">
 					<p>LISTA DE PRODUCTOS</p>
@@ -62,13 +69,15 @@
 	                        foreach ($products as $key => $value) {
 	                        	$row = $value['product'];
 	                        	$img = $value['media'];
-	                        
 	            	            echo '<li><div class="liBox">';
-	                	               echo '<div class="thumbContainer"><a href="product?id_product='.$row['id_product'].'"><img class="u-full-width" id="'.$row['id_product'].'" src="'.$path.$img[0]['url'].'"/></a></div>';
+	                	               echo '<a href="product?id='.$row['id_product'].'"><div class="thumbContainer" 
+	                	               style="background-image:url('.$path.$img[0]['url'].')"/></div></a>';
+	                	               // echo '<div class="thumbContainer"><a href="product?id_product='.$row['id_product'].'"><img class="u-full-width" id="'.$row['id_product'].'" src="'.$path.$img[0]['url'].'"/></a></div>';
 	                	            echo '<p class="id_product">'.$row['id_product'].'</p>';
-	                                // $brand = $set->getProductBrand($row['brand_id_brand']);
-	                                // echo '<p class="marca"> '.$brand.'</p>';
-	                                echo '<p class="marca">Tiempo de uso: '.$row['tiempo_de_uso'].'</p>';
+	                                $brand = $set->getProductBrand($row['brand_id_brand']);
+	                                echo '<p class="brand"> '.$brand.'</p>';
+	                                echo '<p class="id_brand"> '.$row['brand_id_brand'].'</p>';
+	                                echo '<p class="time">Tiempo de uso: '.$row['tiempo_de_uso'].'</p>';
 	                	            echo '<p class="name">'.$row['name'].'</p>';
 	                                echo '<div class="priceContainer">';
 	                                $price_sale = $row['price_sale'];
@@ -77,7 +86,7 @@
 	                                }
 	                                // echo '<p class="precioShow">$'.number_format($price_sale, 2).'</p>';
 	                                $price = explode('.',$price_sale);
-			                		echo '<p class="precioShow">$'.$price[0].'.<sup>'.$price[1].'</sup></p>';
+			                		echo '<p class="price">$'.$price[0].'.<sup>'.$price[1].'</sup></p>';
 	                                echo '<p>'.$row['description_short'].'</p>';
 	                                echo '</div>';
 	                                $categories = $set->getProductCategories($row['id_product']);
@@ -90,7 +99,8 @@
 	                                }
 	                                $typeProduct = $set->getProductTypeName($row['type_id_type']);
 	                                echo '<p class="type">'.$typeProduct.'</p>';
-	                                echo '<div class="linkContainer"><a href="product/'.$row['id_product'].'">AGREGAR AL CARRITO</a></div>';
+	                                echo '<p class="id_type">'.$row['type_id_type'].'</p>';
+	                                echo '<div class="linkContainer"><a href="product?id='.$row['id_product'].'">AGREGAR AL CARRITO</a></div>';
 	            	            echo '</div></li>';
 	            	            if($maxPrice <$row['price_sale']){$maxPrice  = $row['price_sale']; }
 	            	        }
@@ -108,6 +118,7 @@
 					<div class="filterBox">
 						<details open>
 							<summary>Categorias</summary>
+							<p class="clearFilter" id="clearCategories">Clear</p>
 							<ul>
 								<?php
 									$categories = $set->getCategories();
@@ -129,6 +140,7 @@
 					<div class="filterBox">
 						<details open>
 							<summary>Marcas</summary>
+							<p class="clearFilter" id="clearBrands">Clear</p>
 							<ul>
 								<?php
 									$brands = $set->getBrands();
@@ -150,6 +162,7 @@
 					<div class="filterBox">
 						<details open>
 							<summary>Tipo</summary>
+							<p class="clearFilter" id="clearTypes">Clear</p>
 							<ul>
 								<?php
 									$types = $set->getTypes();
@@ -181,10 +194,9 @@
 			</div>
 		</div>
 	</div>
-
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+	<script src="node_modules/list.js/dist/list.min.js"></script>
 	<script src="node_modules/nouislider/distribute/nouislider.js"></script>
 	<script type="text/javascript" src="script/store.js"></script>
 </body>
