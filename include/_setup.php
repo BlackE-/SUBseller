@@ -221,26 +221,7 @@
 			}
 			return $returnValue;
 		}
-		function getProduct($id_product){
-			$returnValue = true;
-			$this->checkDBLogin();
-			$qry = 'SELECT * FROM product WHERE id_product='.$id_product;
-			$result = $this->db->selectQuery($qry);
-			if(!$result){
-				$this->db->HandleError('No producto');
-				$returnValue = false;
-			}else{
-				if(!$this->db->numRows($result)){
-					$this->db->HandleError('No producto');
-					$returnValue = false;
-				}else{
-					$returnValue = $this->db->fetchArray($result);
-				}
-			}
-			return $returnValue;
-
-		}
-
+		
 		function getBestSellers(){
 			$returnValue = false;
 			$this->checkDBLogin();
@@ -295,7 +276,6 @@
 			}
 			return $returnValue;
 		}
-
 		function filterProducts(){
 			$returnValue = false;
 			$this->checkDBLogin();
@@ -394,7 +374,6 @@
 			$returnValue = $tempArray;
 			return $returnValue;
 		}
-
 		function filterProductsByTag(){
 			$returnValue = false;
 			$this->checkDBLogin();
@@ -418,6 +397,35 @@
 		/*
 			PRODUCT
 		*/
+		function getProduct($id_product){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM product WHERE id_product='.$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No producto');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No producto');
+					$returnValue = false;
+				}else{
+					$array_data = [];
+					$row = $this->db->fetchArray($result);
+					array_push($array_data, array('product'=>$row));
+					//media thumbnai
+					$media = $this->getMedia($row['id_product'],'product');
+					if(!$media){array_push($array_data, array('media'=>''));
+					}else{array_push($array_data, array('media'=>$media));}
+
+					// //media secondary thumbnail
+					$media_secondary = $this->getMedia($row['id_product'],'product_secondary');
+					array_push($array_data, array('media_secondary'=>$media_secondary));
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
 		function getProductCategories($id_product){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -469,6 +477,245 @@
 			}
 			return $returnValue;
 		}
+		/*
+			shoping car
+		*/
+		function addProductToCart(){
+			$id_product = $_POST['id_product'];
+			$quantity = $_POST['quantity'];
+	        $price = $_POST['price'];
+	        
+	        $returnValue = true;
+			$this->checkDBLogin();
+
+			$qry = "SELECT stock FROM product_inventory WHERE product_id_product=".$id_product;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+			    $this->db->HandleError("No contamos con el producto en el inventario");
+				$returnValue = false;
+			}
+			else{
+				$row = $this->db->fetchArray($result);
+				if($row['stock']<intval($quantity)){
+					 $this->db->HandleError("No contamos con la cantidad (".$quantity.") solicitada.");
+					 $returnValue = false;
+				}
+				else{
+					//	GUARDAR TODOS LOS DATOS EN SESSION
+					if(!isset($_SESSION)){ session_start(); }
+					if(!isset($_SESSION['shop'])){ $_SESSION['cart'] = array();}
+		            $found = false;
+		            foreach($_SESSION['cart'] as $key => $value){
+	                    if($value['id_product'] == $id_product){
+	                        $found=true;
+	                        $_SESSION['cart'][$key]['quantity'] = $value['quantity'] + $quantity;
+	                    }
+		            }
+		            if(!$found)
+					     array_push($_SESSION['cart'],array("id_product" => $id_product, "qty"=>$quantity,"price"=>$price,"id_session_cart"=>""));
+				}
+			}
+			return $returnValue;
+		}
+
+		function updateCar(){
+			if(!isset($_SESSION)){session_start();}	
+			$carTemp = $_SESSION['cart'];
+
+	        $returnValue = true;
+			$this->checkDBLogin();
+	        
+			foreach($cartTemp as $key=>$value){
+	            $cartTemp[$key]['qty'] = $_POST[$key];
+	            $update_query = "UPDATE session_cart SET number_items=".$_POST[$key]." WHERE session_client_id_session_client=".$value['id_session_client'];
+	            $result = $this->db->updateQuery($update_query);
+			}
+
+			$_SESSION['cart'] = $cartTemp;
+			return true;
+		}
+
+		function clearDBCart(){
+	        if(!isset($_SESSION)){session_start();}
+	        $returnValue = true;
+			$this->checkDBLogin();
+			
+	        $update_query = "UPDATE session_client SET status=1 WHERE id_session_client=".$_SESSION['id_session_client'];
+	        $result = $this->db->updateQuery($update_query,$this->connection);
+	        return $returnValue;
+	    }
+
+	    function checkDBCart(){
+	        if(!isset($_SESSION)){session_start();}
+	        $returnValue = true;
+			$this->checkDBLogin();
+
+	        if(!isset($_SESSION)){ session_start(); }
+	        if(!$this->CheckLogin()){
+	            $this->db->HandleError("Sin Login");
+	            $returnValue = false;
+	        }else{
+				$queries = array(); //variable para ir entendiendo el proceso, cada paso se mete al array
+	        	$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+		        $qry = "SELECT * from session_client WHERE status = 0 AND cliente_id_cliente=".$id_client;
+		        $return = $this->db->selectQuery($qry);
+		        if(!$this->db->numRows($return)){
+		            //NO HAY carrito guardado en DB 
+		            $qry = "INSERT INTO session_client (client_id_client, status) VALUES(".$id_client.",0)";
+		            $result = $this->db->insertQuery($qry);
+		            if(!$result){
+		                $this->db->HandleError('No se pudo guardar status en DB');
+		                $returnValue = false;
+		            }else{
+		            	$id_session_client = mysql_insert_id();
+			            $_SESSION['id_session_client'] = $id_session_client;
+			            $cartTemp = $_SESSION['cart'];
+			            foreach($cartTemp as $key2=>$cartValue){
+			                //GUARDARLO EN LA BASE
+			                $insert = "INSERT INTO session_cart (session_client_id_session_client,product_id_product,number_items,price) 
+			                			VALUES (".$id_session_client.",".$cartValue['id_product'].",".$cartValue['qty'].",".$cartValue['price'].")";
+			                $query = $this->db->insertQuery($insert);
+			                if(!$query){
+			                    $this->db->HandleError('No se pudo guardar el carrito en DB');
+			                    $returnValue = false;
+			                }
+			            }
+		            }
+		        }
+		        else{
+		        	//SI HAY UN CARRITO guardado 	recuperar ID_CARRITO_SESION
+		            $session_client = $this->db->fetchArray($return);
+		            $id_session_client = $session_client['id_session_client'];
+		            $_SESSION['id_session_client'] = $id_session_client;
+
+		            $qry = "SELECT *  FROM session_cart WHERE session_client_id_session_client=".$id_session_client;
+		            $items = $this->db->selectQuery($qry);
+		            $cartTemp = $_SESSION['cart'];
+
+		            //meter todos los ID productos del carrito DB en un array
+		            $id_items = array();
+		            $numResults = $this->db->getNumRows($items);
+
+		            $array_productos_faltan_en_base = array();
+		            $array_productos_insertados = array();
+
+		            if($numResults > count($cartTemp)){
+		                //hay mas items en DB que en SESSION
+		                array_push($queries, "MAS EN DB");
+		                while($prod = $this->db->fetchAssoc($items)){
+		                    $found = false;
+		                    foreach($cartTemp as $key2=>$cartValue){	//recorrer el carrito
+		                        if($cartValue['id_product'] == $prod['id_product']){//producto encontrado en DB, ¡se actualiza en session cart!
+		                            $found = true;
+		                            //$update = "UPDATE session_cart SET number_items=".$prod['number_items']." WHERE id_session_cart =".$prod['id_session_cart'];
+		                            //$this->db->updateQuery($update);
+									//array_push($queries, $update);
+		                            
+		                            $_SESSION['cart'][$key2]['qty'] = $prod['number_items'];
+		                            $_SESSION['cart'][$key2]['id_session_cart'] = $prod['id_session_cart'];
+		                            
+		                            //EVALUAR si este producto esta en el arreglo: array_productos_faltan_en_base
+		                            if(in_array($cartValue['id_product'], $array_productos_faltan_en_base)){
+		                            	//si ESTA, quiere decir que se guardo en otro ciclo del while, y se tiene que eliminar de los arreglos
+										array_push($queries, "ELIMINAR:".$cartValue['id_product']);
+		                                $key = array_search($cartValue['id_product'], $array_productos_faltan_en_base);
+		                                unset($array_productos_faltan_en_base[$key]);
+		                                unset($array_productos_insertados[$key]);
+		                            }
+		                        }
+		                        else{
+		                            //SE TIENE QUE INSERTAR EN LA BASE DE DATOS
+		                            //evaluar si ya se guardo el producto en una iteracion anterior
+		                            if(!in_array($cartValue['id_product'], $array_productos_faltan_en_base)){
+		                                array_push($array_productos_faltan_en_base,$cartValue['id_product']);
+		                                array_push($array_productos_insertados, 
+		                                	array(	"id_session_cart"=>$id_session_client,
+		                                			"id_producto"=>$cartValue['id_product'],
+		                                			"qty"=>$cartValue['number_items'],
+		                                			"price"=>$cartValue['price']));                           
+		                            }
+		                        }
+		                    }
+		                    if($found == false){
+		                        //no estaba en  SESSION se agrega el cart SESSION
+		                        array_push($_SESSION['cart'],array("id_product" => $prod['id_product'],
+		                        									"qty"=>$prod['number_items'],
+		                        									"price"=>$prod['price'],
+		                        									"id_session_cart"=>$prod['session_client_id_session_client']));
+		                        
+		                    }
+		                }
+		                foreach($array_productos_faltan_en_base as $key=>$value){
+		                        $insert = "INSERT INTO session_cart (session_client_id_session_client,id_product,qty,price) 
+		                        			VALUES(".$id_session_client.",".
+		                        					$array_productos_insertados[$key]['id_product'].",".
+		                        					$array_productos_insertados[$key]['qty'].",".
+		                        					$array_productos_insertados[$key]['price'].")";
+		                        $this->db->insertQuery($insert);
+		                }
+		                $returnValue = $queries;
+		            }
+		            else{
+		                //hay mas en SESSION que en DB
+		                array_push($queries, "MAS EN SESSION");
+		                foreach($cartTemp as $key2=>$cartValue){
+		                    $found = false;
+		                    while($prod = mysql_fetch_assoc($items)){
+		                        if($cartValue['id_product'] == $prod['id_product']){//producto encontrado en DB y en carrito se actualiza
+		                            $found = true;
+		                            //$update = "UPDATE session_cart SET number_items=".$prod['number_items']." WHERE id_session_cart=".$prod['id_session_cart'];
+		                            //array_push($queries, $update);
+		                            //$qry = $this->db->updateQuery($update);
+		                            
+		                            $_SESSION['cart'][$key2]['qty'] = $prod['number_items'];
+		                            $_SESSION['cart'][$key2]['id_session_cart'] = $prod['session_client_id_session_client'];
+
+		                            //EVAULAR SI producto esta en arreglo: array_productos_faltan_en_base
+		                            if(in_array($cartValue['id_product'], $array_productos_faltan_en_base)){ 
+		                            	//si ESTA, quiere decir que se guardo en otro ciclo del while, y se tiene que eliminar de los arreglos
+		                                $key = array_search($cartValue['id_product'], $array_productos_faltan_en_base);
+		                                unset($array_productos_faltan_en_base[$key]);
+		                                unset($array_productos_insertados[$key]);
+		                            }
+		                        }
+		                        else{
+		                            // SE TIENE QUE INSERTAR EN LA BASE DE DATOS
+		                            //evaluar si ya se guardo el producto en una iteracion anterior
+		                            if(!in_array($cartValue['id_product'], $array_productos_faltan_en_base)){
+		                                array_push($array_productos_faltan_en_base,$prod['id_product']);
+		                                array_push($array_productos_insertados, 
+		                                	array(	"id_session_cart"=>$id_session_client,
+		                                			"id_product"=>$cartValue['id_product'],
+		                                			"qty"=>$cartValue['number_items'],
+		                                			"price"=>$cartValue['price']));
+		                            }
+		                        }
+		                    }
+		                    if($found == false){
+		                        //no esta en DB, se agrega el producto de SESSION a DB
+		                        if(!in_array($cartValue['id_product'], $array_productos_faltan_en_base)){
+		                            array_push($array_productos_faltan_en_base,$prod['id_product']);
+		                            $insert = "INSERT INTO session_cart (session_client_id_session_client,id_product,number_items,price) 
+		                            			VALUES(".$id_session_client.",".$cartValue['id_product'].",".$cartValue['quantity'].",".$cartValue['price'].")";
+		                            $this->db->insertQuery($insert);
+		                        }
+		                    }
+		                }
+		                foreach($array_productos_faltan_en_base as $key=>$value){
+                            $insert = "INSERT INTO session_cart (session_client_id_session_client,id_product,number_items,price) 
+                            			VALUES(".$id_session_client.",".
+                            					$array_productos_insertados[$key]['id_product'].",".
+                            					$array_productos_insertados[$key]['qty'].",".
+                            					$array_productos_insertados[$key]['price'].")";
+                            $this->db->insertQuery($insert);
+		                }
+		                $returnValue = $queries;
+		            }
+		        }
+	        }
+	        return $returnValue;
+    	}
+
 		/*
 
 			INVENTORY

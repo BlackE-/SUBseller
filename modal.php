@@ -11,7 +11,7 @@
 	  50%{ opacity: 0;top:0; }
 	  100% {top:-9999px;}
 	}
-	.modal-content {background-color: #fefefe;  margin: auto; border: 1px solid #fdfdfd;align-items:center;text-align:center;border-radius:20px;width: 70%;position: relative;overflow: hidden;padding:20px 20px 50px 20px;transform-origin: 50% 0;}
+	.modal-content {background-color: #fefefe;  margin: auto; border: 1px solid #fdfdfd;align-items:center;text-align:center;border-radius:20px;width: 70%;position: relative;overflow: hidden;padding:20px;transform-origin: 50% 0;}
 
 	.modal-header{height: 30px;border-bottom:1px solid #2361f0; position: relative;text-align: right;}
 	.modal-body{height: auto;padding:20px 0;}

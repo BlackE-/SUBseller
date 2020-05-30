@@ -43,7 +43,8 @@
 		                    echo '<td><p class="inventario" id="inventario_'.$row['id_product'].'">'.$totalInventario.' <i class="fas fa-caret-right"></i><input type="number" id="qty_update_'.$row['id_product'].'"/></p></td>';
 		                    echo '<td>';
 		                    echo '<form class="formUpdateQty" id="updateQry_'.$row['id_product'].'">';
-								echo '<input type="number" min="0" class="inputQty" id="'.$row['id_product'].'"/>';
+								// echo '<input type="number" min="0" class="inputQty" id="'.$row['id_product'].'"/>';
+								echo '<input type="number" class="inputQty" id="'.$row['id_product'].'"/>';
 								echo '<input type="submit" value="Guardar" disabled>';
 							echo '</form>';
 		                    echo '</td>';

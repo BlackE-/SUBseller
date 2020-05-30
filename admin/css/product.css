@@ -64,18 +64,19 @@ input[type=number] {  -moz-appearance: textfield;}
 
 .product_img{display: grid;grid-template-columns: 1fr 1fr;}
 .product_img h4{grid-column-start: 1;grid-column-end: 3;}
+
 .pickThumbnail {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
 .pickThumbnail + label {font-size: 1em; color: black;display: inline-block;}
 .pickThumbnail:hover + label {cursor: pointer;}
 
+.secondaryContainerDiv{display: grid;grid-template-columns: repeat(2,150px);}
+.secondaryContainerDiv img{width:100%;}
+.secondaryContainer {position: relative;}
+.secondaryContainer .removeImage{position:absolute; right:0;}
+
 .pickSecundary {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
-.pickSecundary + label {font-size: 1em; color: black;display: inline-block;}
+.pickSecundary + label {grid-column-start:1;grid-column-end:3;font-size: 1em; color: black;display: inline-block;}
 .pickSecundary:hover + label {cursor: pointer;}
-
-
-.product_settings select{width:100%;}
-.product_settings_2 table{width: 100%;}
-.product_settings_2 table p {display: inline-block;margin: 0;}
 
 
 /*
@@ -107,8 +108,13 @@ input[type=number] {  -moz-appearance: textfield;}
 
 
 /*
-
+		DERECHA
 */
+.product_settings select{width:100%;}
+.product_settings_2 table{width: 100%;}
+.product_settings_2 table p {display: inline-block;margin: 0;}
+
+
 .productorRelacionadosContainerDiv select{width: 100%;}
 
 .tagsContainerDiv select{width:100%;}

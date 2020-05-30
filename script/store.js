@@ -71,9 +71,24 @@
         (type) ? document.getElementById('clearTypes').classList.add('show') : document.getElementById('clearTypes').classList.remove('show');
 	}
 
+	addAnimation = () =>{
+		for(let x of userList.matchingItems){
+        	x.elm.classList.remove('zoomOut');
+        	x.elm.classList.add('animated');
+        	x.elm.classList.add('zoomIn');
+        }
+	}
+
+	removeAnimation = () =>{
+		for(let x of userList.matchingItems){
+        	x.elm.classList.remove('zoomIn');
+        	x.elm.classList.remove('animated');
+        }
+	}
+
     updateList = () =>{
     	openModal();
-        const formData = new FormData();
+    	const formData = new FormData();
         let category = document.querySelector('input[name="category"]:checked');
         (category) ? formData.append('category',category.value) :  formData.append('category','');
         let brand = document.querySelector('input[name="brand"]:checked');
@@ -86,7 +101,7 @@
         const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
-				console.log(this.response);
+				// console.log(this.response);
 				myObj = JSON.parse(this.response);
 				setTimeout(function(){closeModal();}, 2000);
 				if(!myObj.return){
@@ -104,6 +119,8 @@
 	                    algo = id_product_2_filter.indexOf(item.values().id_product)
 	                    return algo>=0 ? true : false;
 	                });
+	                addAnimation();
+	                console.log(userList.matchingItems);
 	                document.getElementById('totalProductosInput').value = userList.matchingItems.length
 				}
 			}
