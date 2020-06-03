@@ -118,7 +118,7 @@
 .contenidoBox{width:100%;text-align:center;padding:100px 0;background-position: 50%;background-size: cover;}
 .contenidoBox .text1{font-size:3.5em;color:#fff;margin:0;font-weight: 700;}
 .contenidoBox .text2{font-size:2.5em;color:#2361f0;margin:0;font-weight: 700;line-height: 45px;text-transform: uppercase;}
-.contenidoBox button{background: #2361f0;border: 0;color: #fff;padding: 15px 50px;    margin: 15px 0 0 0;border-radius:50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition:all 300ms linear;}
+.contenidoBox button{background: #2361f0;outline:none;border: 0;color: #fff;padding: 15px 50px;    margin: 15px 0 0 0;border-radius:50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition:all 300ms linear;}
 .contenidoBox button:hover{cursor:pointer;}
 @media only screen and (max-width: 690px) {
 	.contenidoBox{padding:50px 0;}

@@ -228,6 +228,11 @@
 					$returnValue = false;
 				}
 				$qry = "INSERT into settings (name,value,type) values 
+											('mailchimp_key','','website_settings')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
+				$qry = "INSERT into settings (name,value,type) values 
 											('facebook_app_id','','website_settings')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;

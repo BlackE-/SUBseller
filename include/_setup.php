@@ -19,89 +19,106 @@
 	    	}
 	    	return $returnValue;
 	    }
+	    function setErrorMessage($message){$this->db->HandleDBError($message);}
 	    function getErrorMessage(){return $this->db->error_message;}
-
 	    /*
 			LOGIN
 	    */
-	    function loginClient($email,$password){
-	    	$returnValue = true;
-	    	$formvars = array();
-			$formvars['email'] = $this->Sanitize($email);	
-			$qry = "SELECT id_cliente,_password FROM _client WHERE email='".$formvars['email']."'";
-			$result = $this->db->selectQuery($qry);
-			if(!$result){
-				$this->db->HandleDBError("1.No tenemos registro de: ".$email);
-				$returnValue = false;
-			}else{
-				if(!$this->db->numRows($result)){
-					$this->db->HandleError("2.No tenemos registro de: ".$email);
-		            $returnValue = false;
-		        }else{
-		        	$row = $this->db->fetchArray($result);
-		        	$hash = $row['_password'];
-		        	$auth = password_verify($password,$hash);
-		        	if(!$auth){
-		        		$this->db->HandleError("Contraseña incorrecta");
-		            	$returnValue = false;
-		        	}else{
-		        		if(!isset($_SESSION)){ session_start(); }
-				        $_SESSION[$this->GetLoginSessionVar()] = $row['id_user'];
-				        $_SESSION['timeout'] = time() + (1 * 24 * 60 * 60);
-				        						// 1 day; 24 hours; 60 mins; 60 secs
-		        	}
-		        } 
-			}
-		    $this->db->closeAll();
-		    return $returnValue;
-	    }
+	  //   function loginClient($email,$password){
+	  //   	$returnValue = true;
+	  //   	$formvars = array();
+			// $formvars['email'] = $this->Sanitize($email);	
+			// $qry = "SELECT id_cliente,_password FROM _client WHERE email='".$formvars['email']."'";
+			// $result = $this->db->selectQuery($qry);
+			// if(!$result){
+			// 	$this->db->HandleDBError("1.No tenemos registro de: ".$email);
+			// 	$returnValue = false;
+			// }else{
+			// 	if(!$this->db->numRows($result)){
+			// 		$this->db->HandleError("2.No tenemos registro de: ".$email);
+		 //            $returnValue = false;
+		 //        }else{
+		 //        	$row = $this->db->fetchArray($result);
+		 //        	$hash = $row['_password'];
+		 //        	$auth = password_verify($password,$hash);
+		 //        	if(!$auth){
+		 //        		$this->db->HandleError("Contraseña incorrecta");
+		 //            	$returnValue = false;
+		 //        	}else{
+		 //        		if(!isset($_SESSION)){ session_start(); }
+			// 	        $_SESSION[$this->GetLoginSessionVar()] = $row['id_user'];
+			// 	        $_SESSION['timeout'] = time() + (1 * 24 * 60 * 60);
+			// 	        						// 1 day; 24 hours; 60 mins; 60 secs
+		 //        	}
+		 //        } 
+			// }
+		 //    $this->db->closeAll();
+		 //    return $returnValue;
+	  //   }
 
-	    function checkLoginForHeader(){
-	        if(!isset($_SESSION)){ session_start(); }
-	        $sessionvar = $this->GetLoginSessionVar();
-	        if(empty($_SESSION[$sessionvar])){
-	            $this->HandleError("Session expiro!");
-	            return false;
-	        }
-	        if(!$this->DBLogin()){
-	            $this->HandleError("Database login failed!");
-	            return false;
-	        }
-	        $qry = "SELECT id_cliente,name,id_facebook FROM cliente WHERE id_cliente = " . $_SESSION[$sessionvar];
-	        $result = mysql_query($qry,$this->connection);
-	        $row = mysql_fetch_array($result);
-	        if(mysql_num_rows($result)<=0){
-	            $this->HandleError("Error. Datos Incorrectos.");
-	            return false;
-	        }
-	        return array("id_cliente"=>$row['id_cliente'],"name"=>$row['nombre'],'id_facebook'=>$row['id_facebook']);
-	    }
+	  //   function checkLoginForHeader(){
+	  //       if(!isset($_SESSION)){ session_start(); }
+	  //       $sessionvar = $this->GetLoginSessionVar();
+	  //       if(empty($_SESSION[$sessionvar])){
+	  //           $this->HandleError("Session expiro!");
+	  //           return false;
+	  //       }
+	  //       if(!$this->DBLogin()){
+	  //           $this->HandleError("Database login failed!");
+	  //           return false;
+	  //       }
+	  //       $qry = "SELECT id_cliente,name,id_facebook FROM cliente WHERE id_cliente = " . $_SESSION[$sessionvar];
+	  //       $result = mysql_query($qry,$this->connection);
+	  //       $row = mysql_fetch_array($result);
+	  //       if(mysql_num_rows($result)<=0){
+	  //           $this->HandleError("Error. Datos Incorrectos.");
+	  //           return false;
+	  //       }
+	  //       return array("id_cliente"=>$row['id_cliente'],"name"=>$row['nombre'],'id_facebook'=>$row['id_facebook']);
+	  //   }
 
-	    function checkLoginFacebook(){
-	        $id_facebook = $_POST['id_facebook'];
-	        $returnValue = true;
-	        $this->checkDBLogin();
-	        if(!isset($_SESSION)){ session_start(); }
-	        $qry = "SELECT id_client,id_facebook FROM client WHERE id_facebook='$id_facebook'";
-	        $result = $this->db->selectQuery($qry);
-			if(!$result){
-				$this->db->HandleError('No login with Facebook');
-				$returnValue = false;
-			}else{
-				if(!$this->db->numRows($result)){
-					$returnValue = false;
-				}else{
-					$row = $this->db->fetchArray($result);
-			        $_SESSION[$this->GetLoginSessionVar()] = $row['id_client'];
-			        $_SESSION['timeout'] = time();
-				}
-			}
-	       return $returnValue;
-	   	}
+	  //   function checkLoginFacebook(){
+	  //       $id_facebook = $_POST['id_facebook'];
+	  //       $returnValue = true;
+	  //       $this->checkDBLogin();
+	  //       if(!isset($_SESSION)){ session_start(); }
+	  //       $qry = "SELECT id_client,id_facebook FROM client WHERE id_facebook='$id_facebook'";
+	  //       $result = $this->db->selectQuery($qry);
+			// if(!$result){
+			// 	$this->db->HandleError('No login with Facebook');
+			// 	$returnValue = false;
+			// }else{
+			// 	if(!$this->db->numRows($result)){
+			// 		$returnValue = false;
+			// 	}else{
+			// 		$row = $this->db->fetchArray($result);
+			//         $_SESSION[$this->GetLoginSessionVar()] = $row['id_client'];
+			//         $_SESSION['timeout'] = time();
+			// 	}
+			// }
+	  //      return $returnValue;
+	  //  	}
 
 	    /*
 			REGISTER
 	    */
+		function checkEmailForRegister($email){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM client WHERE email="'.$email.'"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No email in DB');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No email in DB');
+					$returnValue = false;
+				}
+			}
+			return $returnValue; 
+		}
+
 	    function insertClient($name,$email,$password,$sex,$id_conekta,$cumple,$telefono){
 	    	$returnValue = true;
 	    	$this->checkDBLogin();
@@ -115,19 +132,19 @@
         	$formvars['cumple'] = $this->Sanitize($cumple);
         	$formvars['telefono'] = $this->Sanitize($telefono);	
 
-			// $qry = 'INSERT INTO client (name,email,_password,sex,id_conekta,birthday,phone,date_created)
-   //              values(
-   //              "' . $formvars['name'] . '",
-   //              "' . $formvars['email'] . '",
-   //              "' . $formvars['password'] . '",
-   //              "' . $formvars['sex'] . '",
-   //              "' . $formvars['conekta'] .'",
-   //              "'. $formvars['cumple'] .'",
-   //              "'. $formvars['telefono'] .'",
-   //              NOW())'; 
-			// if(!$this->db->insertQuery($qry)){
-			// 	$returnValue = false;
-			// }
+			$qry = 'INSERT INTO client (name,email,_password,sex,id_conekta,birthday,phone,date_created)
+                values(
+                "' . $formvars['name'] . '",
+                "' . $formvars['email'] . '",
+                "' . $formvars['password'] . '",
+                "' . $formvars['sex'] . '",
+                "' . $formvars['conekta'] .'",
+                "'. $formvars['cumple'] .'",
+                "'. $formvars['telefono'] .'",
+                NOW())'; 
+			if(!$this->db->insertQuery($qry)){
+				$returnValue = false;
+			}
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
@@ -1033,6 +1050,64 @@
 			$this->db->closeAll();
 			return $returnValue;
 		}
+
+		function getMailchimpKey(){
+			$returnValue = '';
+	    	$this->checkDBLogin();
+	    	$qry = 'SELECT * FROM settings WHERE name="mailchimp_key"';
+	    	$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No conekta');
+				$returnValue = false;
+			}else{
+				$row = $this->db->fetchArray($result); 
+				$returnValue = $row['value'];
+			}
+			return $returnValue; 
+		}
+
+		function getMailchimpList(){
+			$returnValue = '';
+	    	$this->checkDBLogin();
+	    	$qry = 'SELECT * FROM settings WHERE name="mailchimp_id_list"';
+	    	$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No conekta');
+				$returnValue = false;
+			}else{
+				$row = $this->db->fetchArray($result); 
+				$returnValue = $row['value'];
+			}
+			return $returnValue; 
+		}
+			/*
+
+						conekta
+
+			*/
+		function getConektaSecretKey(){
+	    	$returnValue = '';
+	    	$this->checkDBLogin();
+	    	$qry = 'SELECT * FROM settings WHERE name="conekta_status"';
+	    	$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No conekta');
+				$returnValue = false;
+			}else{
+				$row = $this->db->fetchArray($result); //RETURN dev || prod
+				$qry = 'SELECT * FROM settings WHERE name="conekta_key_private_'.$row['value'].'"';
+				$result = $this->db->selectQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No coneketa key');
+					$returnValue = '';
+				}
+				else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['value'];
+				}
+			}
+			return $returnValue; 
+	    }
 
 		/*
 			THEME
