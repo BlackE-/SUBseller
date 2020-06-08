@@ -44,11 +44,6 @@
 				hideLoading();
 				if(myObj.return){
 					//true
-					// if(typeUpdate == 'stepDown'){
-					// 	document.getElementById(id_product).stepDown(1);
-					// }else{
-					// 	document.getElementById(id_product).stepUp(1);
-					// }
 					closeModal();
 					location.reload();
 				}else{
@@ -60,7 +55,7 @@
 				}
 			}
 		}
-		xhr.open('POST', './include/CART-updateCart.php', true);
+		xhr.open('POST', '../include/CART-updateCart.php', true);
 		xhr.send(formData); 
 	}
 
@@ -112,7 +107,7 @@
 				}
 			}
 		}
-		xhr.open('POST', './include/CART-deleteProductFromCart.php', true);
+		xhr.open('POST', '../include/CART-deleteProductFromCart.php', true);
 		xhr.send(formData); 
 	}
 

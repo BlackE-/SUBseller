@@ -61,49 +61,6 @@
 		    return $returnValue;
 	    }
 
-	  //   function checkLoginForHeader(){
-	  //       if(!isset($_SESSION)){ session_start(); }
-	  //       $sessionvar = $this->GetLoginSessionVar();
-	  //       if(empty($_SESSION[$sessionvar])){
-	  //           $this->HandleError("Session expiro!");
-	  //           return false;
-	  //       }
-	  //       if(!$this->DBLogin()){
-	  //           $this->HandleError("Database login failed!");
-	  //           return false;
-	  //       }
-	  //       $qry = "SELECT id_cliente,name,id_facebook FROM cliente WHERE id_cliente = " . $_SESSION[$sessionvar];
-	  //       $result = mysql_query($qry,$this->connection);
-	  //       $row = mysql_fetch_array($result);
-	  //       if(mysql_num_rows($result)<=0){
-	  //           $this->HandleError("Error. Datos Incorrectos.");
-	  //           return false;
-	  //       }
-	  //       return array("id_cliente"=>$row['id_cliente'],"name"=>$row['nombre'],'id_facebook'=>$row['id_facebook']);
-	  //   }
-
-	  //   function checkLoginFacebook(){
-	  //       $id_facebook = $_POST['id_facebook'];
-	  //       $returnValue = true;
-	  //       $this->checkDBLogin();
-	  //       if(!isset($_SESSION)){ session_start(); }
-	  //       $qry = "SELECT id_client,id_facebook FROM client WHERE id_facebook='$id_facebook'";
-	  //       $result = $this->db->selectQuery($qry);
-			// if(!$result){
-			// 	$this->db->HandleError('No login with Facebook');
-			// 	$returnValue = false;
-			// }else{
-			// 	if(!$this->db->numRows($result)){
-			// 		$returnValue = false;
-			// 	}else{
-			// 		$row = $this->db->fetchArray($result);
-			//         $_SESSION[$this->GetLoginSessionVar()] = $row['id_client'];
-			//         $_SESSION['timeout'] = time();
-			// 	}
-			// }
-	  //      return $returnValue;
-	  //  	}
-
 	    /*  ------------------------    LOGOUT  --------------------------- */
 		function Logout(){
 		    session_start();
@@ -163,8 +120,75 @@
 		    return $returnValue;
 	    }
 
+	    /*
+			PASSWORD
+	    */
+		function passwordReset(){
+			$email = $_POST['email'];
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM client WHERE email="'.$email.'"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tenemos registro de cliente: '.$email);
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tenemos registro de cliente: '.$email);
+					$returnValue = false;
+				}else{
+					$from = $this->getWebsiteSetting('from_email');
+					$subject = 'Solicitud nueva contraseña';
+					$urlHeader = (isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on')) ? 'https://' : 'http://';
+					$urlHeader .= $_SERVER['HTTP_HOST'];
+					
+					$logo = $urlHeader.$this->getWebsiteSetting('website_logo');
+					$pswnew = $urlHeader.$this->getWebsiteSetting('website_url').'/pswnew?email='.$email;
+					
+					$mensajeConfirmacion = '<table>';
+					$mensajeConfirmacion.= '<tr><td><img src="'.$logo.'"/></td></tr>';
+					$mensajeConfirmacion.= '<tr><td><h2>¿Olvidaste tu contraseña? ¡No hay problema! </h2></td></tr>';
+					$mensajeConfirmacion.= '<tr><td><p>¡Puedes configurar uno nuevo ahora! Haga clic en el siguiente enlace.</p></td></tr>';
+					$mensajeConfirmacion.= '<tr><td>< href="'.$pswnew.'" target="_blank">';
+					$mensajeConfirmacion.= '<button style="background:#2361f0;border: 0;color: #fff;padding: 15px 50px;border-radius: 50px;">¡Puedes configurar uno nuevo ahora! Haga clic en el siguiente enlace.</button>';
+					$mensajeConfirmacion.= '</a></td></tr>';
+					$returnValue = array('message'=>$mensajeConfirmacion,'to'=>$email,'from'=>$from,'subject'=>$subject);
+				}
+			}
+			return $returnValue; 
+		} 
 
-		
+		function passwordNew(){
+			$email = $_POST['email'];
+			$password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+			$returnValue = true;
+			$this->checkDBLogin();
+
+			$qry = 'SELECT * FROM client WHERE email="'.$email.'"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tenemos registro de cliente: '.$email);
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tenemos registro de cliente: '.$email);
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$qry = 'UPDATE client SET _password="'.$password.'" WHERE id_client='.$row['id_client'];
+					$result = $this->db->updateQuery($qry);
+					if(!$result){
+						$returnValue = false;
+						$this->db->HandleError('No se pudo actualizar la contraseña');
+					}
+				}
+			}
+			return $returnValue; 
+
+
+		}
+
 		
 		/*
 			Orders
@@ -204,7 +228,6 @@
 			}
 			return $returnValue;
 		}
-
 
 		/*
 			Products
@@ -492,8 +515,6 @@
 			}
 			return $returnValue;
 		}
-		
-
 
 		/*
 	    	
@@ -636,6 +657,18 @@
 			return $returnValue;
 	    }
 
+	    function deleteSessionCart($id_session_cart){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			$qry = "DELETE FROM session_cart WHERE id_session_cart=".$id_session_cart;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+			    $this->db->HandleError($qry . "No se pudo actualizar el carrito");
+				$returnValue = false;
+			}
+			return $returnValue;
+	    }
+
 	    function updateSessionClient($id_session_client){
 	    	$returnValue = true;
 			$this->checkDBLogin();
@@ -701,17 +734,22 @@
 		        	//not logged in
 					//	GUARDAR TODOS LOS DATOS EN SESSION
 					if(!isset($_SESSION)){ session_start(); }
-					if(!isset($_SESSION['shop'])){ $_SESSION['cart'] = array();}
-		            $found = false;
-		            foreach($_SESSION['cart'] as $key => $value){
-	                    if($value['id_product'] == $id_product){
-	                        $found=true;
-	                        $_SESSION['cart'][$key]['qty'] = $value['quantity'] + $quantity;
-	                    }
-		            }
-		            if(!$found)
-					    array_push($_SESSION['cart'],array("id_product" => $id_product, "qty"=>$quantity,"price"=>$price,"id_session_cart"=>""));
-						//array_push($_SESSION['cart'],array("id_producto" => $id_product, "quantity"=>$quantity,"price"=>$price,"id_carrito_producto"=>""));
+					if(!isset($_SESSION['cart'])){ $_SESSION['cart'] = array();}
+					if(empty($_SESSION['CART'])){
+						array_push($_SESSION['cart'],array("id_product" => $id_product, "qty"=>$quantity,"price"=>$price));
+						$this->db->HandleError('Cart is empty');
+					}else{
+						$found = false;
+			            foreach($_SESSION['cart'] as $key => $value){
+		                    if($value['id_product'] == $id_product){
+		                        $found=true;
+		                        $_SESSION['cart'][$key]['qty'] = $value['quantity'] + $quantity;
+		                    }
+			            }
+			            if(!$found)
+						    array_push($_SESSION['cart'],array("id_product" => $id_product, "qty"=>$quantity,"price"=>$price));
+						$this->db->HandleError('Cart not empty Product');
+					}
 		        }
 			}else{
 				$returnValue = false;
@@ -724,35 +762,63 @@
 			$this->checkDBLogin();
 			$id_product = $_POST['id_product'];
 			$quantity = $_POST['quantity'];
+			$price = $_POST['price'];
+
 			$result = $this->checkInventory($id_product,$quantity);
 			if($result){
 				if(!isset($_SESSION)){ session_start(); }
 				if($this->CheckLogin()){
-					$id_product = $_POST['id_product'];
-					$qty = $_POST['quantity'];
-					$price = $_POST['price'];
-
 					$id_session_client = $_SESSION['id_session_client'];
 					$qry = 'SELECT * from session_cart WHERE product_id_product='.$id_product.' AND session_client_id_session_client='.$id_session_client;
 		        	$result = $this->db->selectQuery($qry);
 		        	$row = $this->db->fetchArray($result);
 		        	$id_session_cart = $row['id_session_cart'];
 		        	
-		        	$returnValue = $this->updateSessionCart($id_session_cart,$qty,$price);
+		        	$returnValue = $this->updateSessionCart($id_session_cart,$quantity,$price);
 		        }
 		        else{
-		        	$carTemp = $_SESSION['cart'];
+		        	$cartTemp = $_SESSION['cart'];
 		        	foreach($cartTemp as $key=>$value){
-			            $cartTemp[$key]['qty'] = $_POST[$key];
-			            $update_query = "UPDATE session_cart SET number_items=".$_POST[$key]." WHERE session_client_id_session_client=".$value['id_session_client'];
-			            $result = $this->db->updateQuery($update_query);
+		        		if($cartTemp[$key]['id_product'] == $id_product){
+		        			$cartTemp[$key]['qty'] = $quantity;
+		        		}
 					}
 					$_SESSION['cart'] = $cartTemp;
+					// $this->db->HandleError('Cart update Product');
 		        }
 		    }
 		    else{
 				$returnValue = false;
 			}
+			return $returnValue;
+		}
+
+		function deleteProductFromCart(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$id_product = $_POST['id_product'];
+
+			if(!isset($_SESSION)){ session_start(); }
+			if($this->CheckLogin()){
+				$id_session_client = $_SESSION['id_session_client'];
+				$qry = 'SELECT * from session_cart WHERE product_id_product='.$id_product.' AND session_client_id_session_client='.$id_session_client;
+	        	$result = $this->db->selectQuery($qry);
+	        	$row = $this->db->fetchArray($result);
+	        	$id_session_cart = $row['id_session_cart'];
+	        	
+	        	$returnValue = $this->deleteSessionCart($id_session_cart);
+	        }
+	        else{
+	        	$carTemp = $_SESSION['cart'];
+	        	$cartNew = array();
+	        	foreach($cartTemp as $key=>$value){
+	        		if($carTemp[$key]['id_product'] != $id_product){
+	        			array_push($cartNew,array("id_product" => $carTemp[$key]['id_product'], "qty"=>$carTemp[$key]['qty'],"price"=>$carTemp[$key]['price']));
+	        		}
+				}
+				$_SESSION['cart'] = $cartNew;
+				$this->db->HandleError('Cart delete Product');
+	        }
 			return $returnValue;
 		}
 
@@ -773,31 +839,26 @@
 			$this->checkDBLogin();
 			if(!isset($_SESSION)){ session_start(); }
 	        if(!$this->CheckLogin()){
-	        	array_push($queries, 'no login');
 	            $this->db->HandleError("Sin Login");
 	            $returnValue = false;
 	        }else{
-	        	array_push($queries, 'is login');
 				$id_client =  $_SESSION[$this->GetLoginSessionVar()];
 		        $qry = "SELECT * from session_client WHERE status = 0 AND client_id_client=".$id_client;
 		        $result = $this->db->selectQuery($qry);
 		        if(!$this->db->numRows($result)){
-		        	array_push($queries, 'no habia carrito');
 		        	//NO HAY carrito guardado en DB 
-	            	array_push($queries, 'se creo un carrito, para guardar todo lo de SESSION');
+		        	// array_push($queries, 'no habia carrito');
+	            	// array_push($queries, 'se creo un carrito, para guardar todo lo de SESSION');
 	            	$id_session_client = $this->insertSessionClient($id_client);
 		            $cartTemp = $_SESSION['cart'];
 		            foreach($cartTemp as $key2=>$cartValue){
 		                //GUARDARLO EN LA BASE
 		                $insert = "INSERT INTO session_cart (session_client_id_session_client,product_id_product,number_items,price) 
 		                			VALUES (".$id_session_client.",".$cartValue['id_product'].",".$cartValue['qty'].",".$cartValue['price'].")";
-		                $query = $this->db->insertQuery($insert);
-		                if(!$query){
-		                    $this->db->HandleError('No se pudo guardar el carrito en DB');
-		                    $returnValue = false;
-		                }
+		                // array_push($queries, $insert);
+		                $this->db->insertQuery($insert);
 		            }
-		            //unset($_SESSION['CART']);
+		            unset($_SESSION['cart']);
 		        }else{
 		        	// array_push($queries, 'SI HABIA CARRITO');
 		        	//SI HAY UN carrito 	recuperar ID_CARRITO_SESION
@@ -830,21 +891,22 @@
 	                    	}
 	                    	if($cartValue['id_product'] == $prod['product_id_product']){//producto encontrado en DB y en carrito se actualiza
 	                            $found = true;
-	                            // array_push($queries, array('3 found true'=>$prod['product_id_product']));
+	                            array_push($queries, array('3 found true'=>$prod['product_id_product']));
 	                            $qty = intval($cartValue['qty']) + intval ($prod['number_items']);
 	                            $update = "UPDATE session_cart SET number_items=".$qty." WHERE product_id_product=".$cartValue['id_product']." AND id_session_cart=".$prod['id_session_cart'];
 	                            $this->db->updateQuery($update);
 	                            // array_push($queries, $update);
 	                        }
 	                        else{
-	                        	// array_push($queries, array('5 product_not_found'=>$prod['product_id_product']));
+	                        	array_push($queries, array('5 product_not_found'=>$prod['product_id_product']));
 	                        	if(!in_array($cartValue['id_product'], $array_products_in_db,true)){
 	                        		// array_push($queries, array('6 prod_not_in_array_db'=>$cartValue['id_product']));
 	                        		// array_push($queries, array('6 prod_not_in_array_db'=>$array_products_in_db));
+
 	                        		// SE TIENE QUE INSERTAR EN LA BASE DE DATOS 	//evaluar si ya se guardo el producto en una iteracion anterior
 		                            if(!in_array($cartValue['id_product'], $array_products_missing_in_db,true)){
-		                                // array_push($queries, array('7 prod_not_in_array_insert'=>$cartValue['id_product']));
-		                                array_push($array_products_missing_in_db,$prod['product_id_product']);
+		                                // array_push($queries, array('7 prod_not_in_array_insert'=>$array_products_missing_in_db));
+		                                array_push($array_products_missing_in_db,$cartValue['id_product']);
 		                                array_push($array_products_to_insert, 
 		                                	array(	"id_product"=>$cartValue['id_product'],
 		                                			"qty"=>$cartValue['qty'],
@@ -863,10 +925,39 @@
 							$this->db->insertQuery($insert);
 	                	}
 	                }
+	                unset($_SESSION['cart']);
 	            }
 		    }
 		    $returnValue = $queries;
 		    return $returnValue;
+	    }
+
+	    function getLimitFreeDelivery(){
+	    	$returnValue = 0;
+	    	$this->checkDBLogin();
+	    	$qry = 'SELECT * from settings WHERE name="limit_free_delivery"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result || !$this->db->numRows($result)){
+				$returnValue = 0;
+			}else{
+				$row = $this->db->fetchArray($result);
+				$returnValue = intval($row['value']);
+			}
+			return $returnValue;
+	    }
+
+	    function getDeliveryCost(){
+	    	$returnValue = 0;
+	    	$this->checkDBLogin();
+	    	$qry = 'SELECT * from settings WHERE name="delivery_cost"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result || !$this->db->numRows($result)){
+				$returnValue = 0;
+			}else{
+				$row = $this->db->fetchArray($result);
+				$returnValue = intval($row['value']);
+			}
+			return $returnValue;
 	    }
 
 

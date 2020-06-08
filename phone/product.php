@@ -5,16 +5,17 @@
 	}else{
 		$id_product = $_GET['id'];
 	}
-	require_once "include/_setup.php";
+	require_once "../include/_setup.php";
 	$set = new Setup();
 	$login = $set->checkLogin();
-	$path = '/subseller';
+	$path = '/subseller/phone';
+	$pathImg = '../';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
 	<script>
-         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+         if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
          	<?php
          		echo 'window.location.replace("phone/product?id_product='.$id_product.'")';
          	?>
@@ -49,15 +50,15 @@
 						$thumb = $data[1]['media'][0];
 						// print_r($thumb);
 						echo '<div class="thumbContainer">';
-						echo 	'<img id="thumbSelected" src="'.$path.'/'.$thumb['url'].'"/>';
+						echo 	'<img id="thumbSelected" src="'.$pathImg.'/'.$thumb['url'].'"/>';
 						echo '</div>';
 						$secondary = $data[2]['media_secondary'];
 						if(!empty($secondary)){
 							echo '<div class="mosaico">';
             		            echo '<ul>';
-            		            	echo '<li><img id="0" class="thumb selected" src="'.$path.'/'.$thumb['url'].'"/>';
+            		            	echo '<li><img id="0" class="thumb selected" src="'.$pathImg.'/'.$thumb['url'].'"/>';
             		            foreach($secondary as $key=>$value){
-        		                    echo '<li><img id="'.($key+1).'" class="thumb" src="'.$path.'/'.$value['url'].'"/>';
+        		                    echo '<li><img id="'.($key+1).'" class="thumb" src="'.$pathImg.'/'.$value['url'].'"/>';
         		                }
             		            echo '</ul>';
             		        echo '</div>';
@@ -107,7 +108,7 @@
 	</div>
 
 	<?php include('footer.php');?>
-	<?php include('modal.php');?>
+	<?php include('../modal.php');?>
 	<script type="text/javascript" src="script/product.js"></script>
 </body>
 </html>

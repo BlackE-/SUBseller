@@ -24,13 +24,13 @@
 #glideBestSellers .typeContainer p{background:#2361f0;padding:0 10px;color:#fff;margin:0;}
 #glideBestSellers .box{margin: 0 auto;width: 100%;}
 #glideBestSellers .boxBorder{display:grid;padding:15px 10px;    border-right:1px solid #12f9e7;border-bottom:1px solid #12f9e7;border-bottom-right-radius: 10px;overflow: hidden;}
-#glideBestSellers .boxBorder .thumbContainer{display:grid;height:100px;align-items: center;width: 100%;}
+#glideBestSellers .boxBorder .thumbContainer{display:grid;height:150px;align-items: center;width: 100%;overflow: hidden;}
 #glideBestSellers .boxBorder .thumbContainer img{width: 100%;}
 #glideBestSellers .boxBorder .textContainer{text-align: left;border-bottom: 1px solid #12f9e7;padding-bottom: 20px;}
 #glideBestSellers .boxBorder .textContainer p{color:#545454;font-size: 12px;margin: 0;}
 #glideBestSellers .boxBorder .textContainer .title{color:#2361f0;font-weight: 700;font-size: 10px;}
 #glideBestSellers .boxBorder .priceContainer{color:#12f9e7;font-weight: 700;font-size: 20px;text-align: left;padding:10px 0;}
-#glideBestSellers .boxBorder .addCartContainer a{text-decoration: none;color:#2361f0;font-size: 16px;}
+#glideBestSellers .boxBorder .addCartContainer a{text-decoration: none;color:#2361f0;font-size: 14px;}
 #glideBestSellers .boxBorder .addCartContainer i{transition: all 300ms ease-in;color:#2361f0;}
 #glideBestSellers .boxBorder .addCartContainer:hover i{transform:rotate(90deg);}
 @media only screen and (max-width: 320px){

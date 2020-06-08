@@ -60,7 +60,8 @@
     		            		<div class="row"><input type="text" id="apellidoRegister" placeholder="Apellido"/></div>
 	    		            	<div class="row"><input type="number" id="phoneRegister" placeholder="Telefono: 10 dígitos"/></div>
 	    		            	<div class="row"><input type="email" id="emailRegister" placeholder="Correo Electrónico"/><p class="little">Aquí enviaremos la confirmación del pedido.</p></div>
-	    		            	<div class="row"><input type="password" id="password1" placeholder="Contraseña" minlength="8" /></div>
+	    		            	<div class="row"><input type="password" id="password1" placeholder="Contraseña" minlength="8" />
+	    		            		<p class="little">Al menos 8 caracteres: 1 letra Mayúscula, 1 letra Minúscula, 1 Número y 1 carácter especial</p></div>
 	    		            	<div class="row"><input type="password" id="password2" placeholder="Confirmar Contraseña" minlength="8"/></div>
 	    		            	<div class="row">
     		            			<p>Fecha de nacimiento:</p>
@@ -132,10 +133,10 @@
     		            	<hr>
     		            </div>
     		            <div class="registerContainer">
-    		            	<form class="loginForm">
+    		            	<form id="loginForm">
 	    		            	<p class="topRegister"><b>o usar tu correo electrónico</b></p>
-	    		            	<div class="row"><input type="email" class="emailLogin" placeholder="Correo Electrónico"/></div>
-	    		            	<div class="row"><input type="password" class="passwordLogin" placeholder="Contraseña"/></div>
+	    		            	<div class="row"><input type="email" id="emailLogin" placeholder="Correo Electrónico"/></div>
+	    		            	<div class="row"><input type="password" id="passwordLogin" placeholder="Contraseña"/></div>
 	    		            	<div class="row">
 	    		            		<input type="submit" class="submitLogin" value="Iniciar Sesión">
 	    		            		<p class="forgot"><a href="pswreset"><i>Olvidé mi contraseña</i></a></p>
