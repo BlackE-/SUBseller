@@ -61,6 +61,32 @@
 		    return $returnValue;
 	    }
 
+	    function checkPhone(){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = "SELECT phone FROM client WHERE id_client=".$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.no telefono");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No telefono");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	if($row['phone'] == ''){
+		        		$returnValue = false;
+		        	}
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
 	    /*  ------------------------    LOGOUT  --------------------------- */
 		function Logout(){
 		    session_start();
@@ -960,8 +986,7 @@
 			return $returnValue;
 	    }
 
-
-		/*
+	    /*
 
 			INVENTORY
 
@@ -985,6 +1010,179 @@
 			}
 			return $returnValue;
 		}
+
+	    /*	
+
+	    		DELIVERY  	
+
+	    */
+
+		function getShippingFromClient(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'SELECT * FROM shipping WHERE name IS NOT NULL AND client_id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No shipping');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No shipping');
+					$returnValue = false;
+				}else{
+					$array_data = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($array_data,array('id_shipping'=>$row['id_shipping'],'name'=>$row['name']));
+					}
+					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+		function getShipping(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$id_shipping = $_POST['id_shipping'];
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'SELECT * FROM shipping WHERE id_shipping='.$id_shipping;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No shipping');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No shipping');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getConektaId(){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'SELECT id_conekta FROM client WHERE id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No id_conekta');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No id_conekta');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['id_conekta'];
+				}
+			}
+			return $returnValue;
+	    }
+
+	    function updateClientPhone($phone){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'UPDATE client SET phone="'.$phone.'"WHERE id_client='.$id_client;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update phone');
+				$returnValue = false;
+			}
+			return $returnValue;
+	    }
+
+		function getStates($country){
+			switch ($country) {
+				case 'MEX':
+					$states = array("Aguascalientes",
+								"Baja California",
+								"Baja California Sur",
+								"Campeche",
+								"Chiapas",
+								"Chihuahua",
+								"Coahuila",
+								"Colima",
+								"Ciudad de México",
+								"Durango",
+								"Guanajuato",
+								"Guerrero",
+								"Hidalgo",
+								"Jalisco",
+								"México",
+								"Michoacán",
+								"Morelos",
+								"Nayarit",
+								"Nuevo León",
+								"Oaxaca",
+								"Puebla",
+								"Querétaro",
+								"Quintana Roo",
+								"San Luis Potosí",
+								"Sinaloa",
+								"Sonora",
+								"Tabasco",
+								"Tamaulipas",
+								"Tlaxcala",
+								"Veracruz",
+								"Yucatán",
+								"Zacatecas"); 
+					break;
+				
+				default:
+					# code...
+					break;
+			}
+			return $states;
+		}
+
+		function insertShipping(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$id_shipping = $_POST['id_shipping'];
+			if($id_shipping == 0){
+				$addressline1 = $this->Sanitize($_POST['address1']);
+				$addressline2 = $this->Sanitize($_POST['address2']);
+				$cp = $this->Sanitize($_POST['cp']);
+				$city = $this->Sanitize($_POST['city']);
+				$state = $this->Sanitize($_POST['state']);
+				$country = $this->Sanitize($_POST['country']);
+				$notes = $this->Sanitize($_POST['notes']);
+				$name = $this->Sanitize($_POST['name']);
+
+
+				if($_POST['save'] == 1){
+					$qry = 'INSERT into shipping (address_line_1,address_line_2,city,cp,state,country,notes,name,client_id_client) 
+								VALUES("'.$addressline1.'","'.$addressline2.'","'.$city.'","'.$cp.'","'.$state.'","'.$country.'","'.$notes.'","'.$name.'",'.$id_client.')';
+				}else{
+					$qry = 'INSERT into shipping (address_line_1,address_line_2,city,cp,state,country,notes,client_id_client) 
+								VALUES("'.$addressline1.'","'.$addressline2.'","'.$city.'","'.$cp.'","'.$state.'","'.$country.'","'.$notes.'","'.$id_client.')';
+				}
+				$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleDBError('No insert shipping');
+					$returnValue = false;
+				}
+				$id_shipping = $this->db->lastInsertID();
+			}
+			$_SESSION['id_shipping'] = $id_shipping;
+			return $returnValue;
+		}
+
+
+
+
+		
 		/*
 	
 			COUPONS
