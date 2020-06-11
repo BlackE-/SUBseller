@@ -16,7 +16,7 @@
 	.modal-header{height: 30px;border-bottom:1px solid #2361f0; position: relative;text-align: right;}
 	.modal-body{height: auto;padding:20px 0;}
 	.closeModal:hover,.closeModal:focus {cursor: pointer;}
-	.lds-dual-ring {display: inline-block;width: 50px;height: 50px;}
+	.lds-dual-ring {display: inline-block;width: 50px;height: 50px;margin:0 auto;}
 	.lds-dual-ring:after {content: " ";display: block;width: 46px;height: 46px;margin: 1px;border-radius: 50%;border: 5px solid #2361f0;border-color: #2361f0 transparent #2361f0 transparent;animation: lds-dual-ring 1.2s linear infinite;}
 	@keyframes lds-dual-ring {
 	  0% {transform: rotate(0deg);}

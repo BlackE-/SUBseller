@@ -54,6 +54,16 @@
   				document.getElementById(id_category).checked = true;
   				updateList();
   			break;
+  			case 'brand':
+  				let id_brand = 'b-option-'+id;
+  				document.getElementById(id_brand).checked = true;
+  				updateList();
+  			break;
+  			case 'type':
+  				let id_type = 't-option-'+id;
+  				document.getElementById(id_type).checked = true;
+  				updateList();
+  			break;
   			case 'tag':
   				// let id_category = 'c-option-'+id;
   				// document.getElementById(id_category).checked = true;

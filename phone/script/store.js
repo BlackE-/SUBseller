@@ -38,6 +38,16 @@
   				setLimpiarFiltros();
   				updateList();
   			break;
+  			case 'brand':
+  				let id_brand = 'b-option-'+id;
+  				document.getElementById(id_brand).checked = true;
+  				updateList();
+  			break;
+  			case 'type':
+  				let id_type = 't-option-'+id;
+  				document.getElementById(id_type).checked = true;
+  				updateList();
+  			break;
   			case 'tag':
   				updateListByTag(id);
   			break;
@@ -60,6 +70,15 @@
 		document.getElementById('clearCategories').classList.remove('show');
 		return;
     }
+
+    addAnimation = () =>{
+		for(let x of userList.matchingItems){
+        	x.elm.classList.remove('zoomOut');
+        	x.elm.classList.add('animated');
+        	x.elm.classList.add('zoomIn');
+        }
+	}
+
 
     updateList = () =>{
     	openModal();
@@ -94,6 +113,7 @@
 	                    algo = id_product_2_filter.indexOf(item.values().id_product)
 	                    return algo>=0 ? true : false;
 	                });
+	                 addAnimation();
 	                document.getElementById('totalProductosInput').value = userList.matchingItems.length
 				}
 			}

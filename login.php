@@ -19,8 +19,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-
-	<link rel="stylesheet" href="node_modules/@glidejs/glide/dist/css/glide.core.min.css">
 	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
@@ -31,7 +29,7 @@
 	<div id="formsContainer">
 		<div class="container" id="box">
     		<div class="pasoContainer">
-                <p><b>PASO 1</b></p>
+                <p>PASO 1: <b>COMPLETA TU IDENTIDAD</b></p>
                 <div class="meter">
                   <span style="width: 25%"></span>
                 </div>
