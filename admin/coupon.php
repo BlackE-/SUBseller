@@ -42,7 +42,7 @@
 
 					<?php
 							$products_id = explode(",",$coupon['product_ids']);
-							if(sizeof($products_id)>1){
+							if(sizeof($products_id)>=1){
 								echo '<p class="title">Productos incluidos</p>';
 								foreach ($products_id as $key => $row){
 									echo '<div  class="productContainer">';

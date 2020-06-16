@@ -8,6 +8,7 @@
 		header("Location: login"); 
 		exit;
 	}
+	$set->checkCoupons();
 ?>
 <!DOCTYPE html>
 <html>
@@ -44,9 +45,9 @@
 		                    if($row['status']){echo '<p class="activo">Activo</p>';}
 		                    else{echo '<p class="expirado">Expirado</p>';}
 		                    echo '</td>';
-		                    echo '<td><p>'.$row['discount_type'].'</p></td>';
-		                    $date = date_create($row['date_expires']);
-		                    echo '<td><p>'.date_format($date, 'Y-m-d').'</p></td>';
+		                    echo '<td><p class="discount_type">'.$row['discount_type'].'</p></td>';
+		                    $date_expires = date_create($row['date_expires']);
+		                    echo '<td><p>'.date_format($date_expires, 'Y-m-d').'</p></td>';
 		                    echo '<td><p>'.$row['usage_count'].'</p></td>';
 		                    echo '</tr>';
 		                }

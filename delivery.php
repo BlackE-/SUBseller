@@ -61,7 +61,7 @@
 	            			}
 	            		?>
 	            		<div class="row"><input type="text" id="address1" placeholder="Domicilio"/></div>
-	            		<div class="row"><input type="text" id="address2" placeholder=""/></div>
+	            		<div class="row"><input type="text" id="address2" placeholder="Domicilio (cont)"/></div>
 	            		<?php
 	            			if(!$set->checkPhone()){//FALSE has no phone ASK FOR PHONE
 	            				echo '<div class="row"><input type="number" id="phone" placeholder="Telefono: 10 dígitos"/></div>';
@@ -103,24 +103,23 @@
 								$totalRows = 0;
 								foreach ($cart as $key => $value) {
 									$product = $set->getProduct($value['id_product']);
-									// print_r($product);
 									$pro = $product[0]['product'];
-									// print_r($pro);
 									$proImg = $product[1]['media'];
 									$price_sale = $pro['price_sale'];
 			                        if($pro['discount'] != 0){
 			                        	$price_sale = $pro['price_sale']*$pro['discount'];
 			                        }
 			                        $price = explode('.',$price_sale);
-			                        $totalRow = number_format($value['price'] * $value['qty'], 2, '.', '');
-			                        $priceRow = explode('.',$totalRow);
+			                        $totalRow = $value['price'] * $value['number_items'];
+			                        $totalRowFormat = number_format($totalRow, 2, '.', ',');
+			                        $priceRow = explode('.',$totalRowFormat);
 			                        $totalRows += $totalRow;
 
 									echo '<div class="item">';
 									echo 	'<img class="thumb" src="'.$path.$proImg[0]['url'].'"/>';
 									echo 	'<div class="itemDetails">';
 									echo 		'<p class="name">'.$pro['name'].'</p>';
-			                		echo 		'<p class="sale_price">'.$value['qty'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
+			                		echo 		'<p class="sale_price">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 			                		echo 	'</div>';
 			                		echo 	'<div>';
 									echo 		'<p class="totalRow">$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p>';
@@ -132,8 +131,9 @@
 					<hr>
 					<div id="detailsContainer">
 						<?php
-							$subtotal = number_format($totalRows, 2, '.', '');
-							$subtotalShow = explode('.', $subtotal);
+							$subtotal = $totalRows;
+							$subtotalFormat = number_format( $subtotal, 2, '.', ',');
+							$subtotalShow = explode('.', $subtotalFormat);
 							echo '<div class="subtotalContainer"><p><b>Subtotal:</b></p><p class="lightLabel2" id="subtotal">$'.$subtotalShow[0].'.<sup>'.$subtotalShow[1].'</sup></p></div>';
 
 							$freeDelivery = $set->getLimitFreeDelivery();
@@ -144,7 +144,7 @@
 	                        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', '');
 	                        	$total += $deliveryCost;
 	                        }
-							$total = number_format($total, 2, '.', '');
+							$total = number_format($total, 2, '.', ',');
 							$totalShow = explode('.', $total);
 							$deliveryShow = explode('.', $deliveryCost);
 							echo '<div class="deliveryCostContainer"><p><b>Gastos de envío:</b></p><p id="deliveryCost">$'.$deliveryShow[0].'.<sup>'.$deliveryShow[1].'</sup></p></div>';

@@ -823,7 +823,32 @@
 			COUPONS
 	
 		*/
-
+		function checkCoupons(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM coupon ORDER BY id_coupon ASC';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No coupons');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No coupons');
+					$returnValue = false;
+				}else{
+					$today = date("Y-m-d 00:00:00");
+					while($row = $this->db->fetchArray($result)){
+						if($row['date_expires'] < $today){
+							if($row['status'] == '1'){
+								$qry2 = 'UPDATE coupon SET status="0" WHERE id_coupon='.$row['id_coupon'];
+								$this->db->updateQuery($qry2);
+							}
+						}
+					}
+				}
+			}
+			return $returnValue;
+		}
 		function getCoupons(){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -865,18 +890,9 @@
 			$returnValue = true;
 			$this->checkDBLogin();
 			$data = $_POST;
-			$qry = 'INSERT INTO coupon (date_created,code,description,discount_type,amount,status,date_expires,product_ids) 
-								VALUES (NOW(),
-								"'.$data['code'].'",
-								"'.$data['description'].'",
-								"'.$data['type'].'",
-								'.(double)$data['amount'].',
-								1,
-								"'.$data['date_expires'].'",
-								"'.$data['product_ids'].'"
-							)';
+			$qry = 'INSERT INTO coupon (date_created,code,description,discount_type,amount,status,date_expires,product_ids) VALUES (NOW(),"'.$data['code'].'","'.$data['description'].'","'.$data['type'].'",'.(double)$data['amount'].',1,"'.$data['date_expires'].'","'.$data['product_ids'].'")';
 			$result = $this->db->insertQuery($qry);
-
+			$returnValue = $qry;
 			if(!$result){
 				$this->db->HandleError('No insert coupon');
 				$returnValue = false;

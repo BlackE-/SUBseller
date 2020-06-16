@@ -15,4 +15,4 @@
 .link_coupon{color:#b7002a;text-decoration: none;}
 .link_coupon:hover{color:#aaa;}
 .activo{background: #44c98c;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
-.expirado{background: transparent;color:#aaa;padding:10px;text-align: center;}
+.expirado{background: transparent;color:#aaa;text-align: center;}

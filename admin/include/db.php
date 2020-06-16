@@ -124,7 +124,7 @@
                             email VARCHAR(45) NOT NULL UNIQUE,
                             _password VARCHAR(255) NOT NULL,
                             type VARCHAR(5),
-                            date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+                            date_created DATETIME DEFAULT CURRENT_TIMESTAMP
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){
@@ -148,7 +148,7 @@
                             _password VARCHAR(255),
                             sex VARCHAR(1) COMMENT 'F/M',
                             id_facebook VARCHAR(30),
-                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 birthday DATE,
                                 id_conekta VARCHAR(21),
                                 phone VARCHAR(15)
@@ -215,13 +215,13 @@
                 }
                 $create = "CREATE TABLE coupon(
                                 id_coupon INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 code VARCHAR(20) UNIQUE NOT NULL,
                                 description TEXT,
-                                discount_type VARCHAR(15) COMMENT 'PERCENTAGE(%),FIXED($),FIXED_PRODUCT($ EACH PRODUCT),PERCENTAGE_PRODUCTS(% EACH PRODUCT),FREE_SHIPPING',
+                                discount_type VARCHAR(20) COMMENT 'PERCENTAGE(%),FIXED($),FIXED_PRODUCT($ EACH PRODUCT),PERCENTAGE_PRODUCTS(% EACH PRODUCT),FREE_SHIPPING',
                                 amount DECIMAL(10,2),
                                 status BOOLEAN,
-                                date_expires DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                date_expires DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 usage_count INT DEFAULT 0,
                                 product_ids TEXT COMMENT 'ARRAY OF PRODUCTS INCLUDED TO BE DISCOUNT',
                                 product_ids_excluded TEXT COMMENT 'ARRAY OF PRODUCTS NOT INCLUDED IN THE DISCOUNT',
@@ -350,7 +350,7 @@
                 $create = "CREATE TABLE product_movement(
                                 id_product_movement INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 product_id_product INT UNSIGNED,
-                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 stock INT,
                                 type VARCHAR(20) COMMENT 'INGRESO,EGRESO',
 
@@ -410,6 +410,7 @@
                                 id_billing INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 address_line_1 VARCHAR(50),
                                 address_line_2 VARCHAR(50),
+                                cp VARCHAR(6),
                                 city VARCHAR(45),
                                 state VARCHAR(35),
                                 country VARCHAR(3) DEFAULT 'MEX' COMMENT 'ISO3 EJ:MEX',
@@ -432,7 +433,7 @@
                 }
                 $create = "CREATE TABLE _order(
                                 id_order INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
                                 status varchar(15) COMMENT 'PENDING PAYMENT(OXXO,SPEI) / PROCESSING (PAYED) / SEND / CANCELED / REFUNDED / COMPLETE',
                                 total float,
                                 shipping_fee float,
@@ -441,10 +442,12 @@
                                 client_id_client INT UNSIGNED,
                                 shipping_id_shipping INT UNSIGNED,
                                 billing_id_billing INT UNSIGNED,
+                                coupon_id_coupon INT UNSIGNED,
                                 
                                 INDEX(client_id_client),
                                 INDEX(shipping_id_shipping),
                                 INDEX(billing_id_billing),
+                                INDEX(coupon_id_coupon),
                                 
                                 FOREIGN KEY(client_id_client)
                                     REFERENCES client(id_client)
@@ -456,6 +459,10 @@
                                 
                                 FOREIGN KEY(billing_id_billing)
                                     REFERENCES billing(id_billing)
+                                    ON DELETE RESTRICT ON UPDATE CASCADE
+
+                                FOREIGN KEY(coupon_id_coupon)
+                                    REFERENCES coupon(id_coupon)
                                     ON DELETE RESTRICT ON UPDATE CASCADE
                             )";
                 $result = mysqli_query($this->connection,$create);

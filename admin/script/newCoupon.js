@@ -18,6 +18,7 @@ $(document).ready(function(){
             addTemporaryClass(code ,'swing', 1000);
             return false;
         }
+        const amount = document.querySelector('#amount');
         const description = document.querySelector('#description');
         const date_expires = document.querySelector('#date_expires');
         if(date_expires.value.length === 0){
@@ -26,15 +27,9 @@ $(document).ready(function(){
             addTemporaryClass(date_expires ,'swing', 1000);
             return false;
         }
-
-        const amount = document.querySelector('#amount');
-        if(amount.value.length === 0){
-            errorMessage("Falta Valor");
-            addTemporaryClass(amount ,'animated', 1000);
-            addTemporaryClass(amount ,'swing', 1000);
-            return false;
-        }
         
+       
+
 
         let typeSelect = document.querySelector('input[name="type"]:checked').value;
         if(typeSelect === 'null'){
@@ -62,10 +57,9 @@ $(document).ready(function(){
                 type = 'free_shipping';
             break;
         }
-        let product_ids;
+        let product_ids = [];
         switch(type){
             case 'fixed_products': case 'percetage_products':
-                product_ids = [];
                 table.$('input[type="checkbox"]').each(function(){
                     if(this.checked){ product_ids.push($(this).attr("id")); }
                 });
@@ -73,6 +67,14 @@ $(document).ready(function(){
                     errorMessage('Elegir al menos un producto');
                     return false;
                 }
+
+                if(amount.value.length === 0){
+                    errorMessage("Falta Valor");
+                    addTemporaryClass(amount ,'animated', 1000);
+                    addTemporaryClass(amount ,'swing', 1000);
+                    return false;
+                }
+
             break;
         }
 
@@ -81,7 +83,8 @@ $(document).ready(function(){
         let formData = new FormData();
         formData.append('code', code.value);
         formData.append('description', description.value);
-        formData.append('date_expires', date_expires.value);
+        console.log(date_expires.value);
+        formData.append('date_expires', `${date_expires.value} 00:00:00`);
         formData.append('type', type);
         formData.append('amount', amount.value);
         formData.append('product_ids', product_ids);
@@ -97,6 +100,7 @@ $(document).ready(function(){
                     console.log(myObj.message);
                     errorMessage(myObj.message);
                 }else{
+                    console.log(myObj.return);
                     console.log('Cupon Guardado');
                     list.style.opacity = '1';
                     para.innerText = 'Cupon Guardado';
@@ -120,7 +124,7 @@ $(document).ready(function(){
     const list = document.querySelector(".modal-body p"); 
 
     const a = document.createElement('a');
-    a.href = "discounts";
+    a.href = "coupons";
     a.appendChild(document.createTextNode('Cupones'));
     a.style.display = 'none'; 
     modalBody.appendChild(a);
