@@ -7,7 +7,7 @@ header .container{display:grid;grid-template-columns: 250px auto;grid-template-r
 @media only screen and (max-width: 1060px) {header .container{grid-template-columns: 200px auto;}}
 @media only screen and (max-width: 690px) {header .container{display:grid;grid-template-columns: 30% auto;grid-template-rows: 40px 80px;}}
 header .container #logoContainer{grid-row-start: 1;grid-row-end: 3;padding: 10px;background: #fff;    display: grid;align-items: center;}
-header .container #logoContainer svg{display: block;}
+header .container #logoContainer svg{display: block;width:100%}
 @media only screen and (max-width: 1060px) {header .container #logoContainer{padding: 0 10px;}}
 header .container #topContainer{background:#2361f0; display: grid;grid-template-columns: auto 100px 160px 160px;align-items: center;text-align: right;}
 header .container #topContainer p{margin:0;color:#fff;font-size: 12px;}

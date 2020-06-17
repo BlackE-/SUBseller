@@ -1,5 +1,5 @@
 #formsContainer{background:#fbfbfc;}
-.pasoContainer{width:50%;margin:50px auto 0 auto;text-align:center;}
+.pasoContainer{width:90%;margin:50px auto 0 auto;text-align:center;}
 .pasoContainer p{margin:0;padding:0 0 15px 0;color:#000;}
 .pasoContainer p b{color:#2361f0;}
 /*  PROGRESS BAR    */
@@ -24,13 +24,17 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 /*  TABS LOGIN / REGISTER    */
 .tabs{display: grid;grid-template-columns: 1fr 1fr;justify-content: center;align-items: center;grid-gap: 10px;margin:10px 10px 0 10px;}
 .tabs label{color:#545454;}
-.radio-tabs{margin:0 auto;width:50%;text-align:center;padding:70px 0;}
+.radio-tabs{margin:0 auto;width:90%;text-align:center;padding:70px 0;}
 .radio-tabs input[name='houses-state']{display: none;}
 .radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}
 .radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}
 .radio-tabs .tab:hover {background-color: #fff;}
-@media all and (max-width : 570px) {.radio-tabs .tab {padding:10px 20px;font-size:14px;}}
-@media all and (max-width : 440px) {.radio-tabs .tab {padding:10px;font-size:10px;}}
+@media all and (max-width : 570px) {
+    .radio-tabs .tab {padding:10px 20px;font-size:14px;}
+}
+@media all and (max-width : 440px) {
+    .radio-tabs .tab {padding:10px;font-size:10px;}
+}
 .radio-tabs .panels {background-color: #fff;padding: 1em 20px;}
 .panels ul{margin:0;padding:0;}
 .radio-tabs .panel {display: none;}
@@ -55,15 +59,14 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 :-ms-input-placeholder {  color: #54b0ac;font-style:italic;}
 :-moz-placeholder { color: #54b0ac;font-style:italic;}
 .little{padding:5px 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;}
-.little .valid{color:#2361f0;}
 .selectBirthdayContainer{display: grid;grid-template-columns: 1fr 2fr 1fr;grid-gap:15px;}
 .selectdivdate{position:relative;display:inline-block;border:1px solid #d2dae6;}
-.selectdivdate:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
+.selectdivdate:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
 select::-ms-expand {display: none;}
 .selectdivdate select {-webkit-appearance: none; -moz-appearance: none;appearance: none;outline:none;width:100%;border:none;display: inline-block;height: 30px;  color:#54b0ac;  padding: 2px 0 0 5px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
 @media only screen and (max-width: 550px) {.selectBirthdayContainer{grid-template-columns:1fr;}}
 .selectdivsex{position:relative;display:block;border:1px solid #d2dae6;    overflow: hidden;}
-.selectdivsex:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
+.selectdivsex:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
 select::-ms-expand {display: none;}
 .selectdivsex select {-webkit-appearance: none; -moz-appearance: none;appearance: none;outline:none;width:100%;border:none;display: block;height: 30px;  color:#54b0ac;  padding: 2px 0 0 5px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
 
@@ -75,15 +78,38 @@ input[type=checkbox]:checked + label{border:1px solid #1ccfc8;background-color:#
 input[type=checkbox]:checked + label i{color: #fff;-webkit-text-stroke-color: transparent;}
 .terminos{margin:50px 0 0 0;}
 .terminos a,.forgot a{color:#000;}
-@media all and (max-width : 410px) {.registerContainer select{width:100%;}}
 
-.submitLogin{ background: #2361f0;outline: none;border: 0;color: #fff;padding: 15px 50px;margin: 15px 0 0 0;border-radius: 50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition: all 300ms linear;}
+@media all and (max-width : 410px) {
+.registerContainer select{width:100%;}
+}
+
+
+.submitLogin{ background: #2361f0;outline: none;
+    border: 0;
+    color: #fff;
+    padding: 15px 50px;
+    margin: 15px 0 0 0;
+    border-radius: 50px;
+    -webkit-box-shadow: 0px 2px 2px 0px #616060;
+    -moz-box-shadow: 0px 2px 2px 0px #616060;
+    box-shadow: 0px 2px 2px 0px #616060;
+    transition: all 300ms linear;}
 .submitLogin:hover{cursor:pointer;background: #fff;color: #2361f0;}
-.submitRegister{ background: #2361f0;outline: none;border: 0;color: #fff;padding: 15px 50px;margin: 15px 0 0 0;border-radius: 50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition: all 300ms linear;}
+
+.submitRegister{ background: #2361f0;outline: none;
+    border: 0;
+    color: #fff;
+    padding: 15px 50px;
+    margin: 15px 0 0 0;
+    border-radius: 50px;
+    -webkit-box-shadow: 0px 2px 2px 0px #616060;
+    -moz-box-shadow: 0px 2px 2px 0px #616060;
+    box-shadow: 0px 2px 2px 0px #616060;
+    transition: all 300ms linear;}
 .submitRegister:hover{cursor:pointer;background: #fff;color: #2361f0;}
-@media all and (max-width : 1075px) {.radio-tabs,.pasoContainer{width:80%;}}
+
 @media all and (max-width : 815px) {
-    .loginFacebook img{width:100%;}
-    .registerContainer input{width:100%;}
-    input[type=checkbox] + label{float:none;}
+.loginFacebook img{width:100%;}
+.registerContainer input{width:100%;}
+input[type=checkbox] + label{float:none;}
 }

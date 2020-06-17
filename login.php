@@ -59,7 +59,7 @@
 	    		            	<div class="row"><input type="number" id="phoneRegister" placeholder="Telefono: 10 dígitos"/></div>
 	    		            	<div class="row"><input type="email" id="emailRegister" placeholder="Correo Electrónico"/><p class="little">Aquí enviaremos la confirmación del pedido.</p></div>
 	    		            	<div class="row"><input type="password" id="password1" placeholder="Contraseña" minlength="8" />
-	    		            		<p class="little">Al menos 8 caracteres: 1 letra Mayúscula, 1 letra Minúscula, 1 Número y 1 carácter especial</p></div>
+	    		            		<p class="little">Al menos <span id="8char">8 caracteres</span>, <span id="MAY">1 letra Mayúscula</span>, <span id="min">1 letra Minúscula</span>, <span id="num1">1 Número</span></p></div>
 	    		            	<div class="row"><input type="password" id="password2" placeholder="Confirmar Contraseña" minlength="8"/></div>
 	    		            	<div class="row">
     		            			<p>Fecha de nacimiento:</p>

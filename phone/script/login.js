@@ -32,53 +32,11 @@
     	return re.test(String(email).toLowerCase());
 	}
 
-	// validatePassword = (value) =>{
-	// 	// const pa = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{8}$/;
-	// 	//const pa = /^[a-zA-Z0-9]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
-	// 	//https://www.regextester.com/110035
-	// 	// const pa = /(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=])(?=.{8,}).*$/;	//At least 8 characters, min 1 Uppercase 1 Lowercase 1 Number 1 special character and only contains symbols from the alphabet, num
-		
-	// 	//const pa = /^[a-zA-Z0-9[a-zA-Z0-9@#$%^&+!=_]]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
-
-	// 	// at least one number, one lowercase and one uppercase letter
- //    	// at least six characters
- //    	const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-	// 	return re.test(value);
-	// }
-
-	pass1.onkeyup = () =>{
-		// Validate lowercase letters
-		  const lowerCaseLetters = /[a-z]/g;
-		  if(pass1.value.match(lowerCaseLetters)) {  
-		    document.getElementById('min').classList.add("valid");
-		  } else {
-		    document.getElementById('min').classList.remove("valid");
-		  }
-		  
-		  // Validate capital letters
-		  const upperCaseLetters = /[A-Z]/g;
-		  if(pass1.value.match(upperCaseLetters)) {  
-		    document.getElementById('MAY').classList.add("valid");
-		  } else {
-		    document.getElementById('MAY').classList.remove("valid");
-		  }
-
-		  // Validate numbers
-		  const numbers = /[0-9]/g;
-		  if(pass1.value.match(numbers)) {  
-		    document.getElementById('num1').classList.add("valid");
-		  } else {
-		    document.getElementById('num1').classList.remove("valid");
-		  }
-		  
-		  // Validate length
-		  if(pass1.value.length >= 8) {
-		    document.getElementById('8char').classList.add("valid");
-		  } else {
-		    document.getElementById('8char').classList.remove("valid");
-		  }
+	validatePassword = (value) =>{
+		const pa = /^[a-zA-Z0-9[a-zA-Z0-9@#$%^&+!=]]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
+		//https://www.regextester.com/110035
+		return pa.test(value);
 	}
-
 	let password = document.getElementById('password1');
 	password.addEventListener('keyup',(event)=>{
 		event.preventDefault();
@@ -137,11 +95,11 @@
 		    pass1.classList.add('swing');
 		    return false;
 		}
-		// if(!validatePassword(pass1.value)){
-		// 	pass1.classList.add('animated');
-		//     pass1.classList.add('swing');
-		//     return false;
-		// }
+		if(!validatePassword(pass1.value)){
+			pass1.classList.add('animated');
+		    pass1.classList.add('swing');
+		    return false;
+		}
 		if(pass1.value !== pass2.value){
 			pass2.classList.add('animated');
 		    pass2.classList.add('swing');
@@ -184,11 +142,10 @@
 					}else{
 						closeModal();
 						window.location.href = "cart";
-						// setTimeout(function(){closeModal();}, 2000);	
 		            }
 				}
 			}
-			xhr.open('POST','./include/LOGIN-registerClient.php', true);
+			xhr.open('POST','../include/LOGIN-registerClient.php', true);
 			xhr.send(formData);    
     	}else{
     		setTimeout(()=>{
@@ -250,11 +207,10 @@
 					}else{
 						closeModal();
 						window.location.href = "cart";
-						// setTimeout(function(){closeModal();}, 2000);	
 		            }
 				}
 			}
-			xhr.open('POST','./include/LOGIN-loginClient.php', true);
+			xhr.open('POST','../include/LOGIN-loginClient.php', true);
 			xhr.send(formData2); 
 
     	}
