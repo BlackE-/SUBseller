@@ -44,7 +44,7 @@
 			<div class="leftContainer">
 	            <div id="typePaymentContainer">
 	            	<input type="radio" name="typePayment" id="card" checked><label for="card"><i class="fas fa-credit-card"></i> <p>Tarjeta</p></label>
-	            	<input type="radio" name="typePayment" id="spei"><label for="spei"><i class="fas fa-mobile-alt"></i><p>SPEI</p></label>
+	            	<input type="radio" name="typePayment" id="spei"><label for="spei"><i class="fas fa-exchange-alt"></i><p>SPEI</p></label>
 	            	<input type="radio" name="typePayment" id="oxxo"><label for="oxxo"><i class="fas fa-dollar-sign"></i><p>OXXO</p></label>
 	            </div>
 				<div id="typePaymentBoxesContainer">
@@ -72,7 +72,7 @@
 	                               echo         '</div>';
 	                               echo  '</div>';
 	                            }
-	                            echo '<input type="radio" name="card" class="card" value="0" id="new"><label for="new"></label>';
+	                            echo '<input type="radio" name="card" class="card" value="0" id="new" checked><label for="new"></label>';
 	                        }
 	                        catch(Exception $e){
 	                            echo '<input type="radio" name="card" class="card" value="0" id="new" checked><label for="new"></label>';
@@ -92,7 +92,7 @@
 								</div>
 							</div>
 							<div class="row" id="saveCardContainer">
-								<input id="saveCard" type="checkbox"/><label for="guardarTarjeta"><i class="fas fa-check"></i></label>
+								<input id="saveCard" type="checkbox"/><label for="saveCard"><i class="fas fa-check"></i></label>
 								<p>Guardar Tarjeta</p>
 							</div>
 						</form>
@@ -112,6 +112,7 @@
                     <input id="checkTerminos" type="checkbox"/><label for="checkTerminos"><i class="fas fa-check"></i></label>
                     <p>Aceptar <a href="avisodeprivacidad.pdf">Términos y Condiciones</a></p>
                 </div>
+
 			</div>
     		<div class="rightContainer">
     			<div class="editContainer"><a href="cart" class="edit">Editar pedido</a></div>
@@ -121,27 +122,26 @@
 								$totalRows = 0;
 								foreach ($cart as $key => $value) {
 									$product = $set->getProduct($value['id_product']);
-									// print_r($product);
 									$pro = $product[0]['product'];
-									// print_r($pro);
 									$proImg = $product[1]['media'];
 									$price_sale = $pro['price_sale'];
 			                        if($pro['discount'] != 0){
 			                        	$price_sale = $pro['price_sale']*$pro['discount'];
 			                        }
 			                        $price = explode('.',$price_sale);
-			                        $totalRow = number_format($value['price'] * $value['qty'], 2, '.', '');
-			                        $priceRow = explode('.',$totalRow);
+			                        $totalRow = $value['price'] * $value['number_items'];
+			                        $totalRowFormat = number_format($totalRow,2,'.',','); 
+			                        $priceRow = explode('.',$totalRowFormat);
 			                        $totalRows += $totalRow;
 
 									echo '<div class="item">';
 									echo 	'<img class="thumb" src="'.$path.$proImg[0]['url'].'"/>';
 									echo 	'<div class="itemDetails">';
 									echo 		'<p class="name">'.$pro['name'].'</p>';
-			                		echo 		'<p class="sale_price">'.$value['qty'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
+			                		echo 		'<p class="sale_price">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 			                		echo 	'</div>';
-			                		echo 	'<div>';
-									echo 		'<p class="totalRow">$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p>';
+			                		echo 	'<div id="id_row_'.$value['id_product'].'">';
+									echo 		'<p class="totalRow" >$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p>';
 									echo 	'</div>';
 									echo '</div>';
 								}
@@ -150,30 +150,43 @@
 				<hr>
 				<div id="detailsContainer">
 					<?php
-						$subtotal = number_format($totalRows, 2, '.', '');
-						$subtotalShow = explode('.', $subtotal);
-						echo '<div class="subtotalContainer"><p><b>Subtotal:</b></p><p class="lightLabel2" id="subtotal">$'.$subtotalShow[0].'.<sup>'.$subtotalShow[1].'</sup></p></div>';
+						$subtotal = $totalRows;
+						$subtotalFormat = number_format($subtotal, 2, '.', ',');
+						$subtotalShow = explode('.', $subtotalFormat);
+						echo '<div>';
+						echo 	'<p><b>Subtotal:</b></p>';
+						echo 	'<div id="subtotalContainer">';
+						echo 		'<p class="lightLabel2" id="subtotal">$'.$subtotalShow[0].'.<sup>'.$subtotalShow[1].'</sup></p>';
+						echo 	'</div>';
+						echo '</div>';
 
 						$freeDelivery = $set->getLimitFreeDelivery();
 						$total = $subtotal;
-						$deliveryCost = number_format(0, 2, '.', '');
+						$deliveryCost = number_format(0, 2, '.', ',');
                         if($subtotal >= $freeDelivery ){
                         }else{
-                        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', '');
+                        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', ',');
                         	$total += $deliveryCost;
                         }
-						$total = number_format($total, 2, '.', '');
+						$total = number_format($total, 2, '.', ',');
 						$totalShow = explode('.', $total);
 						$deliveryShow = explode('.', $deliveryCost);
-						echo '<div class="deliveryCostContainer"><p><b>Gastos de envío:</b></p><p id="deliveryCost">$'.$deliveryShow[0].'.<sup>'.$deliveryShow[1].'</sup></p></div>';
-						echo '<div class="totalContainer">';
+						echo '<div>';
+						echo 	'<p><b>Gastos de envío:</b></p>';
+						echo 	'<div id="deliveryCostContainer">';
+						echo 		'<p id="deliveryCost">$'.$deliveryShow[0].'.<sup>'.$deliveryShow[1].'</sup></p>';
+						echo 	'</div>';
+						echo '</div>';
+						echo '<div>';
 						echo 	'<p><b>Total:</b></p>';
-						echo 	'<p class="lightLabel2" id="total">$'.$totalShow[0].'.<sup>'.$totalShow[1].'</sup></p>';
+						echo 	'<div id="totalContainer">';
+						echo 		'<p class="lightLabel2" id="total">$'.$totalShow[0].'.<sup>'.$totalShow[1].'</sup></p>';
+						echo 	'</div>';
 						echo '</div>';
 					?>
 				</div>
 				<div id="couponContainer">
-					<input type="text" name="coupon" placeholder="Cupon">
+					<input type="text" id="coupon" placeholder="Cupon">
 					<button id="checkCoupon">Verificar</button>
 				</div>
 				<div class="nextContainer"><button id="next">Pagar</button></div>
@@ -184,6 +197,7 @@
 
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
+	<script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
 	<script type="text/javascript" src="script/payment.js"></script>
 </body>
 </html>
