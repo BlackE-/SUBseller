@@ -41,8 +41,9 @@
 					<p><?php echo $coupon['amount'];?></p>
 
 					<?php
+						if($coupon['discount_type'] !== 'free_shipping'){
 							$products_id = explode(",",$coupon['product_ids']);
-							if(sizeof($products_id)>1){
+							if(!empty($products_id)){
 								echo '<p class="title">Productos incluidos</p>';
 								foreach ($products_id as $key => $row){
 									echo '<div  class="productContainer">';
@@ -54,6 +55,7 @@
 			                    	echo '</div>';
 			                	}	
 							}
+						}
 					?>
 				</div>
 			</div>

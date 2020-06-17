@@ -74,8 +74,9 @@
 			                        	$price_sale = $pro['price_sale']*$pro['discount'];
 			                        }
 			                        $price = explode('.',$price_sale);
-			                        $totalRow = number_format($value['price'] * $value['qty'], 2, '.', '');
-			                        $priceRow = explode('.',$totalRow);
+			                        $totalRow = $value['price'] * $value['number_items'];
+									$totalRowFormat = number_format($totalRow,2,'.',','); 
+			                        $priceRow = explode('.',$totalRowFormat);
 			                        $totalRows += $totalRow;
 
 									echo '<div class="item">';
@@ -83,7 +84,7 @@
 									echo 	'<div class="itemDetails">';
 									echo 		'<p class="name">'.$pro['name'].'</p>';
 									echo 		'<p class="type">'.$type.'</p>';
-			                		echo 		'<p class="sale_price">'.$value['qty'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
+			                		echo 		'<p class="sale_price">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 			                		echo 	'</div>';
 			                		echo 	'<div>';
 									echo 		'<p class="totalRow">$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p>';
@@ -91,7 +92,7 @@
 			                		echo 	'<div class="qtyBox">';
 			                		echo 		'<input type="hidden" id="price_'.$value['id_product'].'" value="'.$price_sale.'"/>';
 									echo 		'<button class="minus" name="'.$value['id_product'].'"><i class="fas fa-minus"></i></button>';
-			            		    echo        '<input type="number" class="quantity" placeholder="1" value="'.$value['qty'].'" id="'.$value['id_product'].'" name="'.$key.'"/>';
+			            		    echo        '<input type="number" class="quantity" placeholder="1" value="'.$value['number_items'].'" id="'.$value['id_product'].'" name="'.$key.'"/>';
 			            		    echo        '<button class="more" name="'.$value['id_product'].'"><i class="fas fa-plus"></i></button>';
 			            		    echo 	'</div>';
 			            		   
@@ -106,8 +107,9 @@
 					</div>
 					<div id="detailsContainer">
 						<?php
-							$subtotal = number_format($totalRows, 2, '.', '');
-							$subtotalShow = explode('.', $subtotal);
+							$subtotal = $totalRows;
+							$subtotalFormat = number_format($subtotal, 2, '.', ',');
+							$subtotalShow = explode('.', $subtotalFormat);
 							echo '<div class="subtotalContainer"><p><b>Subtotal:</b></p><p class="lightLabel2" id="subtotal">$'.$subtotalShow[0].'.<sup>'.$subtotalShow[1].'</sup></p></div>';
 
 							$freeDelivery = $set->getLimitFreeDelivery();
@@ -119,7 +121,8 @@
 	                        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', '');
 	                        	$total += $deliveryCost;
 	                        }
-							$total = number_format($total, 2, '.', '');
+
+							$total = number_format($total, 2, '.', ',');
 							$totalShow = explode('.', $total);
 							$deliveryShow = explode('.', $deliveryCost);
 							echo '<div class="deliveryCostContainer"><p><b>Gastos de envío:</b></p><p id="deliveryCost">$'.$deliveryShow[0].'.<sup>'.$deliveryShow[1].'</sup></p></div>';
