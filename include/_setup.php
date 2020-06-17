@@ -1234,7 +1234,7 @@
 										$totalRow += $value['price'] * $value['number_items'];
 									}
 									$total = $totalRow;
-									$returnValue['shipping']=0.00;  
+									$returnValue['shipping']=0.00;
 								break;
 								case 'fixed_products':
 									$items = $this->getItemsFromSessionClient($id_session_client);
@@ -1243,9 +1243,9 @@
 										if(in_array($value['id_product'],$product_ids)){
 											$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
 											array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice));
-											$totalRow += $newPrice * $value['number_items'];
+											$totalRow += $newPrice;
 										}else{
-											$totalRow += $value['price'];
+											$totalRow += $value['price'] * $value['number_items'];
 										}
 									}
 									$returnValue['subtotal'] = $totalRow;
@@ -1309,7 +1309,7 @@
 									} 
 								break;
 								default:
-								array_push($steps, 'default');
+									array_push($steps, 'default');
 								break;
 							}
 							$returnValue['total']=$total;  

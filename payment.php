@@ -112,7 +112,6 @@
                     <input id="checkTerminos" type="checkbox"/><label for="checkTerminos"><i class="fas fa-check"></i></label>
                     <p>Aceptar <a href="avisodeprivacidad.pdf">Términos y Condiciones</a></p>
                 </div>
-
 			</div>
     		<div class="rightContainer">
     			<div class="editContainer"><a href="cart" class="edit">Editar pedido</a></div>
@@ -153,6 +152,7 @@
 						$subtotal = $totalRows;
 						$subtotalFormat = number_format($subtotal, 2, '.', ',');
 						$subtotalShow = explode('.', $subtotalFormat);
+
 						echo '<div>';
 						echo 	'<p><b>Subtotal:</b></p>';
 						echo 	'<div id="subtotalContainer">';
@@ -171,6 +171,7 @@
 						$total = number_format($total, 2, '.', ',');
 						$totalShow = explode('.', $total);
 						$deliveryShow = explode('.', $deliveryCost);
+
 						echo '<div>';
 						echo 	'<p><b>Gastos de envío:</b></p>';
 						echo 	'<div id="deliveryCostContainer">';
@@ -178,6 +179,7 @@
 						echo 	'</div>';
 						echo '</div>';
 						echo '<div>';
+
 						echo 	'<p><b>Total:</b></p>';
 						echo 	'<div id="totalContainer">';
 						echo 		'<p class="lightLabel2" id="total">$'.$totalShow[0].'.<sup>'.$totalShow[1].'</sup></p>';

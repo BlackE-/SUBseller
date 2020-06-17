@@ -13,7 +13,6 @@
 		modalBody.appendChild(p);
 	}
 
-	//type payment
 	const typePaymentBoxs = document.querySelectorAll('.typePaymentBox');
 	const typePayments = document.querySelectorAll('input[name="typePayment"]');
 	for(let typePayment of typePayments){
@@ -34,6 +33,7 @@
 	const totalText = document.getElementById('total');
 	const deliveryCostContainer = document.getElementById('deliveryCostContainer');
 	const deliveryCost = document.getElementById('deliveryCost');
+
 	checkCouponInput = () =>{
 		if(coupon.value == ''){
 			coupon.classList.add('animated');
@@ -88,6 +88,20 @@
 		let strNewTotal = newTotal.split('.');
 		totalContainer.insertAdjacentHTML('beforeend', `<p>${strNewTotal[0]}.<sup>${strNewTotal[1]}</sup></p>`);
 	}
+	setupProducts = (products_list) =>{
+		console.log(products_list);
+		console.log(typeof products_list);
+		for(let product of products_list){
+			console.log(product);
+			let div_p = document.getElementById(`id_row_${product.id_product}`);
+			div_p.getElementsByClassName('totalRow')[0].style.textDecoration = 'line-through';
+			let newPrice = document.createElement('p');
+			let newPriceText = document.createTextNode(product.newPrice);      // Create a text node
+			newPrice.appendChild(newPriceText);                                          // Append the text to <p>
+			div_p.appendChild(newPrice); 
+		}
+	}
+
 	const checkCoupon = document.getElementById('checkCoupon');
 	checkCoupon.addEventListener('click',function(){
 		if(checkCouponInput()){

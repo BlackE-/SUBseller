@@ -464,6 +464,10 @@
                                 FOREIGN KEY(coupon_id_coupon)
                                     REFERENCES coupon(id_coupon)
                                     ON DELETE RESTRICT ON UPDATE CASCADE
+
+                                FOREIGN KEY(coupon_id_coupon)
+                                    REFERENCES coupon(id_coupon)
+                                    ON DELETE RESTRICT ON UPDATE CASCADE
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){
