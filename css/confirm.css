@@ -37,7 +37,9 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 :-moz-placeholder { color: #54b0ac;font-style:italic;}
 
 /*  left */
-#orderContainer{background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;}
+#orderContainer{display:grid;grid-template-columns:1fr 1fr;background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;}
+#orderContainer div:nth-child(2){text-align: center;}
+.type{text-transform: uppercase;}
 .little{padding:0 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;}
 
 

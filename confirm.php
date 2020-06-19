@@ -7,12 +7,9 @@
 		$set->RedirectToURL('login');
 		exit();
 	}
-
-	//$set->updateSessionClient($_SESSION['id_session_client']);
-	//unset($_SESSION['id_session_client']);
-	//unset($_SESSION['id_shipping']);
-
-	$cart = $set->getCart();
+	$id_order = $_GET['id_order'];
+	unset($_SESSION['id_session_client']);
+	unset($_SESSION['id_shipping']);
 	$path = '/subseller';
 ?>
 
@@ -36,18 +33,62 @@
 	
 	<div id="confirmContainer">
 		<div class="pasoContainer">
-	        <p>PASO 4:  <b> DATOS DE PAGO</b></p>
+	        <p>PASO 4:  <b>CONFIRMACIÓN</b></p>
 	        <div class="meter">
 	          <span style="width: 100%"></span>
 	        </div>
 	    </div>
+    <?php
+		if($id_order == 'undefined'){
+			echo 'El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido';
+		}else{
+			echo '<input type="hidden" id="id_order" value="'.$id_order.'"/>';
+			$order = $set->getOrder($id_order);
+			$transation = $set->getTransation($id_order);
+			$shipping = $set->getShipping($order['shipping_id_shipping']);
+	?>
 		<div class="container">
 			<div class="leftContainer">
 				<div id="orderContainer">
-					<p>Pedido: </p>
-					<p> Dirección de envío</p>
-					<p>Metodo de pago</p>
-					<p>Datos en caso de cupon</p>
+					<?php
+						echo '<div><p>Pedido</p></div><div><p>'.$order['cve_order'].'</p></div>';
+						echo '<div><p>Dirección de envío</p></div>';
+						echo '<div>';
+						echo 	'<p>'.$shipping['address_line_1'].'</p>';
+						echo 	'<p>'.$shipping['address_line_2'].'</p>';
+						echo 	'<p>'.$shipping['cp'].', '.$shipping['city'].'</p>';
+						echo 	'<p>'.$shipping['country'].', '.$shipping['state'].'</p>';
+						echo 	'<p>'.$shipping['notes'].'</p>';
+						echo '</div>';
+
+						echo '<div><p>Detalles de pago</p></div>';
+						echo '<div>';
+						echo 	'<p class="type">'.$transation['type'].'</p>';
+						switch($transation['type']){
+							case 'spei':
+								echo '<p>CLABE</p>';
+								echo '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$transation['code'].'</b></p>';
+							break;
+							case 'oxxo':
+								echo '<p>REFERENCIA</p>';
+								echo '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$transation['code'].'</b></p>';
+								echo '<p>Tienes un plazo de 2 días para realizar tu pago.</p>';
+							break;
+							case 'card':
+							break;
+						}
+						echo '</div>';
+						echo 	'<p class="little">Toda esta información fue enviada por correo.</p>';
+						
+						if($order['coupon_id_coupon'] != ''){
+							$coupon = $set->getCoupon($order['coupon_id_coupon']);
+							echo '<div><p>Datos de cupon utilizado</p></div>';
+							echo '<div>';
+							echo 	'<p>'.$coupon['code'].'</p>';
+							echo 	'<p>'.$coupon['description'].'</p>';
+							echo '</div>';
+						}
+					?>
 				</div>
 
 				<div id="termsContainer"></div>
@@ -109,15 +150,14 @@
     			<hr>
     			<div id="cartItemsContainer">
 						<?php
-								$totalRows = 0;
+						$totalRows = 0;
+							$cart = $set->getItemsFromSessionClient($order['session_client_id_session_client']);
 								foreach ($cart as $key => $value) {
 									$product = $set->getProduct($value['id_product']);
 									$pro = $product[0]['product'];
 									$proImg = $product[1]['media'];
-									$price_sale = $pro['price_sale'];
-			                        if($pro['discount'] != 0){
-			                        	$price_sale = $pro['price_sale']*$pro['discount'];
-			                        }
+									$price_sale = $value['price'];
+			                        
 			                        $price = explode('.',$price_sale);
 			                        $totalRow = $value['price'] * $value['number_items'];
 			                        $totalRowFormat = number_format($totalRow,2,'.',','); 
@@ -143,24 +183,17 @@
 						$subtotal = $totalRows;
 						$subtotalFormat = number_format($subtotal, 2, '.', ',');
 						$subtotalShow = explode('.', $subtotalFormat);
+						$deliveryCost = number_format($order['shipping_fee'], 2, '.', ',');
+						$total = number_format($order['total'], 2, '.', ',');
+						$totalShow = explode('.', $total);
+						$deliveryShow = explode('.', $deliveryCost);
+
 						echo '<div>';
 						echo 	'<p><b>Subtotal:</b></p>';
 						echo 	'<div id="subtotalContainer">';
 						echo 		'<p class="lightLabel2" id="subtotal">$'.$subtotalShow[0].'.<sup>'.$subtotalShow[1].'</sup></p>';
 						echo 	'</div>';
 						echo '</div>';
-
-						$freeDelivery = $set->getLimitFreeDelivery();
-						$total = $subtotal;
-						$deliveryCost = number_format(0, 2, '.', ',');
-                        if($subtotal >= $freeDelivery ){
-                        }else{
-                        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', ',');
-                        	$total += $deliveryCost;
-                        }
-						$total = number_format($total, 2, '.', ',');
-						$totalShow = explode('.', $total);
-						$deliveryShow = explode('.', $deliveryCost);
 						echo '<div>';
 						echo 	'<p><b>Gastos de envío:</b></p>';
 						echo 	'<div id="deliveryCostContainer">';
@@ -177,6 +210,9 @@
 				</div>
     		</div>
     	</div>
+	<?php
+		}//END ELSE
+	?>
 	</div>
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>

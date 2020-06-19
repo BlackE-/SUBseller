@@ -32,7 +32,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-	<link rel="stylesheet" href="node_modules/nouislider/distribute/nouislider.css">
 	<link rel="stylesheet" type="text/css" href="css/cart.css">
 </head>
 <body>
@@ -64,15 +63,10 @@
 								$totalRows = 0;
 								foreach ($cart as $key => $value) {
 									$product = $set->getProduct($value['id_product']);
-									// print_r($product);
 									$pro = $product[0]['product'];
-									// print_r($pro);
 									$proImg = $product[1]['media'];
 									$type = $set->getProductTypeName($pro['id_product']);
-									$price_sale = $pro['price_sale'];
-			                        if($pro['discount'] != 0){
-			                        	$price_sale = $pro['price_sale']*$pro['discount'];
-			                        }
+									$price_sale = $value['price'];
 			                        $price = explode('.',$price_sale);
 			                        $totalRow = $value['price'] * $value['number_items'];
 									$totalRowFormat = number_format($totalRow,2,'.',','); 
@@ -95,8 +89,6 @@
 			            		    echo        '<input type="number" class="quantity" placeholder="1" value="'.$value['number_items'].'" id="'.$value['id_product'].'" name="'.$key.'"/>';
 			            		    echo        '<button class="more" name="'.$value['id_product'].'"><i class="fas fa-plus"></i></button>';
 			            		    echo 	'</div>';
-			            		   
-									
 									// echo 	'<div class="delete" id="'.$key.'" title="¿Seguro que deseas eliminar el producto?">';
 									echo 	'<div class="delete" id="delete_'.$value['id_product'].'" title="¿Seguro que deseas eliminar el producto?">';
 			                	    echo 		'<i class="far fa-trash-alt"></i>';

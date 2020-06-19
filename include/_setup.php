@@ -87,6 +87,78 @@
 		    return $returnValue;
 	    }
 
+	    function getClientName(){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = "SELECT name FROM client WHERE id_client=".$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.no telefono");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No telefono");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	$returnValue = $row['name'];
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
+	    function getClientEmail(){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = "SELECT email FROM client WHERE id_client=".$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.no telefono");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No telefono");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	$returnValue = $row['email'];
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
+	    function getClientConekta(){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = "SELECT id_conekta FROM client WHERE id_client=".$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.no telefono");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No telefono");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	$returnValue = $row['id_conekta'];
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
 	    /*  ------------------------    LOGOUT  --------------------------- */
 		function Logout(){
 		    session_start();
@@ -219,6 +291,32 @@
 		/*
 			Orders
 		*/
+		function generateCVEorder(){
+	        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+	        $charactersLength = strlen($characters);
+	        do
+	        {
+	            $code = '';
+	            $codeLength = 6;
+	            for ($i = 0; $i < $codeLength; $i++)
+	            {
+	                $code .= $characters[rand(0, $charactersLength - 1)];
+	            }
+	        } while (!$this->checkCVEOrder($code));
+	        return $code;
+	    }
+
+	    function checkCVEOrder($cve_order){
+	        $returnValue = true;
+			$this->checkDBLogin();
+	        $check = "SELECT * FROM _order WHERE cve_order='".$cve_order."'";
+	        $result = $this->db->selectQuery($check);
+	        if($this->db->numRows($result)){
+	            return false;
+	        }
+	        return true;
+	    }
+
 		function getOrdersClient($id_client){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -237,10 +335,10 @@
 			}
 			return $returnValue; 
 		}
-		function getTypeTransation($id_order){
+		function getTransation($id_order){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT type FROM _transaction WHERE order_id_order = '.$id_order;
+			$qry = 'SELECT * FROM _transaction WHERE order_id_order = '.$id_order;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$returnValue = false;
@@ -249,11 +347,76 @@
 					$returnValue = false;
 				}else{
 					$row = $this->db->fetchArray($result);
-					$returnValue = $row['type'];
+					$returnValue = $row;
 				}
 			}
 			return $returnValue;
 		}
+
+		function insertOrder($status,$total,$shipping_fee,$cve_order,$id_client,$id_shipping,$id_coupon,$type,$id_conekta,$code,$id_session_client){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			$qry = 'INSERT INTO _order (date_created,status,total,shipping_fee,cve_order,client_id_client,session_client_id_session_client,shipping_id_shipping,coupon_id_coupon)
+                values(
+                NOW(),
+                "' . $status . '",
+                ' . $total . ',
+                ' . $shipping_fee . ',
+                "' . $cve_order . '",
+                ' . $id_client .',
+                ' . $id_session_client .',
+                '. $id_shipping .',
+                '. $id_coupon .'
+                )'; 
+            $result = $this->db->insertQuery($qry);
+            if(!$result){
+				$returnValue = false;
+				$this->db->HandleDBError('No se pudo guardar la orden' .$qry);
+			}else{
+				$id_order = $this->db->lastInsertID();
+				$returnValue = $id_order;
+				$qry2 = 'INSERT INTO _transaction (id_conekta,code,type,order_id_order)
+	                values(
+	                "' . $id_conekta . '",
+	                "' . $code . '",
+	                "' . $type . '",
+	                "' . $id_order . '"
+	                )'; 
+				$result2 = $this->db->insertQuery($qry2);
+				if(!$result2){
+					$returnValue = false;
+					$this->db->HandleError('No se pudo guardar la transaction');
+				}else{
+					$qry3 = 'UPDATE session_client SET status="1" WHERE id_session_client='.$id_session_client;
+					$result3 = $this->db->updateQuery($qry3);
+					if(!$result3){
+						$returnValue = false;
+						$this->db->HandleError('No se pudo actualizar session_client');
+					}
+				}
+				
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
+	    function getOrder($id_order){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM _order WHERE id_order = '.$id_order;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$returnValue = $this->db->fetchArray($result);
+				}
+			}
+			return $returnValue;
+	    }
+
 
 		/*
 			Products
@@ -1013,6 +1176,25 @@
 			return $returnValue;
 		}
 
+		function updateInventory($id_product,$number_items){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE product_inventory SET stock=stock-'.$number_items. ' WHERE product_id_product='.$id_product;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$returnValue = false;
+				$this->db->HandleError('NO SE PUDO actualizar el inventario');
+			}else{
+				$qry2 = 'INSERT INTO product_movement (product_id_product,date_created,stock,type) VALUES ("'.$id_product.'",NOW(),"'.$number_items.'","EGRESO")';
+				$result2 = $this->db->insertQuery($qry2);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar el movimiento');
+					$returnValue = false;
+				}
+			}
+			return $returnValue;
+		}
+
 	    /*	
 
 	    		DELIVERY  	
@@ -1043,10 +1225,9 @@
 			}
 			return $returnValue;
 		}
-		function getShipping(){
+		function getShipping($id_shipping){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$id_shipping = $_POST['id_shipping'];
 			if(!isset($_SESSION)){ session_start(); }
 			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
 			$qry = 'SELECT * FROM shipping WHERE id_shipping='.$id_shipping;
@@ -1221,7 +1402,6 @@
 							$this->db->updateQuery($qry2);
 						}else{
 							//type
-							$_SESSION['id_coupon'] = $row['id_coupon'];
 							$id_session_client = $_SESSION['id_session_client'];
 							$returnValue['type'] = $row['discount_type'];
 							$products = array();
@@ -1332,6 +1512,121 @@
 				$returnValue = false;
 			}else{
 				$returnValue = $this->db->fetchArray($result);
+			}
+			return $returnValue;
+		}
+
+		function checkCouponSetCart($coupon){
+			$qry = 'SELECT * FROM coupon WHERE code="'.$coupon.'"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tenemos cupon:'.$coupon);
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tenemos cupon:'.$coupon);
+					$returnValue = false;
+				}else{
+					//type
+					$id_session_client = $_SESSION['id_session_client'];
+					$returnValue['id_coupon'] = $row['id_coupon'];
+					$returnValue['type'] = $row['discount_type'];
+					$products = array();
+					$total = 0;
+					$totalRow = 0;
+					switch ($row['discount_type']) {
+						case 'free_shipping':
+							$items = $this->getItemsFromSessionClient($id_session_client);
+							foreach ($items as $key => $value) {
+								$totalRow += $value['price'] * $value['number_items'];
+								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+							}
+							$total = $totalRow;
+							$returnValue['subtotal']=$total;  
+							$returnValue['shipping']=0.00;
+						break;
+						case 'fixed_products':
+							$items = $this->getItemsFromSessionClient($id_session_client);
+							$product_ids = explode(',',$row['product_ids']);
+							foreach ($items as $key => $value) {
+								if(in_array($value['id_product'],$product_ids)){
+									$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+									$totalRow += $newPrice;
+									$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+								}else{
+									$totalRow += $value['price'] * $value['number_items'];
+								}
+							}
+							$returnValue['subtotal'] = $totalRow;
+							$total = $totalRow;
+							if($total > $this->getLimitFreeDelivery()){
+								$returnValue['shipping']=0.00;  
+							}else{
+								$total += $this->getDeliveryCost();
+								$returnValue['shipping']=$this->getDeliveryCost();
+							} 
+						break;
+						case 'percetage_products':
+							$items = $this->getItemsFromSessionClient($id_session_client);
+							$percetage = (100 - intval($row['amount'])) / 100;
+							array_push($steps, $percetage);
+							$product_ids = explode(',',$row['product_ids']);
+							foreach ($items as $key => $value) {
+								if(in_array($value['id_product'],$product_ids)){
+									//si el product que se ingreso esta 
+									$newPrice = ($value['price'] * $percetage) * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+									$totalRow += $newPrice;
+									$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+								}else{
+									$totalRow += $value['price'] * $value['number_items'];
+								}
+							}
+							$returnValue['subtotal'] = $totalRow;
+							$total = $totalRow;
+							if($total > $this->getLimitFreeDelivery()){
+								$returnValue['shipping']=0.00;  
+							}else{
+								$total += $this->getDeliveryCost();
+								$returnValue['shipping']=$this->getDeliveryCost();
+							} 
+							break;
+						case 'percetage':
+							$items = $this->getItemsFromSessionClient($id_session_client);
+							$percetage = (100 - $row['amount']) / 100;
+							foreach ($items as $key => $value) {
+								$totalRow += $value['price'] * $value['number_items'];
+								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+							}
+							$total = $totalRow * $percetage;
+							$returnValue['subtotal']=$total;  
+							if($total > $this->getLimitFreeDelivery()){
+								$returnValue['shipping']=0.00;  
+							}else{
+								$total += $this->getDeliveryCost();
+								$returnValue['shipping']=$this->getDeliveryCost();
+							} 
+							break;
+						case 'fixed':
+							$items = $this->getItemsFromSessionClient($id_session_client);
+							foreach ($items as $key => $value) {
+								$totalRow += $value['price'] * $value['number_items'];
+								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+							}
+							$total = $totalRow - $row['amount'];
+							$returnValue['subtotal']=$total;  
+							if($total > $this->getLimitFreeDelivery()){
+								$returnValue['shipping']=0.00;  
+							}else{
+								$total += $this->getDeliveryCost();
+								$returnValue['shipping']=$this->getDeliveryCost();
+							} 
+						break;
+					}
+					$returnValue['total']=$total;  
+					$returnValue['products']=$products;
+				}
 			}
 			return $returnValue;
 		}

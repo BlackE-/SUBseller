@@ -1,7 +1,7 @@
 <?php
 	require_once "_setup.php";
 	$set = new Setup();
-	$returnValue = $set->getShipping();
+	$returnValue = $set->getShipping($_POST['id_shipping']);
 
 	//JSON RETURN
 	header('Content-Type: application/json');

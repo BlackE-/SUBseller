@@ -431,6 +431,45 @@
                     $returnValue = false;
                     $this->HandleDBError('Error creating tables');
                 }
+                $create = "CREATE TABLE session_client(
+                                id_session_client INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                client_id_client INT UNSIGNED,
+                                status BOOLEAN,
+                                
+                                INDEX (client_id_client),
+                                
+                                FOREIGN KEY(client_id_client)
+                                    REFERENCES client(id_client)
+                                    ON DELETE NO ACTION ON UPDATE CASCADE
+                            )";
+                $result = mysqli_query($this->connection,$create);
+                if(!$result){
+                    $returnValue = false;
+                    $this->HandleDBError('Error creating tables');
+                }
+                $create = "CREATE TABLE session_cart(
+                                id_session_cart INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                                number_items INT,
+                                price DECIMAL(10,2),
+                                session_client_id_session_client INT UNSIGNED,
+                                product_id_product INT UNSIGNED,
+                                
+                                INDEX(session_client_id_session_client),
+                                INDEX(product_id_product),
+                                
+                                FOREIGN KEY(session_client_id_session_client)
+                                    REFERENCES session_client(id_session_client)
+                                    ON DELETE NO ACTION ON UPDATE CASCADE,
+                                
+                                FOREIGN KEY(product_id_product)
+                                    REFERENCES product(id_product)
+                                    ON DELETE NO ACTION ON UPDATE CASCADE
+                            )";
+                $result = mysqli_query($this->connection,$create);
+                if(!$result){
+                    $returnValue = false;
+                    $this->HandleDBError('Error creating tables');
+                }
                 $create = "CREATE TABLE _order(
                                 id_order INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
@@ -440,17 +479,23 @@
                                 taxes float,
                                 cve_order VARCHAR(10) COMMENT 'UNIQUE CODE FOR EACH ORDER',
                                 client_id_client INT UNSIGNED,
+                                session_client_id_session_client INT UNSIGNED,
                                 shipping_id_shipping INT UNSIGNED,
                                 billing_id_billing INT UNSIGNED,
                                 coupon_id_coupon INT UNSIGNED,
                                 
                                 INDEX(client_id_client),
+                                INDEX(session_client_id_session_client),
                                 INDEX(shipping_id_shipping),
                                 INDEX(billing_id_billing),
                                 INDEX(coupon_id_coupon),
                                 
                                 FOREIGN KEY(client_id_client)
                                     REFERENCES client(id_client)
+                                    ON DELETE RESTRICT ON UPDATE CASCADE,
+
+                                FOREIGN KEY(session_client_id_session_client)
+                                    REFERENCES session_client(id_session_client)
                                     ON DELETE RESTRICT ON UPDATE CASCADE,
                                 
                                 FOREIGN KEY(shipping_id_shipping)
@@ -460,10 +505,6 @@
                                 FOREIGN KEY(billing_id_billing)
                                     REFERENCES billing(id_billing)
                                     ON DELETE RESTRICT ON UPDATE CASCADE,
-
-                                FOREIGN KEY(coupon_id_coupon)
-                                    REFERENCES coupon(id_coupon)
-                                    ON DELETE RESTRICT ON UPDATE CASCADE
 
                                 FOREIGN KEY(coupon_id_coupon)
                                     REFERENCES coupon(id_coupon)
@@ -515,45 +556,7 @@
                     $returnValue = false;
                     $this->HandleDBError('Error creating tables');
                 }
-                $create = "CREATE TABLE session_client(
-                                id_session_client INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                client_id_client INT UNSIGNED,
-                                status BOOLEAN,
-                                
-                                INDEX (client_id_client),
-                                
-                                FOREIGN KEY(client_id_client)
-                                    REFERENCES client(id_client)
-                                    ON DELETE NO ACTION ON UPDATE CASCADE
-                            )";
-                $result = mysqli_query($this->connection,$create);
-                if(!$result){
-                    $returnValue = false;
-                    $this->HandleDBError('Error creating tables');
-                }
-                $create = "CREATE TABLE session_cart(
-                                id_session_cart INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                number_items INT,
-                                price DECIMAL(10,2),
-                                session_client_id_session_client INT UNSIGNED,
-                                product_id_product INT UNSIGNED,
-                                
-                                INDEX(session_client_id_session_client),
-                                INDEX(product_id_product),
-                                
-                                FOREIGN KEY(session_client_id_session_client)
-                                    REFERENCES session_client(id_session_client)
-                                    ON DELETE NO ACTION ON UPDATE CASCADE,
-                                
-                                FOREIGN KEY(product_id_product)
-                                    REFERENCES product(id_product)
-                                    ON DELETE NO ACTION ON UPDATE CASCADE
-                            )";
-                $result = mysqli_query($this->connection,$create);
-                if(!$result){
-                    $returnValue = false;
-                    $this->HandleDBError('Error creating tables');
-                }
+                
                 return $returnValue;
             }
             catch(Exception $e){

@@ -177,9 +177,26 @@
 		fd.append('newCard',1);
 		fd.append('token',token.id);
 		
-
 		//ajax
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200) {
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					//return false is error
+					hideLoading();
+					setModalError(myObj.message);
+					setTimeout(()=>{closeModal();},5000);
+				}else{
 
+					//windows relocation
+					let url = `confirm?id_order=${myObj.return}`;
+					window.location.href = url
+				}	
+			}
+		}
+		xhr.open('POST','./include/PAYMENT-pay.php', '');
+		xhr.send(fd);
 
 
 	}
@@ -197,18 +214,21 @@
 	const next = document.getElementById('next');
 	next.addEventListener('click',function(){
 		if(checkTerminos.checked){
+			resetModal();
+			openModal();
+			
 			let type = document.querySelector('input[name="typePayment"]:checked').getAttribute('id');
 			switch(type){
 				case 'card':
 					let id_card = document.querySelector("input[name='card']:checked").value;
 					const formCard = document.getElementById('cardForm');
 					if(typeof id_card === 'undefined'){
-						resetModal();
-						openModal();
 						hideLoading();
 						setModalError('Elegir una tarjeta');
 						setTimeout(()=>{closeModal();},2000);
+						return false;
 					}
+
 					//get public key conekta
 					let public_key_conekta = getKey();
 					if(id_card === '0'){
@@ -221,15 +241,54 @@
 						let fd = new FormData();
 						fd.append('type',type);
 						fd.append('coupon',coupon.value);
-						//no necesita token por que la tarjeta ya fue guardada en CONKETA
-    					fd.append("id_card",id_card);
+    					fd.append("id_card",id_card);//no necesita token por que la tarjeta ya fue guardada en CONKETA
     					fd.append("newCard",0);
+    					const xhr = new XMLHttpRequest();
+						xhr.onreadystatechange = function(){
+							if (this.readyState == 4 && this.status == 200) {
+								myObj = JSON.parse(this.response);
+								if(!myObj.return){
+									//return false is error
+									hideLoading();
+									setModalError(myObj.message);
+									setTimeout(()=>{closeModal();},5000);
+								}else{
+									//windows relocation
+									let url = `confirm?id_order=${myObj.return}`;
+									window.location.href = url
+								}	
+							}
+						}
+						xhr.open('POST','./include/PAYMENT-pay.php', true);
+						xhr.send(fd);
+    					
 					}
 				break;
 				default:
 					let fd = new FormData();
 					fd.append('type',type);
 					fd.append('coupon',coupon.value);
+					const xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function(){
+						if (this.readyState == 4 && this.status == 200) {
+							myObj = JSON.parse(this.response);
+							console.log(myObj);
+							if(!myObj.return){
+								//return false is error
+								hideLoading();
+								setModalError(myObj.message);
+								setTimeout(()=>{closeModal();},5000);
+							}else{
+								closeModal();
+								//windows relocation
+								let url = `confirm?id_order=${myObj.return}`;
+								Window.location.href = url
+							}
+						}
+					}
+					xhr.open('POST','./include/PAYMENT-pay.php', true);
+					xhr.send(fd);
+
 				break;
 			}
 			return false;

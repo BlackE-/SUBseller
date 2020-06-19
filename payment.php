@@ -123,10 +123,7 @@
 									$product = $set->getProduct($value['id_product']);
 									$pro = $product[0]['product'];
 									$proImg = $product[1]['media'];
-									$price_sale = $pro['price_sale'];
-			                        if($pro['discount'] != 0){
-			                        	$price_sale = $pro['price_sale']*$pro['discount'];
-			                        }
+									$price_sale = $value['price'];
 			                        $price = explode('.',$price_sale);
 			                        $totalRow = $value['price'] * $value['number_items'];
 			                        $totalRowFormat = number_format($totalRow,2,'.',','); 
