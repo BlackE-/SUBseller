@@ -417,7 +417,7 @@
                                 email VARCHAR(45),
                                 rfc VARCHAR(20),
                                 razon_social VARCHAR(45),
-                                cdfi VARCHAR(45),
+                                cfdi VARCHAR(45),
                                 client_id_client INT UNSIGNED,
                                 
                                 INDEX(client_id_client),
