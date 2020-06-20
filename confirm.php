@@ -40,7 +40,9 @@
 	    </div>
     <?php
 		if($id_order == 'undefined'){
-			echo 'El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido';
+			echo '<div class="container"><div class="leftContainer"><div id="orderContainer">';
+			echo '<p>El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido</p>';
+			echo '</div></div></div>';
 		}else{
 			echo '<input type="hidden" id="id_order" value="'.$id_order.'"/>';
 			$order = $set->getOrder($id_order);
@@ -75,10 +77,16 @@
 								echo '<p>Tienes un plazo de 2 días para realizar tu pago.</p>';
 							break;
 							case 'card':
+								echo 'Código de authorización';
+								echo '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$transation['code'].'</b></p>';
+							break;
+							case 'paypal':
+								echo 'Código';
+								echo '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$transation['code'].'</b></p>';
 							break;
 						}
 						echo '</div>';
-						echo 	'<p class="little">Toda esta información fue enviada por correo.</p>';
+						echo 	'<div><p class="little">Toda esta información fue enviada por correo.</p></div><div></div>';
 						
 						if($order['coupon_id_coupon'] != ''){
 							$coupon = $set->getCoupon($order['coupon_id_coupon']);
@@ -122,14 +130,21 @@
                 	</div>
 
                 	<div id="facturaContainerBox">
-                		<input type="text" name="rfc" placeholder="RFC*">
-                		<input type="email" name="email" placeholder="Correo Electrónico*">
-	                	<input type="text" name="razon_social" placeholder="Razon Social*">
-	                	<input type="text" name="address1" placeholder="Domicilio">
-	                	<input type="text" name="address2" placeholder="Domicilio (cont)">
-	                	<input type="text" name="cp" length="6" placeholder="CP">
-	                	<input type="text" name="city" placeholder="Alcaldia/Municipio">
-	                	<input type="text" name="country" value="MEX" disabled>
+                		<input type="text" id="rfc" placeholder="RFC*" required>
+                		<input type="email" id="email" placeholder="Correo Electrónico*" required>
+	                	<input type="text" id="razon_social" placeholder="Razon Social*" required>
+	                	<div class="selectCDFI">
+	            			<select id="cfdi">
+	            				<option value="0">Elegir CFDI</option>
+	            				<option value="01-AdquisionMercancia">01 - Adquisición Mercancias</option>
+	            				<option value="03-GastosGeneral">03 - Gastos General</option>
+	            			</select>
+	            		</div>
+	                	<input type="text" id="address1" placeholder="Domicilio">
+	                	<input type="text" id="address2" placeholder="Domicilio (cont)">
+	                	<input type="text" id="cp" length="6" placeholder="CP">
+	                	<input type="text" id="city" placeholder="Alcaldia/Municipio">
+	                	<input type="text" id="country" value="MEX" disabled>
                 		<div class="selectState">
 	            			<select id="state">
 	            				<option value="0">Elegir un estado</option>
@@ -141,7 +156,7 @@
 		            	?>
 	            			</select>
 	            		</div>
-	            		<div class="nextContainer"><button id="next">Solicitar</button></a></div>
+	            		<div class="nextContainer"><button id="request">Solicitar</button></a></div>
                 	</div>
                 </div>
 
@@ -208,6 +223,8 @@
 						echo '</div>';
 					?>
 				</div>
+
+				<div class="nextContainer"><a href="store"><button id="">Ir a Tienda</button></a></div>
     		</div>
     	</div>
 	<?php
