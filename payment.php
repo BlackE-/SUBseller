@@ -61,32 +61,38 @@
 	                        	$cards = $customer->payment_sources;
 	                            foreach($cards as $key=>$value){
 	                               echo '<div class="row">';
-	                               echo     '<div class="tarjetaBox">';
+	                               echo     '<div class="cardBox">';
 	                               echo         '<input type="radio" name="card" class="card" value="'.$value['id'].'" id="card'.$key.'">';
-	                               echo         '<label for="card'.$key.'"></label>';
+	                               echo         '<label for="card'.$key.'">';
 	                               switch($value['brand']){
-	                                   case "VISA":echo '<i class="fab fa-cc-visa"></i>';break;
-	                                   case "MC":echo '<i class="fab fa-cc-mastercard"></i>';break;
+	                                   case "visa":echo '<i class="fab fa-cc-visa"></i>';break;
+	                                   case "mastercard":echo '<i class="fab fa-cc-mastercard"></i>';break;
+	                                   default: echo '<i class="fas fa-credit-card"></i>';break;
 	                               }
+	                               echo         '</label>';
 	                               echo 		'<p>xxxx-xxxx-xxxx-'.$value['last4'].'</p>';
-	                               echo         '</div>';
+	                               echo      '</div>';
 	                               echo  '</div>';
 	                            }
-	                            echo '<input type="radio" name="card" class="card" value="0" id="new" checked><label for="new"></label>';
+	                            echo '<div class="cardBox">';
+	                            echo 	'<input type="radio" name="card" class="card" value="0" id="new" checked>';
+	                            echo 	'<label for="new"><i class="fas fa-check"></i></label>';
+	                            echo 	'<p>Ingresar nueva</p>';
+	                            echo '</div>';
 	                        }
 	                        catch(Exception $e){
 	                            echo '<input type="radio" name="card" class="card" value="0" id="new" checked><label for="new"></label>';
 	                        }
 	                    ?>
                     		<div class="row"><input id="nameCard" type="text" size="20" placeholder="Nombre en la tarjeta" data-conekta="card[name]"/></div>
-							<div class="row"><input id="numberCard" type="password" size="20" placeholder="Número tarjeta" data-conekta="card[number]"/></div>
+							<div class="row"><input id="numberCard" type="text" size="20" placeholder="Número tarjeta" data-conekta="card[number]"/></div>
 							<div class="row" id="cardDetailsContainer">
 								<div id="expiresContainer">
 									<input type="text" id="mTarjeta" size="2" data-conekta="card[exp_month]" placeholder="MM"/><input type="text" size="4" id="yTarjeta" data-conekta="card[exp_year]" placeholder="AAAA"/>
 									<p class="little">Vencimiento</p>
 								</div>
 								<div id="cvcContainer">
-									<input id="CVCtarjeta" type="text" size="4" placeholder="CVC" data-conekta="card[cvc]"/>
+									<input id="CVCtarjeta" type="password" size="4" placeholder="CVC" data-conekta="card[cvc]"/>
 									<label><i class="fas fa-question" title="Los digitos que estan en la parte de atras de tu tarjeta"></i></label>
 									<p class="little">Codigo CVC</p>
 								</div>
@@ -185,7 +191,7 @@
 					?>
 				</div>
 				<div id="couponContainer">
-					<input type="text" id="coupon" placeholder="Cupon">
+					<input type="text" id="coupon" placeholder="Cupon" autocomplete="off">
 					<button id="checkCoupon">Verificar</button>
 				</div>
 				<div class="nextContainer"><button id="next">Pagar</button></div>

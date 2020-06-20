@@ -371,7 +371,7 @@
             $result = $this->db->insertQuery($qry);
             if(!$result){
 				$returnValue = false;
-				$this->db->HandleDBError('No se pudo guardar la orden' .$qry);
+				$this->db->HandleError('No se pudo guardar la orden');
 			}else{
 				$id_order = $this->db->lastInsertID();
 				$returnValue = $id_order;
@@ -393,6 +393,11 @@
 						$returnValue = false;
 						$this->db->HandleError('No se pudo actualizar session_client');
 					}
+				}
+
+				if($id_coupon != 'NULL'){
+					$qry4 = 'UPDATE coupon SET usage_count=usage_count+1, used_by=CONCAT("'.$id_client.',") where id_coupon='.$id_coupon;
+					$this->db->updateQuery($qry4);
 				}
 				
 			}
@@ -800,7 +805,7 @@
 	       	else{
 	       		$array_items = array();
 	       		while($row = $this->db->fetchArray($result)){
-	       			array_push($array_items, array('id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price']));
+	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price']));
 	       		}
 	       		$returnValue = $array_items;
 	       	}
@@ -1372,9 +1377,7 @@
 	
 		*/
 		function checkCoupon(){
-			$returnValue = array();
 			$this->checkDBLogin();
-
 			$coupon = $_POST['coupon'];
 			$qry = 'SELECT * FROM coupon WHERE code="'.$coupon.'"';
 			$result = $this->db->selectQuery($qry);
@@ -1401,102 +1404,113 @@
 							$qry2 = 'UPDATE coupon SET status="0" WHERE id_coupon='.$row['id_coupon'];
 							$this->db->updateQuery($qry2);
 						}else{
-							//type
-							$id_session_client = $_SESSION['id_session_client'];
-							$returnValue['type'] = $row['discount_type'];
-							$products = array();
-							$total = 0;
-							$totalRow = 0;
-							switch ($row['discount_type']) {
-								case 'free_shipping':
-									$items = $this->getItemsFromSessionClient($id_session_client);
-									foreach ($items as $key => $value) {
-										$totalRow += $value['price'] * $value['number_items'];
-									}
-									$total = $totalRow;
-									$returnValue['shipping']=0.00;
-								break;
-								case 'fixed_products':
-									$items = $this->getItemsFromSessionClient($id_session_client);
-									$product_ids = explode(',',$row['product_ids']);
-									foreach ($items as $key => $value) {
-										if(in_array($value['id_product'],$product_ids)){
-											$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
-											array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice));
-											$totalRow += $newPrice;
-										}else{
+							$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+							$usedby = $row['used_by'];
+							$id_clients_used_by = explode(',',$usedby);
+							if(in_array($id_client, $id_clients_used_by)){
+								$this->db->HandleError('Cupon '.$coupon.' ya fue usado');
+								$returnValue = false;
+							}else{
+								$returnValue = array();
+								//type
+								$id_session_client = $_SESSION['id_session_client'];
+								$returnValue['type'] = $row['discount_type'];
+							
+								$products = array();
+								$total = 0;
+								$totalRow = 0;
+								switch ($row['discount_type']) {
+									case 'free_shipping':
+										$items = $this->getItemsFromSessionClient($id_session_client);
+										foreach ($items as $key => $value) {
 											$totalRow += $value['price'] * $value['number_items'];
 										}
-									}
-									$returnValue['subtotal'] = $totalRow;
-									$total = $totalRow;
-									if($total > $this->getLimitFreeDelivery()){
-										$returnValue['shipping']=0.00;  
-									}else{
-										$total += $this->getDeliveryCost();
-										$returnValue['shipping']=$this->getDeliveryCost();
-									} 
-								break;
-								case 'percetage_products':
-									$items = $this->getItemsFromSessionClient($id_session_client);
-									$percetage = (100 - intval($row['amount'])) / 100;
-									array_push($steps, $percetage);
-									$product_ids = explode(',',$row['product_ids']);
-									foreach ($items as $key => $value) {
-										if(in_array($value['id_product'],$product_ids)){
-											//si el product que se ingreso esta 
-											$newPrice = ($value['price'] * $percetage) * $value['number_items'];
-											array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice));
-											$totalRow += $newPrice;
+										$total = $totalRow;
+										$returnValue['shipping']=0.00;
+									break;
+									case 'fixed_products':
+										$items = $this->getItemsFromSessionClient($id_session_client);
+										$product_ids = explode(',',$row['product_ids']);
+										foreach ($items as $key => $value) {
+											if(in_array($value['id_product'],$product_ids)){
+												$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
+												array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice));
+												$totalRow += $newPrice;
+											}else{
+												$totalRow += $value['price'] * $value['number_items'];
+											}
+										}
+										$returnValue['subtotal'] = $totalRow;
+										$total = $totalRow;
+										if($total > $this->getLimitFreeDelivery()){
+											$returnValue['shipping']=0.00;  
 										}else{
+											$total += $this->getDeliveryCost();
+											$returnValue['shipping']=$this->getDeliveryCost();
+										} 
+									break;
+									case 'percetage_products':
+										$items = $this->getItemsFromSessionClient($id_session_client);
+										$percetage = (100 - intval($row['amount'])) / 100;
+										array_push($steps, $percetage);
+										$product_ids = explode(',',$row['product_ids']);
+										foreach ($items as $key => $value) {
+											if(in_array($value['id_product'],$product_ids)){
+												//si el product que se ingreso esta 
+												$newPrice = ($value['price'] * $percetage) * $value['number_items'];
+												array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice));
+												$totalRow += $newPrice;
+											}else{
+												$totalRow += $value['price'] * $value['number_items'];
+											}
+										}
+										$returnValue['subtotal'] = $totalRow;
+										$total = $totalRow;
+										if($total > $this->getLimitFreeDelivery()){
+											$returnValue['shipping']=0.00;  
+										}else{
+											$total += $this->getDeliveryCost();
+											$returnValue['shipping']=$this->getDeliveryCost();
+										} 
+										break;
+									case 'percetage':
+										$items = $this->getItemsFromSessionClient($id_session_client);
+										$percetage = (100 - $row['amount']) / 100;
+										foreach ($items as $key => $value) {
 											$totalRow += $value['price'] * $value['number_items'];
 										}
-									}
-									$returnValue['subtotal'] = $totalRow;
-									$total = $totalRow;
-									if($total > $this->getLimitFreeDelivery()){
-										$returnValue['shipping']=0.00;  
-									}else{
-										$total += $this->getDeliveryCost();
-										$returnValue['shipping']=$this->getDeliveryCost();
-									} 
+										$total = $totalRow * $percetage;
+										if($total > $this->getLimitFreeDelivery()){
+											$returnValue['shipping']=0.00;  
+										}else{
+											$total += $this->getDeliveryCost();
+											$returnValue['shipping']=$this->getDeliveryCost();
+										} 
+										break;
+									case 'fixed':
+										$items = $this->getItemsFromSessionClient($id_session_client);
+										foreach ($items as $key => $value) {
+											$totalRow += $value['price'] * $value['number_items'];
+										}
+										$total = $totalRow - $row['amount'];
+										if($total > $this->getLimitFreeDelivery()){
+											$returnValue['shipping']=0.00;  
+										}else{
+											$total += $this->getDeliveryCost();
+											$returnValue['shipping']=$this->getDeliveryCost();
+										} 
 									break;
-								case 'percetage':
-									$items = $this->getItemsFromSessionClient($id_session_client);
-									$percetage = (100 - $row['amount']) / 100;
-									foreach ($items as $key => $value) {
-										$totalRow += $value['price'] * $value['number_items'];
-									}
-									$total = $totalRow * $percetage;
-									if($total > $this->getLimitFreeDelivery()){
-										$returnValue['shipping']=0.00;  
-									}else{
-										$total += $this->getDeliveryCost();
-										$returnValue['shipping']=$this->getDeliveryCost();
-									} 
+									default:
+										array_push($steps, 'default');
 									break;
-								case 'fixed':
-									$items = $this->getItemsFromSessionClient($id_session_client);
-									foreach ($items as $key => $value) {
-										$totalRow += $value['price'] * $value['number_items'];
-									}
-									$total = $totalRow - $row['amount'];
-									if($total > $this->getLimitFreeDelivery()){
-										$returnValue['shipping']=0.00;  
-									}else{
-										$total += $this->getDeliveryCost();
-										$returnValue['shipping']=$this->getDeliveryCost();
-									} 
-								break;
-								default:
-									array_push($steps, 'default');
-								break;
+								}
+								$returnValue['total']=$total;  
+								$returnValue['products']=$products;
+
+								array_push($returnValue, $steps);
 							}
-							$returnValue['total']=$total;  
-							$returnValue['products']=$products;
 						}
 					}
-					array_push($returnValue, $steps);
 				}
 			}
 			
@@ -1517,6 +1531,7 @@
 		}
 
 		function checkCouponSetCart($coupon){
+			$this->checkDBLogin();
 			$qry = 'SELECT * FROM coupon WHERE code="'.$coupon.'"';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
@@ -1528,104 +1543,110 @@
 					$returnValue = false;
 				}else{
 					//type
-					$id_session_client = $_SESSION['id_session_client'];
-					$returnValue['id_coupon'] = $row['id_coupon'];
-					$returnValue['type'] = $row['discount_type'];
-					$products = array();
-					$total = 0;
-					$totalRow = 0;
-					switch ($row['discount_type']) {
-						case 'free_shipping':
-							$items = $this->getItemsFromSessionClient($id_session_client);
-							foreach ($items as $key => $value) {
-								$totalRow += $value['price'] * $value['number_items'];
-								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
-							}
-							$total = $totalRow;
-							$returnValue['subtotal']=$total;  
-							$returnValue['shipping']=0.00;
-						break;
-						case 'fixed_products':
-							$items = $this->getItemsFromSessionClient($id_session_client);
-							$product_ids = explode(',',$row['product_ids']);
-							foreach ($items as $key => $value) {
-								if(in_array($value['id_product'],$product_ids)){
-									$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
-									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
-									$totalRow += $newPrice;
-									$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
-								}else{
+					if(!isset($_SESSION)){ session_start(); }
+					if(!isset($_SESSION['id_session_client'])){
+						$returnValue = false;
+						$this->db->HandleError('Ocurrio un error con el cupon');
+					}else{
+						$row = $this->db->fetchArray($result);
+						$id_session_client = $_SESSION['id_session_client'];
+						$returnValue['id_coupon'] = $row['id_coupon'];
+						$returnValue['type'] = $row['discount_type'];
+						$products = array();
+						$total = 0;
+						$totalRow = 0;
+						switch ($row['discount_type']) {
+							case 'free_shipping':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								foreach ($items as $key => $value) {
 									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
 								}
-							}
-							$returnValue['subtotal'] = $totalRow;
-							$total = $totalRow;
-							if($total > $this->getLimitFreeDelivery()){
-								$returnValue['shipping']=0.00;  
-							}else{
-								$total += $this->getDeliveryCost();
-								$returnValue['shipping']=$this->getDeliveryCost();
-							} 
-						break;
-						case 'percetage_products':
-							$items = $this->getItemsFromSessionClient($id_session_client);
-							$percetage = (100 - intval($row['amount'])) / 100;
-							array_push($steps, $percetage);
-							$product_ids = explode(',',$row['product_ids']);
-							foreach ($items as $key => $value) {
-								if(in_array($value['id_product'],$product_ids)){
-									//si el product que se ingreso esta 
-									$newPrice = ($value['price'] * $percetage) * $value['number_items'];
-									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
-									$totalRow += $newPrice;
-									$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+								$total = $totalRow;
+								$returnValue['subtotal']=$totalRow;  
+								$returnValue['shipping']=0.00;
+							break;
+							case 'fixed_products':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$product_ids = explode(',',$row['product_ids']);
+								foreach ($items as $key => $value) {
+									if(in_array($value['id_product'],$product_ids)){
+										$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
+										array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+										$totalRow += $newPrice;
+										$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+									}else{
+										$totalRow += $value['price'] * $value['number_items'];
+									}
+								}
+								$returnValue['subtotal'] = $totalRow;
+								$total = $totalRow;
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
 								}else{
-									$totalRow += $value['price'] * $value['number_items'];
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+							break;
+							case 'percetage_products':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$percetage = (100 - intval($row['amount'])) / 100;
+								$product_ids = explode(',',$row['product_ids']);
+								foreach ($items as $key => $value) {
+									if(in_array($value['id_product'],$product_ids)){
+										//si el product que se ingreso esta 
+										$newPrice = ($value['price'] * $percetage) * $value['number_items'];
+										array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+										$totalRow += $newPrice;
+										$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+									}else{
+										$totalRow += $value['price'] * $value['number_items'];
+									}
 								}
-							}
-							$returnValue['subtotal'] = $totalRow;
-							$total = $totalRow;
-							if($total > $this->getLimitFreeDelivery()){
-								$returnValue['shipping']=0.00;  
-							}else{
-								$total += $this->getDeliveryCost();
-								$returnValue['shipping']=$this->getDeliveryCost();
-							} 
+								$returnValue['subtotal'] = $totalRow;
+								$total = $totalRow;
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+								break;
+							case 'percetage':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$percetage = (100 - $row['amount']) / 100;
+								foreach ($items as $key => $value) {
+									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+								}
+								$total = $totalRow * $percetage;
+								$returnValue['subtotal']=$total;  
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+								break;
+							case 'fixed':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								foreach ($items as $key => $value) {
+									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+								}
+								$total = $totalRow - $row['amount'];
+								$returnValue['subtotal']=$total;  
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
 							break;
-						case 'percetage':
-							$items = $this->getItemsFromSessionClient($id_session_client);
-							$percetage = (100 - $row['amount']) / 100;
-							foreach ($items as $key => $value) {
-								$totalRow += $value['price'] * $value['number_items'];
-								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
-							}
-							$total = $totalRow * $percetage;
-							$returnValue['subtotal']=$total;  
-							if($total > $this->getLimitFreeDelivery()){
-								$returnValue['shipping']=0.00;  
-							}else{
-								$total += $this->getDeliveryCost();
-								$returnValue['shipping']=$this->getDeliveryCost();
-							} 
-							break;
-						case 'fixed':
-							$items = $this->getItemsFromSessionClient($id_session_client);
-							foreach ($items as $key => $value) {
-								$totalRow += $value['price'] * $value['number_items'];
-								array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
-							}
-							$total = $totalRow - $row['amount'];
-							$returnValue['subtotal']=$total;  
-							if($total > $this->getLimitFreeDelivery()){
-								$returnValue['shipping']=0.00;  
-							}else{
-								$total += $this->getDeliveryCost();
-								$returnValue['shipping']=$this->getDeliveryCost();
-							} 
-						break;
+						}
+						$returnValue['total']=$total;  
+						$returnValue['products']=$products;
 					}
-					$returnValue['total']=$total;  
-					$returnValue['products']=$products;
 				}
 			}
 			return $returnValue;
@@ -1655,6 +1676,70 @@
 						array_push($array_data,array('id_billing'=>$row['id_billing'],'rfc'=>$row['rfc']));
 					}
 					$returnValue = $array_data;
+				}
+			}
+			return $returnValue;
+		}
+
+		function insertBilling(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$id_order = $_POST['id_order'];
+			$rfc = $this->Sanitize($_POST['rfc']);
+			$razon_social = $this->Sanitize($_POST['razon_social']);
+			$cfdi = $this->Sanitize($_POST['cfdi']);
+			$email = $this->Sanitize($_POST['email']);
+			$addressline1 = $this->Sanitize($_POST['address1']);
+			$addressline2 = $this->Sanitize($_POST['address2']);
+			$cp = $this->Sanitize($_POST['cp']);
+			$city = $this->Sanitize($_POST['city']);
+			$state = $this->Sanitize($_POST['state']);
+			$country = $this->Sanitize($_POST['country']);
+
+
+			$qry = 'INSERT into billing (address_line_1,address_line_2,city,cp,state,country,rfc,razon_social,cfdi,email,client_id_client) 
+							VALUES("'.$addressline1.'","'.$addressline2.'","'.$city.'","'.$cp.'","'.$state.'","'.$country.'","'.$rfc.'","'.$razon_social.'","'.$cfdi.'","'.$email.'",'.$id_client.')';
+			$result = $this->db->insertQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No se pudo guardar la información');
+				$returnValue = false;
+			}else{
+				$id_billing = $this->db->lastInsertID();
+				//update pedido con id_billing
+				$qry2 = 'UPDATE _order SET billing_id_billing='.$id_billing.' WHERE id_order='.$id_order;
+				$result2 = $this->db->updateQuery($qry2);
+				if(!$result2){
+					$returnValue = false;
+					$this->db->HandleDBError('No update order');
+				}
+				else{
+					$returnValue = $id_order;
+					$this->db->HandleDBError('La información fue guardada y enviada por correo');	
+				}
+			}
+			$returnValue['id_billing'] = $id_billing;
+			$returnValue['id_order'] = $id_order;
+			return $returnValue;
+		}
+
+		function getBilling($id_billing){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'SELECT * FROM billing WHERE id_billing='.$id_billing;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No billing');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No billing');
+					$returnValue = false;
+				}else{
+					$returnValue = $this->db->fetchArray($return);
 				}
 			}
 			return $returnValue;

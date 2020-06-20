@@ -23,6 +23,7 @@
     \Conekta\Conekta::setLocale('es');
     $keyConekta = $set->getConektaSecretKey();
 	\conekta\Conekta::setApiKey($keyConekta);
+	\Conekta\Conekta::setApiVersion("2.0.0");
 
 	header('Content-Type: application/json');
 	
@@ -60,6 +61,7 @@
 			echo json_encode($returnValue);
 			exit();
 		}
+
 		//paso 1: CREAR TABLE PEDIDO CON CARRITO
 		$table3 = '<table style="width:80%;margin:0 auto;background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;text-align: center;">';
 		$cart = $couponSetup['products'];
@@ -74,6 +76,10 @@
 		        	'sku'=> $pro['sku']
 		    );
 		    array_push($items,$item);
+		    $priceProduct = number_format($value['newPrice'], 2, '.', ',');
+		    $price = explode('.', $priceProduct);
+		    $priceRowFormat = number_format($value['newPrice'] * $value['number_items'],2,'.',',');
+		    $priceRow = explode('.',$priceRowFormat);
 
 		    $table3 .= '<tr style="border-bottom:1px solid #ccc;">';
 	        $table3 .= '<td><img style="width:100px;" src="'.$urlHeader.$path.$proImg[0]['url'].'"/></td>';
@@ -211,7 +217,7 @@
 		case 'spei':
 			$totalConekta = $total*100;
 			try {
-				$charge = \Conekta\Order::create(array(
+				$order = \Conekta\Order::create(array(
 				          'line_items'=> $items,
 				          'customer_info' => array('customer_id' => $conektaClient),
 				          'currency' => "MXN",
@@ -227,12 +233,16 @@
 						 
 				));
 			}catch (\Conekta\Handler $e) {
-				$error =  $e->getMessage;
-				echo json_encode($error);
+				$returnValue['return'] = false;
+				$returnValue['message'] = $e->getMessage();
+				unset($set);
+				echo json_encode($returnValue);
+				exit();
+
 			}
 			
-			$id_chargeConekta = $charge->id;
-			$transaction_code = $charge->charges[0]->payment_method->receiving_account_number;
+			$id_chargeConekta = $order->id;
+			$transaction_code = $order->charges[0]->payment_method->receiving_account_number;
 			$status = 'PENDING PAYMENT';
 
 			$table7 .= '<p>CLAVE</p>';
@@ -251,7 +261,7 @@
 			}
 			$totalConekta = $total*100;
 			try {
-				$charge = \Conekta\Order::create(array(
+				$order = \Conekta\Order::create(array(
 				          'line_items'=> $items,
 				          'customer_info' => array('customer_id' => $conektaClient),
 				          'currency' => "MXN",
@@ -267,20 +277,20 @@
 		                          )
 						    )
 						  ),
-						  'shipping_contact'=> array("address"=> $shippingAddress),
+						  'shipping_contact'=> array("address"=> $address),
 						  'shipping_lines' => array(array("amount"=>$shipping*100))
 						 
 				));
 			}catch (\Conekta\Handler $e) {
-				unset($set);
 				$returnValue['return'] = false;
-				$returnValue['message'] = $e->getMessage;
+				$returnValue['message'] = $e->getMessage();
+				unset($set);
 				echo json_encode($returnValue);
 				exit();
 			}
 			
-			$id_chargeConekta = $charge->id;
-			$transaction_code = $charge->charges[0]->payment_method->reference;
+			$id_chargeConekta = $order->id;
+			$transaction_code = $order->charges[0]->payment_method->reference;
 			$status = 'PENDING PAYMENT';
 
 			$table7 .= '<p>REFERENCIA</p>';
@@ -298,7 +308,72 @@
 				exit();
 			}else{
 				$status = 'PROCESSING';
-
+				$saveCard = $_POST['saveCard'];
+				$newCard = $_POST['newCard'];
+				$saveCard = $_POST['saveCard'];
+				if($newCard){
+					//nueva tarjeta 
+					$conektaCard = $_POST['token'];
+					if($saveCard){
+						//guardar
+						$customer = \Conekta\Customer::find($conektaClient);
+				        $source = $customer->createPaymentSource(array(
+				          'token_id' => $conektaCard,
+				          'type'     => 'card',
+				          "default" => "true"
+				        ));
+						$payment_method = ["type" => "default"];
+					}else{
+						//SIN guardar
+						$payment_method = ["type" => "card","token_id" => $conektaCard];	
+					}
+				}else{
+					//card saved prevously
+					$id_card = $_POST['id_card'];
+					$payment_method = ["type" => "card","payment_source_id" => $id_card];
+				}
+				$totalConekta = $total*100;
+		        try{
+				  	$order = \Conekta\Order::create([
+				  		'currency' => "MXN",
+				      	'description'=> "ORDEN: ".$cve_order,
+            			'reference_id'=> date("Y")."_".$cve_order,
+            			'amount'=> $totalConekta,
+            			'customer_info' => ["customer_id" => $conektaClient],
+				      	'line_items' => $items,
+				      	'shipping_lines' => [["amount" => $shipping*100]], //shipping_lines - physical goods only
+				      	'shipping_contact' => ["address" => $address], //shipping_contact - required only for physical goods
+				      	'charges' => [
+				      		["payment_method" => $payment_method] //payment_method - use customer's default - a card
+				        ]
+				      ]
+				  	);
+				} catch (\Conekta\ProcessingError $e){
+					$returnValue['return'] = false;
+					$returnValue['message'] = $e->getMessage();
+					unset($set);
+					echo json_encode($returnValue);
+					exit();
+				} catch (\Conekta\ParameterValidationError $e){
+				  	$returnValue['return'] = false;
+					$returnValue['message'] = $e->getMessage();
+					unset($set);
+					echo json_encode($returnValue);
+					exit();
+				} catch (\Conekta\Handler $e){
+					$returnValue['return'] = false;
+					$returnValue['message'] = $e->getMessage();
+					unset($set);
+					echo json_encode($returnValue);
+					exit();
+				}
+				$id_chargeConekta = $order->id;
+				$transaction_code = $order->charges[0]->payment_method->auth_code;
+				$cardlast4 = $order->charges[0]->payment_method->last4;
+				$cardType = $order->charges[0]->payment_method->type;
+				$table7 .= '<p>Tarjeta</p>';
+				$table7 .= '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$cardlast4.'-'.$cardType.'</b></p>';
+				$table7 .= '<p>La información de su tarjeta es manejada por Conekta</p>';
 			}
 		break;
 	}
@@ -347,8 +422,8 @@
 	$id_order = $set->insertOrder($status,$total,$shipping,$cve_order,$id_client,$id_shipping,$id_coupon,$type,$id_chargeConekta,$transaction_code,$id_session_client );
 	if(!$id_order){
 		$returnValue['return'] = 'undefined';
-		$returnValue['message'] = $set->getErrorMessage();
-		//$returnValue['message'] = 'El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido';
+		// $returnValue['message'] = $set->getErrorMessage();
+		$returnValue['message'] = 'El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido';
 		unset($set);
 		echo json_encode($returnValue);
 		exit();
@@ -363,22 +438,22 @@
 
 
 	//PASO CREAR Y ENVIAR CORREO A CLIENTE
-	// $fromEmail = $set->getWebsiteSetting('from_email');
-	// $website_title = $set->getWebsiteSetting('website_title');
-	// $subject = 'Orden de Compra en '.$website_title;
+	$fromEmail = $set->getWebsiteSetting('from_email');
+	$website_title = $set->getWebsiteSetting('website_title');
+	$subject = 'Orden de Compra en '.$website_title;
 
-	// $email = new Email();
-	// $email->setTo($emailClient);
-	// $email->setFrom($fromEmail);
-	// $email->setFromName($website_title);
-	// $email->setSubject($subject);
-	// $email->setMessage($emai);
+	$email = new Email();
+	$email->setTo($emailClient);
+	$email->setFrom($fromEmail);
+	$email->setFromName($website_title);
+	$email->setSubject($subject);
+	$email->setMessage($table10);
 
-	// $sendEmail = $email->sendEmail();
-	// $message = $email->error_message; //si es TRUE el mensaje es 'EMAIL ENVIADO'
+	$sendEmail = $email->sendEmail();
+	$message = $email->error_message; //si es TRUE el mensaje es 'EMAIL ENVIADO'
 
 	$returnValue['return'] = $id_order;
-	$returnValue['message'] = 'Exito';
+	$returnValue['message'] = $message;
 	unset($set);
 	echo json_encode($returnValue);
 	exit();

@@ -53,6 +53,16 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 .typePaymentBox{display: none;opacity: 0;}
 .little{padding:0 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;}
 
+
+.cardBox{display: grid;grid-template-columns: 34px auto;grid-gap:5px;align-items: center;margin:20px 0;}
+.cardBox input[type=radio]{display:none;}
+.cardBox input[type=radio] + label{border:1px solid #aabecc;position:relative;border-radius:34px;height: 34px;width: 34px;cursor: pointer;}
+.cardBox input[type=radio] + label i{position:absolute;top: 8px;left: 6px;color: #aabecc;color: transparent;font-size: 18px;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: #aabecc;transition: all 300ms ease-in;}
+.cardBox input[type=radio]:checked + label{border:1px solid #1ccfc8;background-color:#1ccfc8;}
+.cardBox input[type=radio]:checked + label i{color: #fff;-webkit-text-stroke-color: transparent;}
+.cardBox p{margin: 0;}
+
+
 #cardDetailsContainer{display: grid;grid-template-columns: 1fr 1fr;grid-gap: 20px;}
 #cardDetailsContainer #expiresContainer{display: grid;grid-template-columns: 1fr 1fr;grid-gap:5px;}
 #cardDetailsContainer #cvcContainer{display: grid;grid-template-columns: auto 50px;grid-gap:5px;align-items:center;}

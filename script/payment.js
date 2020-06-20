@@ -43,12 +43,13 @@
 		return true;
 	}
 	clearCoupunInput = () =>{
+		coupon.value = '';
 		coupon.classList.remove('animated');
 		coupon.classList.remove('swing');
 	}
 	setUpProducts = (products_list) =>{
-		console.log(products_list);
-		console.log(typeof products_list);
+		// console.log(products_list);
+		// console.log(typeof products_list);
 		for(let product of products_list){
 			let newPPrice = `$${product.newPrice.toFixed(2)}`;
 			let div_p = document.getElementById(`id_row_${product.id_product}`);
@@ -89,10 +90,10 @@
 		totalContainer.insertAdjacentHTML('beforeend', `<p>${strNewTotal[0]}.<sup>${strNewTotal[1]}</sup></p>`);
 	}
 	setupProducts = (products_list) =>{
-		console.log(products_list);
-		console.log(typeof products_list);
+		// console.log(products_list);
+		// console.log(typeof products_list);
 		for(let product of products_list){
-			console.log(product);
+			// console.log(product);
 			let div_p = document.getElementById(`id_row_${product.id_product}`);
 			div_p.getElementsByClassName('totalRow')[0].style.textDecoration = 'line-through';
 			let newPrice = document.createElement('p');
@@ -118,9 +119,10 @@
 					if(!myObj.return){
 						hideLoading();
 						setModalError(myObj.message);
+						clearCoupunInput();
 						setTimeout(function(){closeModal();}, 5000);
 					}else{
-						console.log(myObj);
+						// console.log(myObj);
 						switch(myObj.return.type){
 							case 'free_shipping':
 								setUpShipping(myObj.return.shipping);
@@ -170,35 +172,36 @@
 	}
 
 	//conekta
+	const saveCard = document.getElementById('saveCard');
 	conektaSuccessResponseHandler = (token)=> {
+
 		let fd = new FormData();
 		fd.append('type','card');
 		fd.append('coupon',coupon.value);
 		fd.append('newCard',1);
 		fd.append('token',token.id);
+		fd.append('saveCard',saveCard.checked);
 		
 		//ajax
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200) {
 				myObj = JSON.parse(this.response);
+				console.log(myObj);
 				if(!myObj.return){
 					//return false is error
 					hideLoading();
 					setModalError(myObj.message);
 					setTimeout(()=>{closeModal();},5000);
 				}else{
-
 					//windows relocation
 					let url = `confirm?id_order=${myObj.return}`;
 					window.location.href = url
 				}	
 			}
 		}
-		xhr.open('POST','./include/PAYMENT-pay.php', '');
+		xhr.open('POST','./include/PAYMENT-pay.php', true);
 		xhr.send(fd);
-
-
 	}
 	conektaErrorResponseHandler = (response) =>{ 
 		resetModal();
@@ -215,8 +218,8 @@
 	next.addEventListener('click',function(){
 		if(checkTerminos.checked){
 			resetModal();
+			showLoading();
 			openModal();
-			
 			let type = document.querySelector('input[name="typePayment"]:checked').getAttribute('id');
 			switch(type){
 				case 'card':
@@ -241,12 +244,14 @@
 						let fd = new FormData();
 						fd.append('type',type);
 						fd.append('coupon',coupon.value);
+						fd.append('saveCard',false);
     					fd.append("id_card",id_card);//no necesita token por que la tarjeta ya fue guardada en CONKETA
     					fd.append("newCard",0);
     					const xhr = new XMLHttpRequest();
 						xhr.onreadystatechange = function(){
 							if (this.readyState == 4 && this.status == 200) {
 								myObj = JSON.parse(this.response);
+								console.log(myObj);
 								if(!myObj.return){
 									//return false is error
 									hideLoading();
