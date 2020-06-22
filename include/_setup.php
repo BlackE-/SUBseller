@@ -1367,9 +1367,6 @@
 			return $returnValue;
 		}
 
-
-
-
 		
 		/*
 	
@@ -1412,6 +1409,7 @@
 								$returnValue = false;
 							}else{
 								$returnValue = array();
+								$_SESSION['id_coupon'] = $row['id_coupon'];
 								//type
 								$id_session_client = $_SESSION['id_session_client'];
 								$returnValue['type'] = $row['discount_type'];
@@ -1529,7 +1527,6 @@
 			}
 			return $returnValue;
 		}
-
 		function checkCouponSetCart($coupon){
 			$this->checkDBLogin();
 			$qry = 'SELECT * FROM coupon WHERE code="'.$coupon.'"';
@@ -1599,6 +1596,124 @@
 										array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
 										$totalRow += $newPrice;
 										$this->updateSessionCart($value['id_session_cart'],$value['number_items'],$newPrice);
+									}else{
+										$totalRow += $value['price'] * $value['number_items'];
+									}
+								}
+								$returnValue['subtotal'] = $totalRow;
+								$total = $totalRow;
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+								break;
+							case 'percetage':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$percetage = (100 - $row['amount']) / 100;
+								foreach ($items as $key => $value) {
+									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+								}
+								$total = $totalRow * $percetage;
+								$returnValue['subtotal']=$total;  
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+								break;
+							case 'fixed':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								foreach ($items as $key => $value) {
+									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+								}
+								$total = $totalRow - $row['amount'];
+								$returnValue['subtotal']=$total;  
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+							break;
+						}
+						$returnValue['total']=$total;  
+						$returnValue['products']=$products;
+					}
+				}
+			}
+			return $returnValue;
+		}
+		function checkCouponForPaypal($id_coupon){
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM coupon WHERE id_coupon="'.$id_coupon.'"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No tenemos cupon:'.$coupon);
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No tenemos cupon:'.$coupon);
+					$returnValue = false;
+				}else{
+					//type
+					if(!isset($_SESSION)){ session_start(); }
+					if(!isset($_SESSION['id_session_client'])){
+						$returnValue = false;
+						$this->db->HandleError('Ocurrio un error con el cupon');
+					}else{
+						$row = $this->db->fetchArray($result);
+						$id_session_client = $_SESSION['id_session_client'];
+						$returnValue['id_coupon'] = $row['id_coupon'];
+						$returnValue['type'] = $row['discount_type'];
+						$products = array();
+						$total = 0;
+						$totalRow = 0;
+						switch ($row['discount_type']) {
+							case 'free_shipping':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								foreach ($items as $key => $value) {
+									$totalRow += $value['price'] * $value['number_items'];
+									array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$value['price'],'number_items'=>$value['number_items']));
+								}
+								$total = $totalRow;
+								$returnValue['subtotal']=$totalRow;  
+								$returnValue['shipping']=0.00;
+							break;
+							case 'fixed_products':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$product_ids = explode(',',$row['product_ids']);
+								foreach ($items as $key => $value) {
+									if(in_array($value['id_product'],$product_ids)){
+										$newPrice = ($value['price'] - $row['amount']) * $value['number_items'];
+										array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+										$totalRow += $newPrice;
+									}else{
+										$totalRow += $value['price'] * $value['number_items'];
+									}
+								}
+								$returnValue['subtotal'] = $totalRow;
+								$total = $totalRow;
+								if($total > $this->getLimitFreeDelivery()){
+									$returnValue['shipping']=0.00;  
+								}else{
+									$total += $this->getDeliveryCost();
+									$returnValue['shipping']=$this->getDeliveryCost();
+								} 
+							break;
+							case 'percetage_products':
+								$items = $this->getItemsFromSessionClient($id_session_client);
+								$percetage = (100 - intval($row['amount'])) / 100;
+								$product_ids = explode(',',$row['product_ids']);
+								foreach ($items as $key => $value) {
+									if(in_array($value['id_product'],$product_ids)){
+										$newPrice = ($value['price'] * $percetage) * $value['number_items'];
+										array_push($products, array('id_product'=>$value['id_product'],'newPrice'=>$newPrice,'number_items'=>$value['number_items']));
+										$totalRow += $newPrice;
 									}else{
 										$totalRow += $value['price'] * $value['number_items'];
 									}
@@ -2054,7 +2169,7 @@
 				$qry = 'SELECT * FROM settings WHERE name="conekta_key_private_'.$row['value'].'"';
 				$result = $this->db->selectQuery($qry);
 				if(!$result){
-					$this->db->HandleError('No coneketa key');
+					$this->db->HandleError('No conekta key');
 					$returnValue = '';
 				}
 				else{
@@ -2064,6 +2179,10 @@
 			}
 			return $returnValue; 
 	    }
+	    	/*
+				paypal
+	    	*/	
+
 
 		/*
 			THEME

@@ -25,6 +25,59 @@
 		});
 	}
 
+	paypalComplete = (id_paypal) =>{
+		//ajax to all that PAYPAL already aproved
+	}
+
+	//PAYPAL
+	paypal.Buttons({
+		createOrder: function (data, actions) {
+		  return fetch('include/PAYPAL-createOrder.php', {
+		    method: 'POST'
+		  }).then(function(res) {
+		    return res.json();
+		  }).then(function(data) {
+		  		console.log(data);
+		  		return data.id;
+		  });
+		},
+		onApprove: function (data, actions) {
+			console.log(data);
+			console.log(actions);
+		  // return fetch('include/PAYPAL-captureOrder.php?id_order=' + data.orderID, {
+		  //   method: 'POST'
+		  // }).then(function(res) {
+		  //   console.log(res);
+		  //   if (!res.ok) {
+		  //     alert('Something went wrong');
+		  //   }
+		  		// else{
+		  		// 	paypalComplete(data.orderID);
+		  		// }
+		  // });
+		  
+		},
+		onCancel: function (data) {
+  			resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Cancelado pago con PAYPAL');
+			setTimeout(()=>{closeModal();},2000);
+  		},
+  		onError: function (err) {
+			// console.log(err);
+			resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Ocurrío un error con Paypal, si el problema persiste, elegir otro método de pago');
+			setTimeout(()=>{closeModal();},5000);
+		}
+
+	}).render('#paypal-button-container');
+
+	const paypalButton = document.getElementById('paypal-button-container');
+	paypalButton.style.display = 'none';
+
 	//COUPON
 	const coupon = document.getElementById('coupon');
 	const subtotalContainer = document.getElementById('subtotalContainer');
@@ -174,7 +227,6 @@
 	//conekta
 	const saveCard = document.getElementById('saveCard');
 	conektaSuccessResponseHandler = (token)=> {
-
 		let fd = new FormData();
 		fd.append('type','card');
 		fd.append('coupon',coupon.value);
@@ -214,6 +266,9 @@
 
 	//pay
 	const checkTerminos = document.getElementById('checkTerminos');
+	checkTerminos.addEventListener('change',function(){
+		(checkTerminos.checked) ? paypalButton.style.display = 'block' : paypalButton.style.display = 'none'; 
+	});
 	const next = document.getElementById('next');
 	next.addEventListener('click',function(){
 		if(checkTerminos.checked){

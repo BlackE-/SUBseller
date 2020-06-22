@@ -194,6 +194,7 @@
 					<input type="text" id="coupon" placeholder="Cupon" autocomplete="off">
 					<button id="checkCoupon">Verificar</button>
 				</div>
+				<div id="paypal-button-container"></div>
 				<div class="nextContainer"><button id="next">Pagar</button></div>
     		</div>
     	</div>
@@ -203,6 +204,7 @@
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
 	<script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
+	<script src="https://www.paypal.com/sdk/js?client-id=AYq-mFAkVvaS38dlyKa1KgksboUvphuPRI4rwNf3bvm8HUNbdMTCPEpcUhBVRPTaVmL-rJqCIUJSTLpR&disable-funding=credit,card&currency=MXN"></script>
 	<script type="text/javascript" src="script/payment.js"></script>
 </body>
 </html>
