@@ -12,50 +12,59 @@
 <head>
 	<?php include('header_meta.php');?>
 	<link rel="stylesheet" type="text/css" href="script/datatables/datatables.min.css" />
-	<link rel="stylesheet" type="text/css" href="css/order.css" />
+	<link rel="stylesheet" type="text/css" href="css/orders.css" />
 </head>
 <body>
 	<?php include('header.php');?>
 	<div class="mainContainer" id="mainContainer">
 		<?php include('sidebar.php');?>
-		<div id="main" class="main">
-			<div class="pedidosContainer">
-				<h1>ORDERS</h1>
-        		<p>Lista de PEDIDOS de la tienda</p>
-			<?php
-	            $orders = $set->getOrders();
-	            if(!$orders){
-	                echo $set->getErrorMessage();
-	            }else{
+		<div id="main" class="main productosContainer">
+			<div id="newProductTitle"><h1>Ordernes</h1></div>
+			<div>
+				<?php
+					$orders = $set->getOrders();
+	            	if(!$orders){
+				?>
+					<p>Sin PEDIDOS</p>
+				<?php
+					}else{
 	                echo '<table id="example" class="display" style="width:100%">';
-	                echo '<thead><tr><th>Order</th><th>Date</th><th>Client</th><th>Type</th><th>Status</th><th>Total</th></tr></thead><tbody>';
-	                while($row = $set->db->fetchArray($productos)){
+	                echo '<thead><tr><th>Order</th><th>Date</th><th>Client</th><th>Status</th><th>Type</th><th>Total</th><th></th></tr></thead><tbody>';
+	                foreach ($orders as $key => $value) {
+	                	// print_r($value);
+	                	// echo '<br>';
 	                    echo '<tr>';
-	                        echo '<td><p class="id_order">'.$row['id_order'].'</p></td>';
-	                        echo '<td><p class="date_order">'.$row['date_order'].'</p></td>';
-	                        $id_client = $row['client_id_client'];
+	                        echo '<td><p class="id_order">'.$value['id_order'].'</p></td>';
+	                        echo '<td><p class="date_created">'.$value['date_created'].'</p></td>';
+	                        $id_client = $value['client_id_client'];
 	                        $name = $set->getClientNameById($id_client);
-	                        echo '<td><p class="date_order">'.$row['date_order'].'</p></td>';
-	                        echo '<td><p>'.$row['status'].'</p></td>';
-	                        echo '<td><p>'.$row['total'].'</p></td>';
+	                        echo '<td><p class="date_created">'.$name.'</p></td>';
+	                        switch($value['status']){
+	                        	case 'PROCESSING':echo '<td><p class="processing">'.$value['status'].'</p></td>';break;
+	                        	case 'PENDING PAYMENT':echo '<td><p class="payment">'.$value['status'].'</p></td>';break;
+	                        	case 'CANCELED':echo '<td><p class="canceled">'.$value['status'].'</p></td>';break;
+	                        	case 'REFUNDED':echo '<td><p class="refunded">'.$value['status'].'</p></td>';break;
+	                        	case 'COMPLETE':echo '<td><p class="complete">'.$value['status'].'</p></td>';break;
+	                        }
 	                        echo '<td>';
-	                        $typeTransaction = $set-getTypeTransation($row['id_order']);
+	                        $typeTransaction = $set->getTypeTransation($value['id_order']);
 	                        switch($typeTransaction){
 	                            case 'oxxo'://OXXO
-	                                echo '<i class="far fa-money-bill-alt"></i>';
+	                                echo '<p class="type"><i class="fas fa-dollar-sign"></i></p>';
 	                            break; 
 	                            case 'card'://tarjeta
-	                                echo '<i class="far fa-credit-card"></i>';
+	                                echo '<p class="type"><i class="fas fa-credit-card"></i></p>';
 	                            break;
 	                            case 'spei'://SPEI
-	                                echo '<i class="fas fa-file-invoice-dollar"></i>';
+	                                echo '<p class="type"><i class="fas fa-exchange-alt"></i></p>';
 	                            break;
 	                            case 'paypal'://paypal
-	                                echo '<i class="fab fa-cc-paypal"></i>';
+	                                echo '<p class="type"><i class="fab fa-cc-paypal"></i></p>';
 	                            break;
 	                        }
 	                        echo '</td>';
-	                        echo '<td><a href="order.php?id_order='.$row['id_order'].'"><button><i class="fas fa-arrow-circle-right"></i></button></a></td>';
+	                        echo '<td><p class="total">$'.number_format($value['total'],2,'.',',').'</p></td>';
+	                        echo '<td><a href="order.php?id_order='.$value['id_order'].'"><button><i class="fas fa-arrow-circle-right"></i></button></a></td>';
 	                    echo '</tr>';
 	                }
 	                echo '</tbody>';
@@ -66,5 +75,13 @@
 		</div>
 	</div>
 	<?php include('footer.php');?>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="script/datatables/datatables.min.js"></script>
+		<script src="script/datatables/dataTables.buttons.min.js"></script>
+		<script src="script/datatables/buttons.html5.min.js"></script>
+		<script src="script/datatables/jszip/jszip.min.js"></script>
+		<script src="script/datatables/pdfmaker/pdfmake.min.js"></script>
+		<script src="script/datatables/pdfmaker/vfs_fonts.js"></script>
+	<script type="text/javascript" src="script/orders.js"></script>
 </body>
 </html>

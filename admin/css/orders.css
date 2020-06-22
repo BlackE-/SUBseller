@@ -1,0 +1,35 @@
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 1fr;  grid-template-rows: 50px auto;  grid-gap: 10px;background: rgba(238, 238, 238, 0.5);}
+.mainContainer #main #newProductContainer{display: grid;grid-template-columns: 100px 200px;justify-content: space-between;}
+.mainContainer #main #newProductContainer .newProduct{width:100%;max-width:250px;height:40px;background: #b7002a;border:1px solid transparent;border-radius:5px;color:#fff;transition:all 300ms ease-in; }
+.mainContainer #main #newProductContainer .newProduct:hover{background: #fff;color:#b7002a;border:1px solid #b7002a;}
+
+.importProducts {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
+.importProducts + label {color: #9f9e9e;line-height: 40px;cursor: pointer}
+.importProducts + label:hover{color: #000;}
+
+.productosContainer .dt-buttons{background: rgba(238, 238, 238, 0.5);}
+.productosContainer .dt-buttons button{width:100%;height:40px;background: transparent;border:1px solid transparent;color:#9f9e9e;}
+.productosContainer .dt-buttons button:hover{color:#000;}
+.productosContainer .dt-buttons .btn-pdf{max-width:70px;}
+.productosContainer .dt-buttons .btn-excel{max-width:100px;}
+.productosContainer .dataTables_wrapper{background: #fff;}
+
+.productosContainer .dataTables_wrapper .dataTables_filter{padding:20px;float:none;text-align: left;}
+.productosContainer .dataTables_wrapper .dataTables_filter input{width: calc(100% - 75px);}
+.productosContainer .dataTable{padding:20px;}
+.productosContainer .dataTable th:nth-child(2),
+.productosContainer .dataTable td:nth-child(2){display: none;}
+
+
+.processing{background: #44c98c;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.payment{background: #1ccfc8;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.canceled{background: #681729;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
+.refunded{background: #b7002a;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
+.complete{background: #2361f0;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
+
+.type{width:100%;text-align: center;}
+.total{width:100%;text-align: center;}
+
+.productosContainer #example button{background-color:transparent;color:#b7002a;border:1px solid #b7002a;border-radius:5px;outline:none;transition: 0.4s ease all;-moz-transition: 0.4s ease all;-webkit-transition: 0.4s ease all;}
+.productosContainer #example button:hover{color:#fff;background-color:#b7002a;}
+
