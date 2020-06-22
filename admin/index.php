@@ -29,8 +29,8 @@
 				<p>Total Ventas</p>
 				<h1>
 					<?php
-						$totalVentas = 2000.00;
-						echo '$'.number_format($totalVentas, 2);
+						$sales = $set->getTotalSales();
+						echo '<p>$'.number_format($sales, 2).'</p>';
 					?>
 				</h1>
 			</div>
@@ -38,8 +38,8 @@
 				<p>Total Clientes</p>
 				<h1>
 					<?php
-						$totalClientes = 25;
-						echo $totalClientes;
+						$countClients = $set->getTotalClients();
+						echo '<p>'.$countClients.'</p>';
 					?>
 				</h1>
 			</div>
@@ -52,46 +52,47 @@
 	</div>
 	<?php include('footer.php');?>
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+	<script type="text/javascript" src="script/index.js"></script>
 	<script type="text/javascript">
-		var ctx = document.getElementById('myChart');
-		
-		var myChart = new Chart(ctx, {
-		    type: 'bar',
-		    data: {
-		        labels: ['29/03','30/03','31/03','1/04', '2/04', '3/04'],
-		        datasets: [{
-		            label: 'orders',
-		            data: [1, 3, 0, 1, 2, 3],
-		            backgroundColor: [
-		                'rgba(255, 99, 132, 0.2)',
-		                'rgba(54, 162, 235, 0.2)',
-		                'rgba(255, 206, 86, 0.2)',
-		                'rgba(75, 192, 192, 0.2)',
-		                'rgba(153, 102, 255, 0.2)',
-		                'rgba(255, 159, 64, 0.2)'
-		            ],
-		            borderColor: [
-		                'rgba(255, 99, 132, 1)',
-		                'rgba(54, 162, 235, 1)',
-		                'rgba(255, 206, 86, 1)',
-		                'rgba(75, 192, 192, 1)',
-		                'rgba(153, 102, 255, 1)',
-		                'rgba(255, 159, 64, 1)'
-		            ],
-		            borderWidth: 1
-		        }]
-		    },
-		    options: {
-		        scales: {
-		            yAxes: [{
-		                ticks: {
-		                    beginAtZero: true,
-		                    stepSize: 1
-		                }
-		            }]
-		        }
-		    }
-		});
+
+		// var ctx = document.getElementById('myChart');
+		// var myChart = new Chart(ctx, {
+		//     type: 'bar',
+		//     data: {
+		//         labels: ['29/03','30/03','31/03','1/04', '2/04', '3/04'],
+		//         datasets: [{
+		//             label: 'orders',
+		//             data: [1, 3, 0, 1, 2, 3],
+		//             backgroundColor: [
+		//                 'rgba(255, 99, 132, 0.2)',
+		//                 'rgba(54, 162, 235, 0.2)',
+		//                 'rgba(255, 206, 86, 0.2)',
+		//                 'rgba(75, 192, 192, 0.2)',
+		//                 'rgba(153, 102, 255, 0.2)',
+		//                 'rgba(255, 159, 64, 0.2)'
+		//             ],
+		//             borderColor: [
+		//                 'rgba(255, 99, 132, 1)',
+		//                 'rgba(54, 162, 235, 1)',
+		//                 'rgba(255, 206, 86, 1)',
+		//                 'rgba(75, 192, 192, 1)',
+		//                 'rgba(153, 102, 255, 1)',
+		//                 'rgba(255, 159, 64, 1)'
+		//             ],
+		//             borderWidth: 1
+		//         }]
+		//     },
+		//     options: {
+		//         scales: {
+		//             yAxes: [{
+		//                 ticks: {
+		//                     beginAtZero: true,
+		//                     stepSize: 1
+		//                 }
+		//             }]
+		//         }
+		//     }
+		// });
 	</script>
 </body>
 </html>

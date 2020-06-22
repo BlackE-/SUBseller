@@ -162,6 +162,11 @@
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
 				}
+				$qry = "INSERT into settings (name,value,type) values 
+											('paypal_merchand_id','','payment_paypal')";
+				if(!$this->db->insertQuery($qry)){
+					$returnValue = false;
+				}
 
 
 				
@@ -267,6 +272,26 @@
 		/*
 			clients
 		*/
+		function getTotalClients(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT COUNT(id_client) as SUMA FROM client';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No clients');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No orders');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['SUMA'];
+				}
+			}
+			return $returnValue;
+		}
+
 		function getClients(){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -280,7 +305,11 @@
 					$this->db->HandleError('No orders');
 					$returnValue = false;
 				}else{
-					$returnValue = $result;
+					$algo = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($algo, $row);
+					}
+					$returnValue = $algo;
 				}
 			}
 			return $returnValue; 
@@ -289,6 +318,49 @@
 		/*
 			Orders
 		*/
+		function getTotalSales(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT sum(total) as SUMA FROM _order';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No orders');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No orders');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['SUMA'];
+				}
+			}
+			return $returnValue; 
+		}
+		function getSalesByDay($dayDate){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT sum(total) as SUMA FROM _order WHERE date_created between "'.$dayDate.' 00:00:00" and "'.$dayDate.' 23:59:59"';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No orders');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No orders');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row['SUMA'];
+					if(gettype($row['SUMA']) == 'NULL'){
+						$returnValue = '0.0';
+					}else{
+						$returnValue = $row['SUMA'];
+					}
+				}
+			}
+			return $returnValue; 
+		}
 		function getOrders(){
 			$returnValue = true;
 			$this->checkDBLogin();
@@ -302,7 +374,11 @@
 					$this->db->HandleError('No orders');
 					$returnValue = false;
 				}else{
-					$returnValue = $result;
+					$algo = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($algo, $row);
+					}
+					$returnValue = $algo;
 				}
 			}
 			return $returnValue; 
