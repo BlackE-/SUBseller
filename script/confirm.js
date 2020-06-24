@@ -12,19 +12,30 @@
 		p.innerText = msg;
 		modalBody.appendChild(p);
 	}
-
+	let id_billing = 0;
 	const id_order = document.getElementById('id_order').value;
-	const checkRFC = document.getElementById('checkRFC');
+	const billing = document.getElementById('billings');
 	const rfc = document.getElementById('rfc');
 	const email = document.getElementById('email');
 	const razon_social = document.getElementById('razon_social');
 	const cfdi = document.getElementById('cfdi');
-	const addressline1 = document.getElementById('address1');
-	const addressline2 = document.getElementById('address2');
+	const address1 = document.getElementById('address1');
+	const address2 = document.getElementById('address2');
 	const cp = document.getElementById('cp');
 	const city = document.getElementById('city');
 	const country = document.getElementById('country');
 	const state = document.getElementById('state');
+	const checkRFC = document.getElementById('checkRFC');
+	checkRFC.addEventListener('change',()=>{
+		if(checkRFC.checked){
+			document.getElementById('facturaContainer').classList.add('show');
+			let topPos = document.getElementById('facturaContainer').scrollHeight + 50;
+			window.scrollTo({ top: topPos, behavior: 'smooth' });
+		}else{
+			document.getElementById('facturaContainer').classList.remove('show');
+		}
+	});
+	
 
 	validateEmail = (email) => {
     	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -70,6 +81,7 @@
 
 				let fd = new FormData();
 				fd.append('id_order',id_order);
+				fd.append('id_billing',id_billing);
 				fd.append('rfc',rfc.value);
 				fd.append('cfdi',cfdi.value);
 				fd.append('razon_social',razon_social.value);
@@ -115,4 +127,83 @@
 		}
 	});
 
+	setBillingForm = (data) =>{
+		rfc.value = data.rfc;
+		razon_social.value = data.razon_social;
+		cfdi.value = data.cfdi;
+		address1.value = data.address_line_1;
+		address2.value = data.address_line_2;
+		email.value = data.email;
+		cp.value = data.cp;
+		city.value = data.city;
+		country.value = data.country;
+		state.value = data.state;
+
+		rfc.setAttribute('disabled','');
+		razon_social.setAttribute('disabled','');
+		cfdi.setAttribute('disabled','');
+		email.setAttribute('disabled','');
+		address1.setAttribute('disabled','');
+		address2.setAttribute('disabled','');
+		city.setAttribute('disabled','');
+		cp.setAttribute('disabled','');
+		country.setAttribute('disabled','');
+		state.setAttribute('disabled','');
+	}
+
+	unsetBillingForm = () =>{
+		rfc.value = '';
+		razon_social.value = '';
+		cfdi.value = '0';
+		address1.value = '';
+		address2.value = '';
+		cp.value = '';
+		city.value = '';
+		country.value = 'MEX';
+		state.value = 'Aguascalientes';
+
+		rfc.removeAttribute('disabled','');
+		razon_social.removeAttribute('disabled','');
+		cfdi.removeAttribute('disabled','');
+		email.removeAttribute('disabled','');
+		address1.removeAttribute('disabled','');
+		address2.removeAttribute('disabled','');
+		city.removeAttribute('disabled','');
+		cp.removeAttribute('disabled','');
+		country.removeAttribute('disabled','');
+		state.removeAttribute('disabled','');
+	}
+
+	if (typeof(billing) != 'undefined' && billing != null){
+		billing.addEventListener('change',function(){
+			id_billing = this.value;
+			// console.log(id_billing);
+			if(id_billing == 0){
+				unsetBillingForm();
+			}else{
+				showLoading();
+				openModal();
+				let formBilling = new FormData();
+				formBilling.append('id_billing',id_billing);
+
+				const xhr = new XMLHttpRequest();
+				xhr.onreadystatechange = function(){
+					if (this.readyState == 4 && this.status == 200) {
+						// console.log(this.response);
+						myObj = JSON.parse(this.response);
+						if(!myObj.return){
+							hideLoading();
+							setModalError(myObj.message);
+							setTimeout(function(){closeModal();}, 5000);
+						}else{
+							closeModal();
+							setBillingForm(myObj.return);
+			            }
+					}
+				}
+				xhr.open('POST','./include/CONFIRM-getBilling.php', true);
+				xhr.send(formBilling); 
+			}
+		});
+	}
 	

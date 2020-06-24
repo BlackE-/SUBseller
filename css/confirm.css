@@ -25,7 +25,7 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 
 
 #confirmContainer{background:#fbfbfc;padding:0 0 50px 0;}
-#confirmContainer .container{display: grid;grid-template-columns: 2fr 1fr;grid-gap:20px;align-items: start;}
+#confirmContainer .container{display: grid;grid-template-columns: 2fr 1fr;grid-gap:20px;}
 #confirmContainer .container .rightContainer{background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;}
 @media all and (max-width : 765px) {
 	#confirmContainer .container{grid-template-columns:1fr;}
@@ -43,8 +43,11 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 .little{padding:0 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;}
 #termsContainer{margin:20px 0;}
 
-.facturaSavedContainer{display: grid;grid-template-columns: 1fr 1fr;}
-.facturaContainer{background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;}
+.facturaSavedContainer{display: grid;grid-template-columns: 1fr 1fr;grid-gap:5px;}
+#facturaContainer{opacity:0;height:0;transition:all 500ms ease-in;background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;}
+#facturaContainer.show{opacity:1;height:auto;}
+
+.billingsSavedContainer{grid-column-start: 1;grid-column-end: 3;}
 #facturaCheckContainer{display: grid;grid-template-columns: 34px auto;grid-gap:10px;align-items: center;}
 #facturaCheckContainer input[type=checkbox] {display:none;}
 #facturaCheckContainer input[type=checkbox] + label{border:1px solid #aabecc;position:relative;border-radius:34px;height: 34px;width: 34px;cursor: pointer;}
@@ -54,7 +57,7 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 
 #facturaContainerBox{display: grid;grid-template-columns: 1fr 1fr;grid-gap:10px;}
 select::-ms-expand {display: none;}
-.billingsSaved{position:relative;display:block;border:1px solid #d2dae6;    overflow: hidden;}
+.billingsSaved{position:relative;display:block;border:1px solid #d2dae6;    overflow: hidden;margin:0 0 15px 0;}
 .billingsSaved:after{content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
 .billingsSaved select {-webkit-appearance: none; -moz-appearance: none;appearance: none;outline:none;width:100%;border:none;display: block;height: 30px;  color:#54b0ac;  padding: 2px 0 0 5px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
 
@@ -117,4 +120,7 @@ select::-ms-expand {display: none;}
 #detailsContainer div > div{grid-template-columns: 1fr;grid-gap: 0;margin: 0;}
 #detailsContainer div#totalContainer p{font-size: 20px;color:#2361f0;font-weight: 800;}
 #detailsContainer div#totalContainer p sup{font-size: 12px;}
+
+
+.enableBilling{    width: 160px;    margin: 20px auto 0 auto;}
 
