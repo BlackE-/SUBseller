@@ -28,6 +28,7 @@
 .complete{background: #2361f0;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
 
 .type{width:100%;text-align: center;}
+.type span{display: none;}
 .total{width:100%;text-align: center;}
 
 .productosContainer #example button{background-color:transparent;color:#b7002a;border:1px solid #b7002a;border-radius:5px;outline:none;transition: 0.4s ease all;-moz-transition: 0.4s ease all;-webkit-transition: 0.4s ease all;}

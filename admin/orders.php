@@ -31,8 +31,6 @@
 	                echo '<table id="example" class="display" style="width:100%">';
 	                echo '<thead><tr><th>Order</th><th>Date</th><th>Client</th><th>Status</th><th>Type</th><th>Total</th><th></th></tr></thead><tbody>';
 	                foreach ($orders as $key => $value) {
-	                	// print_r($value);
-	                	// echo '<br>';
 	                    echo '<tr>';
 	                        echo '<td><p class="id_order">'.$value['id_order'].'</p></td>';
 	                        echo '<td><p class="date_created">'.$value['date_created'].'</p></td>';
@@ -50,16 +48,16 @@
 	                        $typeTransaction = $set->getTypeTransation($value['id_order']);
 	                        switch($typeTransaction){
 	                            case 'oxxo'://OXXO
-	                                echo '<p class="type"><i class="fas fa-dollar-sign"></i></p>';
+	                                echo '<p class="type"><span>OXXO</span><i class="fas fa-dollar-sign"></i></p>';
 	                            break; 
 	                            case 'card'://tarjeta
-	                                echo '<p class="type"><i class="fas fa-credit-card"></i></p>';
+	                                echo '<p class="type"><span>CARD</span><i class="fas fa-credit-card"></i></p>';
 	                            break;
 	                            case 'spei'://SPEI
-	                                echo '<p class="type"><i class="fas fa-exchange-alt"></i></p>';
+	                                echo '<p class="type"><span>SPEI</span><i class="fas fa-exchange-alt"></i></p>';
 	                            break;
-	                            case 'paypal'://paypal
-	                                echo '<p class="type"><i class="fab fa-cc-paypal"></i></p>';
+	                            case 'PayPal'://paypal
+	                                echo '<p class="type"><span>PAYPAL</span><i class="fab fa-cc-paypal"></i></p>';
 	                            break;
 	                        }
 	                        echo '</td>';

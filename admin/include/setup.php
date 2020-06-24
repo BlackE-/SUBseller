@@ -364,7 +364,7 @@
 		function getOrders(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM _order ORDER BY id_order';
+			$qry = 'SELECT * FROM _order ORDER BY id_order DESC';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No orders');
@@ -413,6 +413,40 @@
 				}else{
 					$row = $this->db->fetchArray($result);
 					$returnValue = $row['type'];
+				}
+			}
+			return $returnValue;
+		}
+		function getOrder($id_order){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM _order WHERE id_order = '.$id_order;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+		}
+		function getShippingFromOrder($id_order){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM shipping WHERE order_id_order = '.$id_order;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
 				}
 			}
 			return $returnValue;
