@@ -7,7 +7,6 @@
 	header('Content-Type: application/json');
 
 	require_once "_setup.php";
-	require_once "_email.php";
 	require_once "_curl.php";
 	$set = new Setup();
 	$curl = new Curl();
@@ -35,70 +34,28 @@
 
 
 	//GET ACCESS TOKEN
-	$urlAccessToken = $url.'v1/oauth2/token';
-	$access_token = $curl->getAccessToken($urlAccessToken,$paypal_client_id,$paypal_secret_id);
-	if(array_key_exists("error",$access_token)){	//si la llave ERROR esta en el ARRAY no hubo token
-		$returnValue['statusCode'] = '401';
-		$returnValue['resp'] = $access_token['error'];
-		unset($set);
-		echo json_encode($returnValue);
-		exit();
-	}
-	else{//GET CART
-		if(!isset($_SESSION)){session_start();}
-		$items = array();
-		if(isset($_SESSION['id_coupon'])){//WITH COUPON
-			$couponCode = $set->getCoupon($_SESSION['id_session']);
-			$couponSetup = $set->checkCouponSetCart($couponCode['code']);
-			if(!$couponSetup){//no se actualizo en DB el carrito
-				$returnValue['return'] = false;
-				$returnValue['message'] = $set->getErrorMessage();
-				unset($set);
-				echo json_encode($returnValue);
-				exit();
-			}
-			$cart = $couponSetup['products'];
-			foreach ($cart as $key => $value) {
-				$product = $set->getProduct($value['id_product']);
-				$pro = $product[0]['product'];
-				$proImg = $product[1]['media'];
-			    $priceProduct = number_format($value['newPrice'], 2, '.', ',');
-			    $priceRowFormat = number_format($value['newPrice'] * $value['number_items'],2,'.',',');
-			}
-			$total = $couponSetup['total'];
-			$subtotal = $couponSetup['subtotal'];
-			$shipping = $couponSetup['shipping'];
-		}	
-		else{
-			//sin coupon
-			$cart = $set->getCart();
-			foreach ($cart as $key => $value) {
-				$product = $set->getProduct($value['id_product']);
-				$pro = $product[0]['product'];
-				$proImg = $product[1]['media'];
-				$price_sale = $value['price'];
-		        $totalRow = $value['price'] * $value['number_items'];
-				$totalRowFormat = number_format($totalRow,2,'.',','); 
-		        $subtotal += $totalRow;
-			}
-			$subtotal = $totalRow;
-			$freeDelivery = $set->getLimitFreeDelivery();
-			$total = $subtotal;
-			$deliveryCost = number_format(0, 2, '.', '');
-	        if($subtotal < $freeDelivery ){
-	        	$deliveryCost = number_format($set->getDeliveryCost(), 2, '.', '');
-	        	$total += $deliveryCost;
-	        }
-	        $totalLabel = number_format($total, 2, '.', ',');
+	if(!isset($_SESSION)){session_start();}
+	if(!isset($_SESSION['access_token'])){
+		$urlAccessToken = $url.'v1/oauth2/token';
+		$access_token = $curl->getAccessToken($urlAccessToken,$paypal_client_id,$paypal_secret_id);
+		if(array_key_exists("error",$access_token)){	//si la llave ERROR esta en el ARRAY no hubo token
+			$returnValue['statusCode'] = '401';
+			$returnValue['resp'] = $access_token['error'];
+			unset($set);
+			echo json_encode($returnValue);
+			exit();
 		}
-
-		// //CREATE ORDER
-		https://api.paypal.com/
-		$urlCaptureOrder = $url.'v2/checkout/orders/'.$id_order.'/capture';
-		$createOrder = $curl->captureOrder($access_token['access_token'],$urlCaptureOrder);
-		$returnValue = $createOrder;
-		unset($set);
-		echo json_encode($returnValue);
-		exit();
+		$_SESSION['access_token'] = $access_token['access_token'];
 	}
+
+
+	// //Capture ORDER
+	// $id_order = $_SESSION['order_id']
+	$urlCaptureOrder = $url.'v2/checkout/orders/'.$id_order.'/capture';
+	$createOrder = $curl->captureOrder($_SESSION['access_token'],$urlCaptureOrder);
+	$returnValue = $createOrder;	
+	unset($set);
+	echo json_encode($returnValue);
+	exit();
+
 ?>

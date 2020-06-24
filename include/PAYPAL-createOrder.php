@@ -59,9 +59,6 @@
 			foreach ($cart as $key => $value) {
 				$product = $set->getProduct($value['id_product']);
 				$pro = $product[0]['product'];
-				$proImg = $product[1]['media'];
-			    $priceProduct = number_format($value['newPrice'], 2, '.', ',');
-			    $priceRowFormat = number_format($value['newPrice'] * $value['number_items'],2,'.',',');
 
 			    $items .= '{';
 				$items .= 	'"name":"'.$pro['name'].'",';
@@ -77,8 +74,6 @@
 			$total = $couponSetup['total'];
 			$subtotal = $couponSetup['subtotal'];
 			$shipping = $couponSetup['shipping'];
-			$shippingFormat = number_format($shipping, 2, '.', '');
-	        $totalFormat = number_format($total, 2, '.', ',');
 		}	
 		else{
 			//sin coupon
@@ -86,10 +81,8 @@
 			foreach ($cart as $key => $value) {
 				$product = $set->getProduct($value['id_product']);
 				$pro = $product[0]['product'];
-				$proImg = $product[1]['media'];
 				$price_sale = $value['price'];
 		        $totalRow = $value['price'] * $value['number_items'];
-				$totalRowFormat = number_format($totalRow,2,'.',','); 
 
 				$items .= '{';
 				$items .= 	'"name":"'.$pro['name'].'",';
@@ -107,20 +100,34 @@
 			$subtotal = $totalRow;
 			$freeDelivery = $set->getLimitFreeDelivery();
 			$total = $subtotal;
-			$shippingFormat = number_format(0, 2, '.', '');
+			$shipping = 0;
 	        if($subtotal < $freeDelivery ){
 	        	$total+= $set->getDeliveryCost();
-	        	$shippingFormat = number_format($set->getDeliveryCost(), 2, '.', '');
+	        	$shipping = $set->getDeliveryCost();
 	        }
-	        $totalFormat = number_format($total, 2, '.', ',');
-		}
+	    }
+		$id_shipping = $_SESSION['id_shipping'];
+		$shippingAddress = $set->getShipping($id_shipping);
+		$address = '{
+	                    "address_line_1": "'.$shippingAddress['address_line_1'].'",
+	                    "address_line_2": "'.$shippingAddress['address_line_2'].'",
+	                    "admin_area_2": "'.$shippingAddress['city'].'",
+	                    "admin_area_1": "'.$shippingAddress['state'].'",
+	                    "postal_code": "'.$shippingAddress['cp'].'",
+	                    "country_code": "MX"
+			        }';		
+		$nameClient = $set->getClientName();
+
 
 		$postData = '{
 					  	"intent": "CAPTURE",
+					  	"application_context": {
+				            "shipping_preference": "SET_PROVIDED_ADDRESS"
+				        },
 					  	"purchase_units": [{
 					    	"amount": {
 					        	"currency_code": "MXN",
-					        	"value": "'.$totalFormat.'",
+					        	"value": "'.$total.'",
 					        	"breakdown":{
 					        		"item_total":{
 					        			"currency_code":"MXN",
@@ -128,17 +135,26 @@
 					        		},
 					        		"shipping":{
 							  			"currency_code":"MXN",
-							  			"value":"'.$shippingFormat.'"
+							  			"value":"'.$shipping.'"
 							  		}
 					        	}
 					      	},
-					      	"items":['.$items.']
+					      	"items":['.$items.'],
+					      	"shipping": {
+					      		"name": {
+                        			"full_name":"'.$nameClient.'"
+                    			},
+			                    "address": '.$address.'
+			                }
 					    }]
 					}';
 
 		// //CREATE ORDER https://github.com/paypal/Checkout-NodeJS-SDK/blob/master/samples/CaptureIntentExamples/createOrder.js
 		$urlCreateOrder = $url.'v2/checkout/orders';
 		$createOrder = $curl->createOrder($access_token['access_token'],$urlCreateOrder,$postData);
+		//if(!in_array("ERROR", $createOrder)){
+		//	$_SESSION['order_id'] = $createOrder['access_token'];
+		//}
 		$returnValue = $createOrder;
 		unset($set);
 		echo json_encode($returnValue);

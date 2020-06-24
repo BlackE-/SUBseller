@@ -422,6 +422,25 @@
 			return $returnValue;
 	    }
 
+	    function checkOrder($id_order){
+	    	//check if order is from user logged in
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$qry = 'SELECT * FROM _order WHERE id_order = '.$id_order . ' AND client_id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}
+			}
+			return $returnValue;
+
+	    }
+
 
 		/*
 			Products
@@ -1088,7 +1107,7 @@
 	                    	if($cartValue['id_product'] == $prod['product_id_product']){//producto encontrado en DB y en carrito se actualiza
 	                            $found = true;
 	                            array_push($queries, array('3 found true'=>$prod['product_id_product']));
-	                            $qty = intval($cartValue['qty']) + intval ($prod['number_items']);
+	                            $qty = intval($cartValue['number_items']) + intval ($prod['number_items']);
 	                            $update = "UPDATE session_cart SET number_items=".$qty." WHERE product_id_product=".$cartValue['id_product']." AND id_session_cart=".$prod['id_session_cart'];
 	                            $this->db->updateQuery($update);
 	                            // array_push($queries, $update);
@@ -1802,40 +1821,44 @@
 			if(!isset($_SESSION)){ session_start(); }
 			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
 			$id_order = $_POST['id_order'];
-			$rfc = $this->Sanitize($_POST['rfc']);
-			$razon_social = $this->Sanitize($_POST['razon_social']);
-			$cfdi = $this->Sanitize($_POST['cfdi']);
-			$email = $this->Sanitize($_POST['email']);
-			$addressline1 = $this->Sanitize($_POST['address1']);
-			$addressline2 = $this->Sanitize($_POST['address2']);
-			$cp = $this->Sanitize($_POST['cp']);
-			$city = $this->Sanitize($_POST['city']);
-			$state = $this->Sanitize($_POST['state']);
-			$country = $this->Sanitize($_POST['country']);
-
-
-			$qry = 'INSERT into billing (address_line_1,address_line_2,city,cp,state,country,rfc,razon_social,cfdi,email,client_id_client) 
-							VALUES("'.$addressline1.'","'.$addressline2.'","'.$city.'","'.$cp.'","'.$state.'","'.$country.'","'.$rfc.'","'.$razon_social.'","'.$cfdi.'","'.$email.'",'.$id_client.')';
-			$result = $this->db->insertQuery($qry);
-			if(!$result){
-				$this->db->HandleError('No se pudo guardar la información');
-				$returnValue = false;
+			$id_billing = $_POST['id_billing'];
+			$returnValue = $id_billing;			
+			if($id_billing == '0'){
+				$returnValue = 'ES CERO';
 			}else{
-				$id_billing = $this->db->lastInsertID();
-				//update pedido con id_billing
-				$qry2 = 'UPDATE _order SET billing_id_billing='.$id_billing.' WHERE id_order='.$id_order;
-				$result2 = $this->db->updateQuery($qry2);
-				if(!$result2){
+				$rfc = $this->Sanitize($_POST['rfc']);
+				$razon_social = $this->Sanitize($_POST['razon_social']);
+				$cfdi = $this->Sanitize($_POST['cfdi']);
+				$email = $this->Sanitize($_POST['email']);
+				$addressline1 = $this->Sanitize($_POST['address1']);
+				$addressline2 = $this->Sanitize($_POST['address2']);
+				$cp = $this->Sanitize($_POST['cp']);
+				$city = $this->Sanitize($_POST['city']);
+				$state = $this->Sanitize($_POST['state']);
+				$country = $this->Sanitize($_POST['country']);
+
+
+				$qry = 'INSERT into billing (address_line_1,address_line_2,city,cp,state,country,rfc,razon_social,cfdi,email,client_id_client) 
+								VALUES("'.$addressline1.'","'.$addressline2.'","'.$city.'","'.$cp.'","'.$state.'","'.$country.'","'.$rfc.'","'.$razon_social.'","'.$cfdi.'","'.$email.'",'.$id_client.')';
+				$result = $this->db->insertQuery($qry);
+				if(!$result){
+					$this->db->HandleError('No se pudo guardar la información');
 					$returnValue = false;
-					$this->db->HandleDBError('No update order');
-				}
-				else{
-					$returnValue = $id_order;
-					$this->db->HandleDBError('La información fue guardada y enviada por correo');	
+				}else{
+					$id_billing = $this->db->lastInsertID();
 				}
 			}
-			$returnValue['id_billing'] = $id_billing;
-			$returnValue['id_order'] = $id_order;
+			// //update pedido con id_billing
+			$qry2 = 'UPDATE _order SET billing_id_billing='.$id_billing.' WHERE id_order='.$id_order;
+			$result2 = $this->db->updateQuery($qry2);
+			if(!$result2){
+				$returnValue = false;
+				$this->db->HandleDBError('No update order');
+			}
+			else{
+				$returnValue = $id_order;
+				$this->db->HandleError('La información fue guardada y enviada por correo');	
+			}
 			return $returnValue;
 		}
 
@@ -1854,7 +1877,7 @@
 					$this->db->HandleError('No billing');
 					$returnValue = false;
 				}else{
-					$returnValue = $this->db->fetchArray($return);
+					$returnValue = $this->db->fetchArray($result);
 				}
 			}
 			return $returnValue;

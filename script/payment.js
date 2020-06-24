@@ -27,6 +27,31 @@
 
 	paypalComplete = (id_paypal) =>{
 		//ajax to all that PAYPAL already aproved
+		console.log(id_paypal);
+		let fd = new FormData();
+		fd.append('id_paypal',id_paypal);
+		
+		//ajax
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200) {
+				myObj = JSON.parse(this.response);
+				console.log(myObj);
+				if(!myObj.return){
+					//return false is error
+					hideLoading();
+					setModalError(myObj.message);
+					setTimeout(()=>{closeModal();},5000);
+				}else{
+					//windows relocation
+					let url = `confirm?id_order=${myObj.return}`;
+					window.location.href = url
+				}	
+			}
+		}
+		xhr.open('POST','./include/PAYPAL-completeOrder.php', true);
+		xhr.send(fd);
+
 	}
 
 	//PAYPAL
@@ -44,17 +69,23 @@
 		onApprove: function (data, actions) {
 			console.log(data);
 			console.log(actions);
-		  // return fetch('include/PAYPAL-captureOrder.php?id_order=' + data.orderID, {
-		  //   method: 'POST'
-		  // }).then(function(res) {
-		  //   console.log(res);
-		  //   if (!res.ok) {
-		  //     alert('Something went wrong');
-		  //   }
-		  		// else{
-		  		// 	paypalComplete(data.orderID);
-		  		// }
-		  // });
+			resetModal();
+			openModal();
+			showLoading();
+
+		  	return fetch('include/PAYPAL-captureOrder.php?id_order=' + data.orderID, {
+		    	method: 'POST'
+			}).then(function(res) {
+			    console.log(res);
+			    if (!res.ok) {
+			    	hideLoading();
+			    	setModalError('Ocurrio un error, si el error persiste elegir otro método de pago');
+			    	setTimeout(()=>{closeModal();},2000);
+			    }
+			  	else{
+			  		paypalComplete(data.orderID);
+			  	}
+		  	});
 		  
 		},
 		onCancel: function (data) {

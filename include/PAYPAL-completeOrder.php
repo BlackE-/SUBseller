@@ -4,21 +4,22 @@
 	$urlHeader .= $_SERVER['HTTP_HOST'];
 	header('Content-Type: application/json');
 
+
 	require_once "_setup.php";
 	require_once "_email.php";
 	$set = new Setup();
 	$path = '/subseller';	
 	$shipping = 0.00;$total = 0.00;$totalRow = 0.00;$subtotal = 0.00;
 
-    $id_paypal = $_GET['id_order'];
+    $id_paypal = $_POST['id_paypal'];
     //setups
+	
 		//session
+	if(!isset($_SESSION)){session_start();}
 	$id_client =  $_SESSION[$set->GetLoginSessionVar()];
 	$id_session_client = $_SESSION['id_session_client'];
 	$id_shipping = $_SESSION['id_shipping'];
-
-
-	if(!isset($_SESSION)){session_start();
+	$id_coupon = 'NULL';
 	if(isset($_SESSION['id_coupon'])){//WITH COUPON
 		$couponCode = $set->getCoupon($_SESSION['id_session']);
 		$couponSetup = $set->checkCouponSetCart($couponCode['code']);
@@ -30,7 +31,7 @@
 			exit();
 		}
 		$cart = $couponSetup['products'];
-		foreach ($cart as $key => $value) {
+		foreach ($cart as $key => $value){
 			$product = $set->getProduct($value['id_product']);
 			$pro = $product[0]['product'];
 			$proImg = $product[1]['media'];
@@ -60,11 +61,12 @@
 		$totalLabel = number_format($total, 2, '.', ',');
 		$totalShow = explode('.', $totalLabel);
 		$couponLabel = 'Coupon:' . $coupon;
+	}
 	else{
 		//paso 1: CREAR TABLE PEDIDO CON CARRITO
 		$table3 = '<table style="width:80%;margin:0 auto;background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;text-align: center;">';
 		$cart = $set->getCart();
-		foreach ($cart as $key => $value) {
+		foreach ($cart as $key => $value){
 			$product = $set->getProduct($value['id_product']);
 			$pro = $product[0]['product'];
 			$proImg = $product[1]['media'];
@@ -141,7 +143,7 @@
 
 	//paso 5: tipo de pago / CREAR orden con conekta
 	$cve_order = $set->generateCVEorder();
-	$type = 'PAYPAL';
+	$type = 'PayPal';
 	$status = 'PROCESSING';
 	$table7 = '<table style="width:80%;margin:10px auto;text-align:center;">';
 	$table7 .= '<tr><td><h2>Pago</h2></td></tr>';
@@ -151,8 +153,6 @@
 	$table7 .= '<p>Tipo de Pago: <span style="text-transform:uppercase;">'.$type.'</span></p>';
 	$table7 .= '<p>ORDEN</p>';
 	$table7 .= '<p style="border:2px solid #2361f0;text-align:center;padding:15px;"><b>'.$id_paypal.'</b></p>';
-
-
 	$table7 .= '</td>';
 	$table7 .= '</tr>';
 	$table7 .= '</table>';
@@ -196,7 +196,7 @@
 	//PASO 6: guardar DATA en DB
 	$id_chargeConekta = '';
 	$transaction_code = $id_paypal;
-	$id_order = $set->insertOrder($status,$total,$shipping,$cve_order,$id_client,$id_shipping,$id_coupon,$type,$id_chargeConekta,$transaction_code,$id_session_client );
+	$id_order = $set->insertOrder($status,$total,$shipping,$cve_order,$id_client,$id_shipping,$id_coupon,$type,$id_chargeConekta,$transaction_code,$id_session_client);
 	if(!$id_order){
 		$returnValue['return'] = 'undefined';
 		$returnValue['message'] = 'El pedido no pudo ser guardado, pero la orden ya fue emitida, nos comunicaremos con usted para confirmar el pedido';
@@ -205,7 +205,7 @@
 		exit();
 	}
 
-	foreach ($cart as $key => $value) {
+	foreach ($cart as $key => $value){
 		$set->updateInventory($value['id_product'],$value['number_items']);
 	}
 
@@ -229,4 +229,5 @@
 	unset($set);
 	echo json_encode($returnValue);
 	exit();
+
 ?>

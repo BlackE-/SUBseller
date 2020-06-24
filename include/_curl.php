@@ -71,7 +71,7 @@
 			return $returnValue;
 		}
 
-		function captureOrder(){
+		function captureOrder($access_token,$url){
 			/*
 				curl -v -k -X POST https://api.paypal.com/v2/checkout/orders/5O190127TN364715T/capture \
 				 -H 'PayPal-Request-Id: 7b92603e-77ed-4896-8e78-5dea2050476a' \
@@ -80,6 +80,7 @@
 				 -H 'Content-Type: application/json' \
 				 -d '{}'
 			*/
+			$postData='{}';
 			$curlHeader = array("Content-Type:application/json", "Authorization:Bearer ".$access_token);
 			$this->ch = curl_init();
 			curl_setopt($this->ch, CURLOPT_URL, $url);
