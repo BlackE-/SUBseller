@@ -434,10 +434,11 @@
 			}
 			return $returnValue;
 		}
-		function getShippingFromOrder($id_order){
+
+		function getTransation($id_order){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM shipping WHERE order_id_order = '.$id_order;
+			$qry = 'SELECT * FROM _transaction WHERE order_id_order = '.$id_order;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$returnValue = false;
@@ -451,6 +452,59 @@
 			}
 			return $returnValue;
 		}
+		function getShipping($id_shipping){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM shipping WHERE id_shipping = '.$id_shipping;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getBilling($id_billing){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM billing WHERE id_billing = '.$id_billing;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getItemsFromSessionClient($id_session_client){
+	    	$returnValue = array();
+	       	$login = $this->checkLogin();
+	       	$qry = 'SELECT * FROM session_cart WHERE session_client_id_session_client='.$id_session_client;
+	       	$result = $this->db->selectQuery($qry);
+	       	if(!$result || !$this->db->numRows($result)){
+	       		$this->db->HandleError('no se tienen elementos en el carrito');
+	       	}
+	       	else{
+	       		$array_items = array();
+	       		while($row = $this->db->fetchArray($result)){
+	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price']));
+	       		}
+	       		$returnValue = $array_items;
+	       	}
+	       	return $returnValue;
+	    }
 
 
 		/*
