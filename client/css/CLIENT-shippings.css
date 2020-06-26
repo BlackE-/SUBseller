@@ -1,0 +1,10 @@
+#ordersList{}
+
+.list{list-style:none;overflow: hidden;    width: 100%;padding: 0;margin: 0;display: grid;grid-template-columns: repeat(3,1fr);}
+.list li{text-align:center;    padding: 0.5em;}
+.list li .liBox{background-color: #fff;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;overflow: hidden;margin:0;padding:20px;transition: all 300ms ease-in;}
+.list li .liBox:hover{background-color: #eff4ff;}
+.list li p{font-size:12px;}
+.list li a{text-align:center;text-decoration:none;color:#000;}
+.list li svg{color:#d8292f;font-weight:800;}
+
