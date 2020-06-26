@@ -41,8 +41,8 @@
 	                        	case 'PROCESSING':echo '<td><p class="processing">'.$value['status'].'</p></td>';break;
 	                        	case 'PENDING PAYMENT':echo '<td><p class="payment">'.$value['status'].'</p></td>';break;
 	                        	case 'CANCELED':echo '<td><p class="canceled">'.$value['status'].'</p></td>';break;
-	                        	case 'REFUNDED':echo '<td><p class="refunded">'.$value['status'].'</p></td>';break;
-	                        	case 'COMPLETE':echo '<td><p class="complete">'.$value['status'].'</p></td>';break;
+	                        	case 'EXPIRED':echo '<td><p class="expired">'.$value['status'].'</p></td>';break;
+	                        	case 'COMPLETED':echo '<td><p class="complete">'.$value['status'].'</p></td>';break;
 	                        }
 	                        echo '<td>';
 	                        $typeTransaction = $set->getTypeTransation($value['id_order']);

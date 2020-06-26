@@ -24,8 +24,8 @@
 .processing{background: #44c98c;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
 .payment{background: #1ccfc8;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
 .canceled{background: #681729;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
-.refunded{background: #b7002a;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
-.complete{background: #2361f0;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
+.expired{background: #b7002a;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.complete{background: #2361f0;color:#FFF;padding:10px;text-align: center;border-radius: 5px;}
 
 .type{width:100%;text-align: center;}
 .type span{display: none;}

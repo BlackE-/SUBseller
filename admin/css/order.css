@@ -6,7 +6,9 @@ input[type=number] {  -moz-appearance: textfield;}
 .mainContainer #main { padding: 20px;  display: grid;  grid-template-columns:2fr 1fr;grid-template-rows: 80px auto;grid-gap: 10px; background:rgba(232, 232, 232, 0.5);}
 .mainContainer #main .order_details,
 .mainContainer #main .cartContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 0 20px 20px 20px;border-radius: 2px;}
-
+@media all and (max-width : 765px) {
+	.mainContainer #main{ grid-template-columns: 1fr;}
+}
 /*
 
 	return div
@@ -17,7 +19,9 @@ input[type=number] {  -moz-appearance: textfield;}
 .mainContainer #main .returnDiv a:hover{color:#b7002a;}
 .mainContainer #main .product_price{grid-column-start: 1;grid-column-end: 2;}
 .mainContainer #main .product_inventory{grid-column-start: 1;grid-column-end: 2;}
-
+@media all and (max-width : 765px) {
+	.mainContainer #main .returnDiv{grid-column-end: 2;}
+}
 
 /*
 	order_details
@@ -25,7 +29,7 @@ input[type=number] {  -moz-appearance: textfield;}
 .mainContainer #main .order_details{display: grid;grid-template-columns: 1fr 1fr;}
 .mainContainer #main .order_details div{border-bottom: 1px solid #b7002a;}
 .type{text-transform: uppercase;} 
-
+.little{font-size:10px;margin-top:10px !important;color:#a9bdcc;text-align: center;}
 
 
 

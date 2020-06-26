@@ -506,6 +506,18 @@
 	       	return $returnValue;
 	    }
 
+	    function updateOrderStatus($id_order,$status){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'UPDATE _order SET status="'.$status.'" WHERE id_order='.$id_order;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update');
+				$returnValue = false;
+			}
+			return $returnValue;
+	    }
+
 
 		/*
 			Products

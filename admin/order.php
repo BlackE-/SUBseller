@@ -105,43 +105,35 @@
 			<div class="rightDiv">
 				<div class="editContainer">
 					<p>Status</p>
-					<select>
+					<select id="status">
 						<?php
 							switch ($order['status']) {
 								case 'PROCESSING':
-									echo '<option value="PROCESSING" select>PROCESSING</option>';
 									echo '<option value="PENDING PAYMENT" >PENDING PAYMENT</option>';
+									echo '<option value="PROCESSING" selected>PROCESSING</option>';
 									echo '<option value="CANCELED" >CANCELED</option>';
 									echo '<option value="COMPLETED" >COMPLETED</option>';
 									echo '<option value="EXPIRED" >EXPIRED</option>';
 									break;
 								case 'PENDING PAYMENT':
+									echo '<option value="PENDING PAYMENT" selected >PENDING PAYMENT</option>';
 									echo '<option value="PROCESSING">PROCESSING</option>';
-									echo '<option value="PENDING PAYMENT" select >PENDING PAYMENT</option>';
 									echo '<option value="CANCELED" >CANCELED</option>';
 									echo '<option value="COMPLETED" >COMPLETED</option>';
 									echo '<option value="EXPIRED" >EXPIRED</option>';
 									break;
-								case 'CANCELED ':
+								case 'CANCELED':
+									echo '<option value="PENDING PAYMENT">PENDING PAYMENT</option>';
 									echo '<option value="PROCESSING">PROCESSING</option>';
-									echo '<option value="PENDING PAYMENT" >PENDING PAYMENT</option>';
-									echo '<option value="CANCELED" select>CANCELED</option>';
+									echo '<option value="CANCELED" selected>CANCELED</option>';
 									echo '<option value="COMPLETED" >COMPLETED</option>';
 									echo '<option value="EXPIRED" >EXPIRED</option>';
 									break;
 								case 'COMPLETED':
-									echo '<option value="PROCESSING">PROCESSING</option>';
-									echo '<option value="PENDING PAYMENT" >PENDING PAYMENT</option>';
-									echo '<option value="CANCELED" >CANCELED</option>';
-									echo '<option value="COMPLETED" select>COMPLETED</option>';
-									echo '<option value="EXPIRED" >EXPIRED</option>';
+									echo '<option value="COMPLETED" selected>COMPLETED</option>';
 									break;
 								case 'EXPIRED':
-									echo '<option value="PROCESSING">PROCESSING</option>';
-									echo '<option value="PENDING PAYMENT" >PENDING PAYMENT</option>';
-									echo '<option value="CANCELED" >CANCELED</option>';
-									echo '<option value="COMPLETED" >COMPLETED</option>';
-									echo '<option value="EXPIRED" select>EXPIRED</option>';
+									echo '<option value="EXPIRED" selected>EXPIRED</option>';
 									break;
 								
 								default:
@@ -151,6 +143,8 @@
 						?>
 					</select>
 					<div class="nextContainer"><button id="updateStatus">Update</button></div>
+					<p class="little">Una vez que el status este en COMPLETE, ya no puede cambiarse el status</p>
+					<p id="error"></p>
 				</div>
 
 				<div class="cartContainer">
@@ -222,5 +216,6 @@
 
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
+	<script type="text/javascript" src="script/order.js"></script>
 </body>
 </html>
