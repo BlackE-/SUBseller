@@ -144,11 +144,11 @@
 			$qry = "SELECT id_conekta FROM client WHERE id_client=".$id_client;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
-				$this->db->HandleDBError("1.no telefono");
+				$this->db->HandleDBError("1.no conekta id");
 				$returnValue = false;
 			}else{
 				if(!$this->db->numRows($result)){
-					$this->db->HandleError("2.No telefono");
+					$this->db->HandleError("2.No conekta id");
 		            $returnValue = false;
 		        }else{
 		        	$row = $this->db->fetchArray($result);
@@ -158,6 +158,7 @@
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
+
 
 	    /*  ------------------------    LOGOUT  --------------------------- */
 		function Logout(){
@@ -187,7 +188,7 @@
 			return $returnValue; 
 		}
 
-	    function insertClient($name,$email,$password,$sex,$id_conekta,$cumple,$telefono){
+	    function insertClient($name,$email,$password,$sex,$id_conekta,$cumple,$telefono,$newsletter){
 	    	$returnValue = true;
 	    	$this->checkDBLogin();
 
@@ -200,8 +201,9 @@
 			$formvars['conekta'] = $this->Sanitize($id_conekta);
         	$formvars['cumple'] = $this->Sanitize($cumple);
         	$formvars['telefono'] = $this->Sanitize($telefono);	
+        	$formvars['newsletter'] = $this->Sanitize($newsletter);	
 
-			$qry = 'INSERT INTO client (name,email,_password,sex,id_conekta,birthday,phone,date_created)
+			$qry = 'INSERT INTO client (name,email,_password,sex,id_conekta,birthday,phone,,newsletter,date_created)
                 values(
                 "' . $formvars['name'] . '",
                 "' . $formvars['email'] . '",
@@ -210,6 +212,7 @@
                 "' . $formvars['conekta'] .'",
                 "'. $formvars['cumple'] .'",
                 "'. $formvars['telefono'] .'",
+                "'. $formvars['newsletter'] .'",
                 NOW())'; 
 			if(!$this->db->insertQuery($qry)){
 				$returnValue = false;
@@ -317,10 +320,13 @@
 	        return true;
 	    }
 
-		function getOrdersClient($id_client){
+		function getOrdersClient(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM _order WHERE cliente_id_cliente='.$id_client.' ORDER BY id_order';
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = 'SELECT * FROM _order WHERE client_id_client='.$id_client.' ORDER BY id_order DESC';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No orders');
@@ -1225,7 +1231,7 @@
 
 	    */
 
-		function getShippingFromClient(){
+		function getShippingsFromClient(){
 			$returnValue = true;
 			$this->checkDBLogin();
 			if(!isset($_SESSION)){ session_start(); }
@@ -1270,29 +1276,6 @@
 			}
 			return $returnValue;
 		}
-
-		function getConektaId(){
-	    	$returnValue = true;
-			$this->checkDBLogin();
-			if(!isset($_SESSION)){ session_start(); }
-			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
-			$qry = 'SELECT id_conekta FROM client WHERE id_client='.$id_client;
-			$result = $this->db->selectQuery($qry);
-			if(!$result){
-				$this->db->HandleError('No id_conekta');
-				$returnValue = false;
-			}else{
-				if(!$this->db->numRows($result)){
-					$this->db->HandleError('No id_conekta');
-					$returnValue = false;
-				}else{
-					$row = $this->db->fetchArray($result);
-					$returnValue = $row['id_conekta'];
-				}
-			}
-			return $returnValue;
-	    }
-
 	    function updateClientPhone($phone){
 	    	$returnValue = true;
 			$this->checkDBLogin();
@@ -1799,7 +1782,7 @@
 			billing
 		
 		*/
-		function getBillingFromClient(){
+		function getBillingsFromClient(){
 			$returnValue = true;
 			$this->checkDBLogin();
 			if(!isset($_SESSION)){ session_start(); }
@@ -1891,6 +1874,37 @@
 			}
 			return $returnValue;
 		}
+
+		/*
+		
+				/client/
+
+		*/
+		function getClientData(){
+			$returnValue = true;
+	    	$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+			$qry = "SELECT * FROM client WHERE id_client=".$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.no telefono");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No telefono");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	$returnValue = $row;
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+		}
+
+
 		
 		/*
 			brand
