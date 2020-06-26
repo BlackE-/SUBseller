@@ -148,10 +148,11 @@
                             _password VARCHAR(255),
                             sex VARCHAR(1) COMMENT 'F/M',
                             id_facebook VARCHAR(30),
-                                date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
-                                birthday DATE,
-                                id_conekta VARCHAR(21),
-                                phone VARCHAR(15)
+                            date_created DATETIME DEFAULT CURRENT_TIMESTAMP,
+                            birthday DATE,
+                            id_conekta VARCHAR(21),
+                            phone VARCHAR(15),
+                            newsletter boolean
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){

@@ -1,13 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:400,700&display=swap');
 html{scroll-behavior: smooth;}
-body{font-family: 'Lato', sans-serif;scroll-behavior: 'smooth';}
+body{font-family: 'Lato', sans-serif;scroll-behavior: smooth;}
 .container{width:90%;max-width: 1280px;margin: 0 auto;display: grid;}
 header {background: 	linear-gradient(to bottom, #2361f0 40px,#2361f0 40px,#2361f0 40px,#eff4ff 40px,#eff4ff 40px);box-shadow: 1px 1px 10px #000;}
 header .container{display:grid;grid-template-columns: 250px auto;grid-template-rows: 40px 80px;max-width: none;width: 100%;}
 @media only screen and (max-width: 1060px) {header .container{grid-template-columns: 200px auto;}}
 @media only screen and (max-width: 690px) {header .container{display:grid;grid-template-columns: 30% auto;grid-template-rows: 40px 80px;}}
 header .container #logoContainer{grid-row-start: 1;grid-row-end: 3;padding: 10px;background: #fff;    display: grid;align-items: center;}
-header .container #logoContainer svg{display: block;width:100%}
+header .container #logoContainer svg{display: block;width:100%;height: 100%;}
 @media only screen and (max-width: 1060px) {header .container #logoContainer{padding: 0 10px;}}
 header .container #topContainer{background:#2361f0; display: grid;grid-template-columns: auto 100px 160px 160px;align-items: center;text-align: right;}
 header .container #topContainer p{margin:0;color:#fff;font-size: 12px;}

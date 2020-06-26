@@ -61,7 +61,7 @@ header #search.close{animation-duration: 300ms;animation-name: searchClose;left:
   100% {left: -9999px; opacity: 0;}
 }
 header #navbar #logoContainer{padding:10px;}
-header #navbar #logoContainer svg{display: block;}
+header #navbar #logoContainer svg{display: block;width:100%;}
 header #caption p{font-size: 12px;color:#fff;text-align: center;}
 
 

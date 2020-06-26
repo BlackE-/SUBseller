@@ -12,7 +12,7 @@
 	$phone = $_POST['phone'];
 
 	//EVALUAR SI EL EMAIL YA FUE REGISTRADO
-	$conektaId = $set->getConektaId();
+	$conektaId = $set->getClientConekta();
 	if(!$conektaId){//if return false means the email is not on DB
 	    $returnValue = false;
 	}else{

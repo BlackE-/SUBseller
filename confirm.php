@@ -177,7 +177,7 @@
     		<div id="facturaContainer">
                 	<div class="facturaSavedContainer">
                 		<?php
-                			$billings = $set->getBillingFromClient();
+                			$billings = $set->getBillingsFromClient();
 	            			if(is_array($billings)){
 	            		?>
 	            			<div class="billingsSavedContainer">
