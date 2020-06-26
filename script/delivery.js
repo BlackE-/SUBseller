@@ -53,7 +53,7 @@
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200) {
-				console.log(this.response);
+				// console.log(this.response);
 				myObj = JSON.parse(this.response);
 				if(!myObj.return){
 					hideLoading();
@@ -133,7 +133,7 @@
 			const xhr = new XMLHttpRequest();
 			xhr.onreadystatechange = function(){
 				if (this.readyState == 4 && this.status == 200) {
-					console.log(this.response);
+					// console.log(this.response);
 					myObj = JSON.parse(this.response);
 					if(!myObj.return){
 						hideLoading();

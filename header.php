@@ -22,7 +22,7 @@
 			<div id="userContainer">
 		        <?php
 		            if(!$login){echo '<a href="login"><i class="far fa-user" aria-hidden="true"></i><span>INICIAR SESIÓN</span></a>';}
-		            else{echo '<a href="cliente/index"><i class="far fa-user" aria-hidden="true"></i><span>MI CUENTA</span></a>';}
+		            else{echo '<a href="client/index"><i class="far fa-user" aria-hidden="true"></i><span>MI CUENTA</span></a>';}
 		        ?>
 		    </div>
 	        <div id="cartContainer">

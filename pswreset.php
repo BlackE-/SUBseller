@@ -21,7 +21,6 @@
 	?>
 
 	<link rel="stylesheet" href="node_modules/@glidejs/glide/dist/css/glide.core.min.css">
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/psw.css">
 </head>
 </head>

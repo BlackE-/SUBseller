@@ -21,7 +21,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/delivery.css">
 </head>
 </head>

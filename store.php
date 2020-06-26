@@ -23,7 +23,6 @@
 		require_once('header_meta.php');
 	?>
 	<link rel="stylesheet" href="node_modules/nouislider/distribute/nouislider.css">
-	<link rel="stylesheet" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/store.css">
 </head>
 <body>
