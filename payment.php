@@ -7,6 +7,10 @@
 		$set->RedirectToURL('login');
 		exit();
 	}
+	if(!$set->checkDeliverySession()){
+		$set->RedirectToURL('delivery');
+		exit();
+	}
 	\Conekta\Conekta::setLocale('es');
     $keyConekta = $set->getConektaSecretKey();
 	\conekta\Conekta::setApiKey($keyConekta);
@@ -26,7 +30,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-	<link rel="stylesheet" type="text/css" href="css/animate.css">
 	<link rel="stylesheet" type="text/css" href="css/payment.css">
 </head>
 </head>
@@ -204,7 +207,6 @@
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
 	<script type="text/javascript" src="https://cdn.conekta.io/js/latest/conekta.js"></script>
-	<script src="https://www.paypal.com/sdk/js?client-id=AYq-mFAkVvaS38dlyKa1KgksboUvphuPRI4rwNf3bvm8HUNbdMTCPEpcUhBVRPTaVmL-rJqCIUJSTLpR&disable-funding=credit,card&currency=MXN"></script>
 	<script type="text/javascript" src="script/payment.js"></script>
 </body>
 </html>

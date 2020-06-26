@@ -1386,6 +1386,15 @@
 			return $returnValue;
 		}
 
+		function checkDeliverySession(){
+			$returnValue = true;
+			if(!isset($_SESSION)){ session_start(); }
+			if(!isset($_SESSION['id_shipping']) || empty($_SESSION['id_shipping'])){
+				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
 		
 		/*
 	

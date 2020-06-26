@@ -25,86 +25,115 @@
 		});
 	}
 
+	//paypal
 	paypalComplete = (id_paypal) =>{
-		//ajax to all that PAYPAL already aproved
-		console.log(id_paypal);
-		let fd = new FormData();
-		fd.append('id_paypal',id_paypal);
+			//ajax to all that PAYPAL already aproved
+			console.log(id_paypal);
+			let fd = new FormData();
+			fd.append('id_paypal',id_paypal);
+			
+			//ajax
+			const xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if (this.readyState == 4 && this.status == 200) {
+					myObj = JSON.parse(this.response);
+					console.log(myObj);
+					if(!myObj.return){
+						//return false is error
+						hideLoading();
+						setModalError(myObj.message);
+						setTimeout(()=>{closeModal();},5000);
+					}else{
+						//windows relocation
+						let url = `confirm?id_order=${myObj.return}`;
+						window.location.href = url
+					}	
+				}
+			}
+			xhr.open('POST','./include/PAYPAL-completeOrder.php', true);
+			xhr.send(fd);
+	}
+
+	loadPaypalScript = (url, callback) => {
+		// adding the script tag to the head as suggested before
+		let head = document.getElementsByTagName('head')[0];
+		let script = document.createElement('script');
+		script.type = 'text/javascript';
+		script.src = url;
+		head.appendChild(script);
+
+		   //PAYPAL
+		setTimeout(function(){
+			paypal.Buttons({
+						createOrder: function (data, actions) {
+						  return fetch('include/PAYPAL-createOrder.php', {
+						    method: 'POST'
+						  }).then(function(res) {
+						    return res.json();
+						  }).then(function(data) {
+						  		console.log(data);
+						  		return data.id;
+						  });
+						},
+						onApprove: function (data, actions) {
+							console.log(data);
+							console.log(actions);
+							resetModal();
+							openModal();
+							showLoading();
+
+						  	return fetch('include/PAYPAL-captureOrder.php?id_order=' + data.orderID, {
+						    	method: 'POST'
+							}).then(function(res) {
+							    console.log(res);
+							    if (!res.ok) {
+							    	hideLoading();
+							    	setModalError('Ocurrio un error, si el error persiste elegir otro método de pago');
+							    	setTimeout(()=>{closeModal();},2000);
+							    }
+							  	else{
+							  		paypalComplete(data.orderID);
+							  	}
+						  	});
+						  
+						},
+						onCancel: function (data) {
+				  			resetModal();
+							openModal();
+							hideLoading();
+							setModalError('Cancelado pago con PAYPAL');
+							setTimeout(()=>{closeModal();},2000);
+				  		},
+				  		onError: function (err) {
+							// console.log(err);
+							resetModal();
+							openModal();
+							hideLoading();
+							setModalError('Ocurrío un error con Paypal, si el problema persiste, elegir otro método de pago');
+							setTimeout(()=>{closeModal();},5000);
+						}
+					}).render('#paypal-button-container');
+		},2000);
 		
-		//ajax
+	}
+
+	getClientIdPaypal = () =>{
+		//getKey
+		let key = '';
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200) {
 				myObj = JSON.parse(this.response);
-				console.log(myObj);
-				if(!myObj.return){
-					//return false is error
-					hideLoading();
-					setModalError(myObj.message);
-					setTimeout(()=>{closeModal();},5000);
-				}else{
-					//windows relocation
-					let url = `confirm?id_order=${myObj.return}`;
-					window.location.href = url
-				}	
+				key = myObj.return;
 			}
 		}
-		xhr.open('POST','./include/PAYPAL-completeOrder.php', true);
-		xhr.send(fd);
-
+		xhr.open('POST','./include/PAYMENT-getPaypalKey.php', '');
+		xhr.send();
+		return key;
 	}
-
-	//PAYPAL
-	paypal.Buttons({
-		createOrder: function (data, actions) {
-		  return fetch('include/PAYPAL-createOrder.php', {
-		    method: 'POST'
-		  }).then(function(res) {
-		    return res.json();
-		  }).then(function(data) {
-		  		console.log(data);
-		  		return data.id;
-		  });
-		},
-		onApprove: function (data, actions) {
-			console.log(data);
-			console.log(actions);
-			resetModal();
-			openModal();
-			showLoading();
-
-		  	return fetch('include/PAYPAL-captureOrder.php?id_order=' + data.orderID, {
-		    	method: 'POST'
-			}).then(function(res) {
-			    console.log(res);
-			    if (!res.ok) {
-			    	hideLoading();
-			    	setModalError('Ocurrio un error, si el error persiste elegir otro método de pago');
-			    	setTimeout(()=>{closeModal();},2000);
-			    }
-			  	else{
-			  		paypalComplete(data.orderID);
-			  	}
-		  	});
-		  
-		},
-		onCancel: function (data) {
-  			resetModal();
-			openModal();
-			hideLoading();
-			setModalError('Cancelado pago con PAYPAL');
-			setTimeout(()=>{closeModal();},2000);
-  		},
-  		onError: function (err) {
-			// console.log(err);
-			resetModal();
-			openModal();
-			hideLoading();
-			setModalError('Ocurrío un error con Paypal, si el problema persiste, elegir otro método de pago');
-			setTimeout(()=>{closeModal();},5000);
-		}
-
-	}).render('#paypal-button-container');
+	let clientId = getClientIdPaypal();
+	const urlPaypal = `https://www.paypal.com/sdk/js?client-id=${clientId}&disable-funding=credit,card&currency=MXN`;
+	loadPaypalScript(urlPaypal,'');	
 
 	const paypalButton = document.getElementById('paypal-button-container');
 	paypalButton.style.display = 'none';
@@ -270,7 +299,7 @@
 		xhr.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200) {
 				myObj = JSON.parse(this.response);
-				console.log(myObj);
+				// console.log(myObj);
 				if(!myObj.return){
 					//return false is error
 					hideLoading();
@@ -326,7 +355,7 @@
 						Conekta.setLanguage("es");
 						Conekta.token.create(formCard, conektaSuccessResponseHandler, conektaErrorResponseHandler);
 					}else{
-						console.log("PAGAR TARJETA: "+id_card);
+						// console.log("PAGAR TARJETA: "+id_card);
 						let fd = new FormData();
 						fd.append('type',type);
 						fd.append('coupon',coupon.value);
@@ -337,7 +366,7 @@
 						xhr.onreadystatechange = function(){
 							if (this.readyState == 4 && this.status == 200) {
 								myObj = JSON.parse(this.response);
-								console.log(myObj);
+								// console.log(myObj);
 								if(!myObj.return){
 									//return false is error
 									hideLoading();
@@ -363,7 +392,7 @@
 					xhr.onreadystatechange = function(){
 						if (this.readyState == 4 && this.status == 200) {
 							myObj = JSON.parse(this.response);
-							console.log(myObj);
+							// console.log(myObj);
 							if(!myObj.return){
 								//return false is error
 								hideLoading();
