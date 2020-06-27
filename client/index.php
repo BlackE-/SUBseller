@@ -143,6 +143,7 @@
 	</div>
 
 	<?php include('footer.php');?>
+	<?php include('../modal.php');?>
 	<script type="text/javascript" src="script/CLIENT-index.js"></script>
 </body>
 </html>

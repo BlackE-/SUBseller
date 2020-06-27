@@ -34,12 +34,13 @@
 			<form id="deliveryForm" class="deliveryFormContainer">
 			<?php
 				$shipping = $set->getShipping($id_shipping);
+				echo '<input type="hidden" id="id_shipping" value="'.$id_shipping.'">';
 				echo '<div class="row"><input type="text" id="name" placeholder="Nombre" value="'.$shipping['name'].'"/></div>';
 				echo '<div class="row"><input type="text" id="address1" placeholder="Domicilio" value="'.$shipping['address_line_1'].'"/></div>';
 				echo '<div class="row"><input type="text" id="address2" placeholder="Domicilio (cont)" value="'.$shipping['address_line_2'].'"/></div'; 
             	echo '<div class="row" id="cpCityContainer">';
-            	echo 	'<input type="number" id="cp" placeholder="Código Postal: 6 dígitos"/>';
-            	echo 	'<input type="text" id="city" placeholder="Alcaldia/Municipio"/>';
+            	echo 	'<input type="number" id="cp" placeholder="Código Postal: 6 dígitos" value="'.$shipping['cp'].'"/>';
+            	echo 	'<input type="text" id="city" placeholder="Alcaldia/Municipio" value="'.$shipping['city'].'"/>';
 	            echo '</div>';
             	echo '<div class="row" id="countryStateContainer">';
             	echo 	'<input type="text" id="country" placeholder="MEX" value="'.$shipping['country'].'" disabled />';
@@ -75,7 +76,7 @@
 
 	<?php include('footer.php');?>
 	<?php include('../modal.php');?>
-	<script src="../node_modules/list.js/dist/list.min.js"></script>
+	<script src="script/CLIENT-shipping.js"></script>
 
 </body>
 </html>

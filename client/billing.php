@@ -34,6 +34,7 @@
 			<form id="facturaContainerBox" class="facturaContainerBox">
 			<?php
 				$billing = $set->getBilling($id_billing);
+				echo '<input type="hidden" id="id_billing" value="'.$id_billing.'"/>';
 				echo '<input type="text" id="rfc" placeholder="RFC" value="'.$billing['rfc'].'"/>';
 				echo '<input type="text" id="razon_social" placeholder="Nombre" value="'.$billing['razon_social'].'"/>';
 				echo '<input type="email" id="email" placeholder="Email" value="'.$billing['email'].'"/>';
@@ -60,7 +61,6 @@
             	echo 	'<input type="text" id="country" placeholder="MEX" value="'.$billing['country'].'" disabled />';
            	?>
             		<div class="selectState">
-
             			<select id="state">
 	            	<?php
 	            		$states = $set->getStates('MEX');
@@ -84,7 +84,7 @@
 
 	<?php include('footer.php');?>
 	<?php include('../modal.php');?>
-	<script src="../node_modules/list.js/dist/list.min.js"></script>
+	<script src="script/CLIENT-billing.js"></script>
 
 </body>
 </html>

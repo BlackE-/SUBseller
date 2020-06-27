@@ -196,7 +196,6 @@
 			$formvars['name'] = $this->Sanitize($name);
 			$formvars['email'] = $this->Sanitize($email);
 			$formvars['password'] = password_hash($password, PASSWORD_DEFAULT);
-			$formvars['type'] = $this->Sanitize('admin');
 			$formvars['sex'] = $this->Sanitize($sex);
 			$formvars['conekta'] = $this->Sanitize($id_conekta);
         	$formvars['cumple'] = $this->Sanitize($cumple);
@@ -220,6 +219,36 @@
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
+
+	    function updateClient($name,$email,$sex,$cumple,$telefono,$newsletter){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+	    	if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+
+	    	$formvars = array();
+			$formvars['name'] = $this->Sanitize($name);
+			$formvars['email'] = $this->Sanitize($email);
+			$formvars['sex'] = $this->Sanitize($sex);
+        	$formvars['cumple'] = $this->Sanitize($cumple);
+        	$formvars['telefono'] = $this->Sanitize($telefono);	
+        	$formvars['newsletter'] = $this->Sanitize($newsletter);	
+
+			$qry = 'UPDATE client SET name="'.$formvars['name'].'",
+									  email="'.$formvars['email'].'",
+									  sex="'.$formvars['sex'].'",
+									  birthday="'.$formvars['cumple'].'",
+									  phone="'.$formvars['telefono'].'",
+									  newsletter="'.$formvars['newsletter'].' WHERE id_client='.$id_client;
+			if(!$this->db->updateQuery($qry)){
+				$returnValue = false;
+			}else{
+				$this->db->HandleError('Información guardada');
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+	    
 
 	    /*
 			PASSWORD
@@ -454,7 +483,7 @@
 		function getProducts(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM product ORDER BY id_product';
+			$qry = 'SELECT * FROM product WHERE status=1 ORDER BY id_product ';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No productos');
@@ -547,7 +576,7 @@
         	$tempArray = [];        //1ra busqueda
         	$tempArray2 = [];       //2da busqueda filtrado
 
-			$qry = "SELECT id_product FROM product WHERE price_sale>=".$min_price." AND price_sale <=".$max_price;
+			$qry = "SELECT id_product FROM product WHERE status=1 AND price_sale>=".$min_price." AND price_sale <=".$max_price;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('no products PRICE filter');
@@ -559,7 +588,7 @@
 				}
 
 				if($type != ""){
-		            $selectType = "SELECT id_product FROM product WHERE type_id_type=".$type;
+		            $selectType = "SELECT id_product FROM product WHERE status=1 AND type_id_type=".$type;
 		            $result = $this->db->selectQuery($selectType);
 					if(!$result){
 						$this->db->HandleError('no products filter type');
@@ -590,7 +619,7 @@
 		        }
 
 		        if($brand != ""){
-		            $selectBrands = "SELECT id_product FROM product WHERE brand_id_brand=".$brand;
+		            $selectBrands = "SELECT id_product FROM product WHERE status=1 AND brand_id_brand=".$brand;
 		            $result = $this->db->selectQuery($selectBrands);
 					if(!$result){
 						$this->db->HandleError('no products filter brand');
@@ -1307,7 +1336,7 @@
 								"Guerrero",
 								"Hidalgo",
 								"Jalisco",
-								"México",
+								"Estado de México",
 								"Michoacán",
 								"Morelos",
 								"Nayarit",
@@ -1374,6 +1403,40 @@
 			if(!isset($_SESSION)){ session_start(); }
 			if(!isset($_SESSION['id_shipping']) || empty($_SESSION['id_shipping'])){
 				$returnValue = false;
+			}
+			return $returnValue;
+		}
+
+		function updateShipping(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$id_shipping = $_POST['id_shipping'];
+			
+			$addressline1 = $this->Sanitize($_POST['address1']);
+			$addressline2 = $this->Sanitize($_POST['address2']);
+			$cp = $this->Sanitize($_POST['cp']);
+			$city = $this->Sanitize($_POST['city']);
+			$state = $this->Sanitize($_POST['state']);
+			$country = $this->Sanitize($_POST['country']);
+			$notes = $this->Sanitize($_POST['notes']);
+			$name = $this->Sanitize($_POST['name']);
+
+			$qry = 'UPDATE shipping SET address_line_1="'.$addressline1.'", 
+										address_line_2="'.$addressline2.'",
+										city="'.$city.'",
+										cp="'.$cp.'",
+										state="'.$state.'",
+										country="'.$country.'",
+										notes="'.$notes.'",
+										name="'.$name.'" WHERE client_id_client='.$id_client;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update shipping');
+				$returnValue = false;
+			}else{
+				$this->db->HandleError('Información actualizada');
 			}
 			return $returnValue;
 		}
@@ -1816,8 +1879,6 @@
 			$id_billing = $_POST['id_billing'];
 			$returnValue = $id_billing;			
 			if($id_billing == '0'){
-				$returnValue = 'ES CERO';
-			}else{
 				$rfc = $this->Sanitize($_POST['rfc']);
 				$razon_social = $this->Sanitize($_POST['razon_social']);
 				$cfdi = $this->Sanitize($_POST['cfdi']);
@@ -1840,7 +1901,7 @@
 					$id_billing = $this->db->lastInsertID();
 				}
 			}
-			// //update pedido con id_billing
+			//update pedido con id_billing
 			$qry2 = 'UPDATE _order SET billing_id_billing='.$id_billing.' WHERE id_order='.$id_order;
 			$result2 = $this->db->updateQuery($qry2);
 			if(!$result2){
@@ -1871,6 +1932,44 @@
 				}else{
 					$returnValue = $this->db->fetchArray($result);
 				}
+			}
+			return $returnValue;
+		}
+
+		function updateBilling(){
+			$returnValue = true;
+			$this->checkDBLogin();
+			if(!isset($_SESSION)){ session_start(); }
+			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
+			$id_billing = $_POST['id_billing'];
+			
+			$rfc = $this->Sanitize($_POST['rfc']);
+			$razon_social = $this->Sanitize($_POST['razon_social']);
+			$cfdi = $this->Sanitize($_POST['cfdi']);
+			$email = $this->Sanitize($_POST['email']);
+			$addressline1 = $this->Sanitize($_POST['address1']);
+			$addressline2 = $this->Sanitize($_POST['address2']);
+			$cp = $this->Sanitize($_POST['cp']);
+			$city = $this->Sanitize($_POST['city']);
+			$state = $this->Sanitize($_POST['state']);
+			$country = $this->Sanitize($_POST['country']);
+
+			$qry = 'UPDATE billing SET rfc="'.$rfc.'", 
+										razon_social="'.$razon_social.'",
+										cfdi="'.$cfdi.'",
+										email="'.$email.'",
+										address_line_1="'.$addressline1.'",
+										address_line_2="'.$addressline2.'",
+										city="'.$city.'",
+										cp="'.$cp.'",
+										state="'.$state.'",
+										country="'.$country.'" WHERE client_id_client='.$id_client;
+			$result = $this->db->updateQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No update billing');
+				$returnValue = false;
+			}else{
+				$this->db->HandleError('Información actualizada');
 			}
 			return $returnValue;
 		}
