@@ -58,12 +58,12 @@
   		let clear = document.getElementById('clearCategories');
 		if(!clear.classList.contains('show')){
 			clear.classList.add('show');
-		}
+		}	
   	}
 
 	setClear = () =>{
 		for (const categoryInput of categoryInputs) {categoryInput.checked = false;}
-		for (const typeInput of typeInputs) {typeInputs.checked = false;}
+		for (const typeInput of typeInputs) {typeInput.checked = false;}
 		for (const brandInput of brandInputs) {brandInput.checked = false;}
 		slider.noUiSlider.reset();
 		max_price = maxPrice;

@@ -30,14 +30,8 @@
 	<?php include('header.php');?>
 	<div class="storeContainer">
 		<div class="container" id="storeContainer">
+			<h1>Tienda</h1>
 			<div id="topProductsContainer">
-            	<?php
-            		echo '<input type="hidden" id="page" value="'.$page.'"/>';
-            		echo '<input type="hidden" id="id" value="'.$id.'"/>';
-                    $products = $set->getProducts();
-                    $total = count($products);
-                    echo '<div><p class="totalProductos"><input type="text" id="totalProductosInput" value="'.$total.'"/> productos</p></div>';
-                ?>
                 <div id="ordenContainer">
                     <p class="ordenText">Ordenar:</p>
                     <div class="ordenSelect">
@@ -117,9 +111,18 @@
 	                    	<div id="slider-range"></div>
 	                    </div>
 					</div>
-
-					<button id="filterProducts">Aplicar Filtros</button>
+					<div>
+						<button id="filterProducts">Aplicar Filtros</button>	
+					</div>
 				</details>
+
+				<?php
+            		echo '<input type="hidden" id="page" value="'.$page.'"/>';
+            		echo '<input type="hidden" id="id" value="'.$id.'"/>';
+                    $products = $set->getProducts();
+                    $total = count($products);
+                    echo '<div><p class="totalProductos"><input type="text" id="totalProductosInput" value="'.$total.'"/> productos</p></div>';
+                ?>
 	        </div>
 		</div>
 		<div class="container" id="tagContainer">
@@ -138,7 +141,7 @@
         	        echo 'No Productos';
         	    }else{
         	        $maxPrice = 0;
-        	        echo '<div id="products">';
+        	        echo '<div id="products" class="container">';
                         echo '<ul class="list">';
                         foreach ($products as $key => $value) {
                         	$row = $value['product'];

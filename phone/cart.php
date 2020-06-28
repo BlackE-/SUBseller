@@ -62,7 +62,7 @@
 		                        	$price_sale = $pro['price_sale']*$pro['discount'];
 		                        }
 		                        $price = explode('.',$price_sale);
-		                        $totalRow = number_format($value['price'] * $value['qty'], 2, '.', '');
+		                        $totalRow = number_format($value['price'] * $value['number_items'], 2, '.', '');
 		                        $priceRow = explode('.',$totalRow);
 		                        $totalRows += $totalRow;
 
@@ -70,12 +70,12 @@
 								echo 	'<img class="thumb" src="'.$pathImg.$proImg[0]['url'].'"/>';
 								echo 	'<div class="itemDetails">';
 								echo 		'<p class="name">'.$pro['name'].'</p>';
-		                		echo 		'<p class="sale_price">'.$value['qty'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
+		                		echo 		'<p class="sale_price">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 		                		echo 	'</div>';
 		                		echo 	'<div class="qtyBox">';
 		                		echo 		'<input type="hidden" id="price_'.$value['id_product'].'" value="'.$price_sale.'"/>';
 								echo 		'<button class="minus" name="'.$value['id_product'].'"><i class="fas fa-minus"></i></button>';
-		            		    echo        '<input type="number" class="quantity" placeholder="1" value="'.$value['qty'].'" id="'.$value['id_product'].'" name="'.$key.'"/>';
+		            		    echo        '<input type="number" class="quantity" placeholder="1" value="'.$value['number_items'].'" id="'.$value['id_product'].'" name="'.$key.'"/>';
 		            		    echo        '<button class="more" name="'.$value['id_product'].'"><i class="fas fa-plus"></i></button>';
 		            		    echo 	'</div>';
 								echo 	'<div class="delete" id="delete_'.$value['id_product'].'" title="¿Seguro que deseas eliminar el producto?">';

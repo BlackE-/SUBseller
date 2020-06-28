@@ -64,6 +64,12 @@
 		});
 	}
 
+	new Glide('#thumbContainer',{
+			type: 'slide',
+			// autoplay: 2000,
+  			hoverpause: true,
+		}).mount();
+
 	  
 
 
