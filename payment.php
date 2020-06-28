@@ -52,12 +52,11 @@
 	            </div>
 				<div id="typePaymentBoxesContainer">
 					<div class="typePaymentBox active" id="box-card">
+						<p>Se muestran tarjetas guardadas anteriormente<i>(si es el caso)</i>, o bien ingresar nueva información.</p>
 						<form id="cardForm">
 						<?php
 	                        //check if saved cards
-	                        $id_conekta = $set->getConektaId();
-	                        $keyConekta = $set->getConektaSecretKey();
-							\conekta\Conekta::setApiKey($keyConekta);
+	                        $id_conekta = $set->getClientConekta();
 	                        try{
 	                        	$customer = \conekta\Customer::find($id_conekta);
 	                        	$totalCards = $customer->payment_sources->total;
@@ -104,6 +103,7 @@
 								<input id="saveCard" type="checkbox"/><label for="saveCard"><i class="fas fa-check"></i></label>
 								<p>Guardar Tarjeta</p>
 							</div>
+							<P class="little">Seleccionar si desea guardar la información para futuras compras.</P>
 						</form>
 					</div>
 					<div class="typePaymentBox" id="box-spei">

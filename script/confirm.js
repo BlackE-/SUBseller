@@ -154,6 +154,7 @@
 	unsetBillingForm = () =>{
 		rfc.value = '';
 		razon_social.value = '';
+		email.value = '';
 		cfdi.value = '0';
 		address1.value = '';
 		address2.value = '';
@@ -170,14 +171,12 @@
 		address2.removeAttribute('disabled','');
 		city.removeAttribute('disabled','');
 		cp.removeAttribute('disabled','');
-		country.removeAttribute('disabled','');
 		state.removeAttribute('disabled','');
 	}
 
 	if (typeof(billing) != 'undefined' && billing != null){
 		billing.addEventListener('change',function(){
 			id_billing = this.value;
-			// console.log(id_billing);
 			if(id_billing == 0){
 				unsetBillingForm();
 			}else{

@@ -35,7 +35,7 @@
 	              "phone" => $phone
 	            )
 	        );
-	        $insert = $set->insertClient($name,$email,$password,$sex,$customer->id,$cumple,$phone);
+	        $insert = $set->insertClient($name,$email,$password,$sex,$customer->id,$cumple,$phone,$newsletter);
 	        if(!$insert){
 	            $returnValue = false;
 	        }

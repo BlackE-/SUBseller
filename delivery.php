@@ -15,7 +15,7 @@
 <head>
 	<script>
          if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            window.location.replace("phone/login");
+            window.location.replace("phone/delivery");
         }
      </script>  
 	<?php
@@ -39,7 +39,7 @@
 	            <div class="deliveryFormContainer">
 	            	<form id="deliveryForm" class="deliveryForm">
 	            		<?php
-	            			$shippings = $set->getShippingFromClient();
+	            			$shippings = $set->getShippingsFromClient();
 	            			if(is_array($shippings)){
 	            		?>
 	            			<div class="shippingSavedContainer">

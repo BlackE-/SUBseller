@@ -1389,7 +1389,7 @@
 				}
 				$result = $this->db->insertQuery($qry);
 				if(!$result){
-					$this->db->HandleDBError('No insert shipping');
+					$this->db->HandleError('No insert shipping');
 					$returnValue = false;
 				}
 				$id_shipping = $this->db->lastInsertID();
