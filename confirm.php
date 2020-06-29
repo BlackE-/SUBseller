@@ -1,5 +1,4 @@
 <?php
-	require_once('include/conekta-php/lib/Conekta.php');
     require_once "include/_setup.php";
 	$set = new Setup();
 	$login = $set->checkLogin();

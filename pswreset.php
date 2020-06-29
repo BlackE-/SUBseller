@@ -19,8 +19,6 @@
 	<?php
 		require_once('header_meta.php');
 	?>
-
-	<link rel="stylesheet" href="node_modules/@glidejs/glide/dist/css/glide.core.min.css">
 	<link rel="stylesheet" type="text/css" href="css/psw.css">
 </head>
 </head>
