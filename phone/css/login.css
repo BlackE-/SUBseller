@@ -1,5 +1,5 @@
 #formsContainer{background:#fbfbfc;}
-.pasoContainer{width:90%;margin:50px auto 0 auto;text-align:center;}
+.pasoContainer{width:90%;padding:25px 0 0 0;max-width:360px;margin: 0 auto;text-align:center;}
 .pasoContainer p{margin:0;padding:0 0 15px 0;color:#000;}
 .pasoContainer p b{color:#2361f0;}
 /*  PROGRESS BAR    */
@@ -24,17 +24,11 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 /*  TABS LOGIN / REGISTER    */
 .tabs{display: grid;grid-template-columns: 1fr 1fr;justify-content: center;align-items: center;grid-gap: 10px;margin:10px 10px 0 10px;}
 .tabs label{color:#545454;}
-.radio-tabs{margin:0 auto;width:90%;text-align:center;padding:70px 0;}
+.radio-tabs{margin:15px auto 25px auto;text-align: center;width:100%;}
 .radio-tabs input[name='houses-state']{display: none;}
-.radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}
+.radio-tabs .tab {display: inline-block;padding: 10px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;font-size: 12px;}
 .radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}
 .radio-tabs .tab:hover {background-color: #fff;}
-@media all and (max-width : 570px) {
-    .radio-tabs .tab {padding:10px 20px;font-size:14px;}
-}
-@media all and (max-width : 440px) {
-    .radio-tabs .tab {padding:10px;font-size:10px;}
-}
 .radio-tabs .panels {background-color: #fff;padding: 1em 20px;}
 .panels ul{margin:0;padding:0;}
 .radio-tabs .panel {display: none;}
@@ -53,6 +47,8 @@ background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, .2) 25%, tran
 .registerContainer input[type=number] {-moz-appearance:textfield;}
 .registerContainer input.error{box-shadow: 1px 1px 1px rgba(255,0,0,0.5);}
 .registerContainer select.error{border:1px solid rgb(250, 49, 81,0.5)}
+.registerContainer .topRegister{margin:0;}
+
 .emailRegister{margin:0;}
 ::-webkit-input-placeholder { color: #54b0ac;font-style:italic;}
 ::-moz-placeholder {color: #54b0ac;font-style:italic;}

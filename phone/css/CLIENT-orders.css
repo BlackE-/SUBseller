@@ -1,0 +1,31 @@
+#ordersList{background-color: #fff;padding: 1em 20px;}
+input{transition:all 300ms ease-in;width:calc(100% - 10px);margin:10px 0; outline:0;border:0;border-bottom:1px solid #a9bdcc;border-radius:0;padding:5px 0 5px 10px;}
+.list{display:grid;list-style:none;overflow: hidden;    width: 100%;padding: 0;margin: 0;}
+.list li{display: inline-block;text-align:center;}
+.list li .liBox{margin:0 auto;background-color:#fff;padding:20px;border-bottom:1px solid #2361f0;display: grid;grid-template-columns: 25% 50% 20% 5%;justify-content: center;align-items: center;transition: all 300ms ease-in}
+.list li .liBox:hover{background-color:#eff4ff;}
+.list li p{margin:0;font-size: 12px;}
+.list li a{text-align:center;text-decoration:none;color:#000;}
+.total {color: #000;font-size: 20px;}
+.total sup{font-size: 8px;}
+
+@media all and (max-width : 515px) {
+	.list li .liBox{grid-template-columns: 95% 5%;}
+	.status,.total{display: none;}
+}
+
+.processing{background: #44c98c;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.payment{background: #1ccfc8;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.canceled{background: #681729;color:#aaa;padding:10px;text-align: center;border-radius: 5px;}
+.expired{background: #b7002a;color:#fff;padding:10px;text-align: center;border-radius: 5px;}
+.complete{background: #2361f0;color:#FFF;padding:10px;text-align: center;border-radius: 5px;}
+
+.pagination{width:100%;text-align:center;    margin: 0;padding: 0;}
+.pagination li {width: 30px;height: 30px;line-height:30px;display: inline-block;padding: 5px; border: 1px solid #d2dae6;background-color: #fff;transition: 300ms all ease-in;margin: 5px;}
+.pagination li:hover{background-color:#1ccfc8;}
+.pagination .active{background-color:#1ccfc8;}
+.pagination li a{color:#525e5e;font-weight:500;text-decoration:none;}
+.pagination .active a{color:#525e5e;}
+
+
+

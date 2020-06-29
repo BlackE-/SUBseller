@@ -17,7 +17,7 @@
 	<script>
          if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
          	<?php
-         		echo 'window.location.replace("../product?id_product='.$id_product.'")';
+         		//echo 'window.location.replace("../product?id_product='.$id_product.'")';
          	?>
         }
      </script>  

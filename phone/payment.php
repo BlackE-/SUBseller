@@ -144,7 +144,12 @@
 	            </div>
 				<div id="typePaymentBoxesContainer">
 					<div class="typePaymentBox active" id="box-card">
-						<p>Se muestran tarjetas guardadas anteriormente<i>(si es el caso)</i>, o bien ingresar nueva información.</p>
+						<!-- <p>Se muestran tarjetas guardadas anteriormente<i>(si es el caso)</i>, o bien ingresar nueva información.</p> -->
+						<p>Los pagos por tarjeta bancaria:</p>
+                        <ul>
+                            <li><p>TARJETA<br>Al seleccionar esta opción se muestran tarjetas guardadas previamente (si es el caso)</p></li>
+                        </ul>
+                        <p>Una vez confirmado el pago, la información de tu pedido además de poder visualizarla en la siguiente ventana, será enviada a tu correo.</p>
 						<form id="cardForm">
 						<?php
 	                        //check if saved cards
@@ -154,7 +159,6 @@
 	                        	$totalCards = $customer->payment_sources->total;
 	                        	$cards = $customer->payment_sources;
 	                            foreach($cards as $key=>$value){
-	                               echo '<div class="row">';
 	                               echo     '<div class="cardBox">';
 	                               echo         '<input type="radio" name="card" class="card" value="'.$value['id'].'" id="card'.$key.'">';
 	                               echo         '<label for="card'.$key.'">';
@@ -166,7 +170,6 @@
 	                               echo         '</label>';
 	                               echo 		'<p>xxxx-xxxx-xxxx-'.$value['last4'].'</p>';
 	                               echo      '</div>';
-	                               echo  '</div>';
 	                            }
 	                            echo '<div class="cardBox">';
 	                            echo 	'<input type="radio" name="card" class="card" value="0" id="new" checked>';
@@ -201,14 +204,18 @@
 						</form>
 					</div>
 					<div class="typePaymentBox" id="box-spei">
-						<p>Los pagos por medio de transferencias bancarias a través de SPEI.<br>creará una CLABE de pago, con ella podras pagar en el banco de tu preferencia</p><p>En la siguiente pantalla tendras ésta información, además será enviada a tu correo electrónico.</p>
+						<p>Los pagos por transferencia bancaria:</p>
+                        <ul>
+                            <li><p>SPEI<br>Al seleccionar esta opción se creará una CLABE de pago, con ella podras pagar en el banco de tu preferencia.</p></li>
+                        </ul>
+                        <p>Esta información además de poder visualizarla en la siguiente ventana, será enviada a tu correo.<br>Una vez realizado el pago se nos notificara para poder hacer el envío de tu pedido.</p>
 					</div>
 					<div class="typePaymentBox" id="box-oxxo">
 						<p>Los pagos en efectivo:</p>
                         <ul>
                             <li><p>OXXO<br>Al seleccionar esta opción se generara una referencia para poder hacer el pago en el OXXO mas cercano.</p></li>
                         </ul>
-                        <p>Esta información además de poder visualizarla en la siguiente ventana, será enviada a tu correo.<br>Una vez realizado el pago se nos notificara para poder hacer el envío de tu pedido.</p>
+                        <p>Esta información además de poder visualizarla en la siguiente ventana, será enviada a tu correo.<br>Una vez realizado el pago se nos notificará para poder hacer el envío de tu pedido.</p>
 					</div>
 				</div>
 			</div>

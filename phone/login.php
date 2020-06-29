@@ -27,13 +27,14 @@
 
 	<?php include('header.php');?>
 	<div id="formsContainer">
-		<div class="container" id="box">
-    		<div class="pasoContainer">
+		<div class="pasoContainer">
                 <p><b>PASO 1</b></p>
                 <div class="meter">
                   <span style="width: 25%"></span>
                 </div>
             </div>
+		<div class="container" id="box">
+    		
     		<div class="error"></div>
     		
     		<div class="radio-tabs" role="tablist">

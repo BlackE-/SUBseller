@@ -34,8 +34,13 @@
         search.classList.add('close');
     }
 
-    new Selectr('#productDrop', {
+    const selector = new Selectr('#productDrop', {
             searchable: true,
             defaultSelected:false,
             placeholder:"Buscar"
-        });
+    });
+    selector.on('selectr.select', function(option) {
+        window.location.href = option.value;
+        //console.log(option.value);
+
+    });
