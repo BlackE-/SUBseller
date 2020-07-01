@@ -125,6 +125,7 @@
 	$emailClient = $set->getClientEmail();
 
 	$table1 = '<table style="background:#fff;text-align: center;border:0;width:80%;margin:0 auto;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;"><tr><td><h1>ORDEN DE COMPRA</h1></td></tr><tr><td><p>¡'.$nameClient.' gracias por tu compra!</h5></p></tr></table>';
+	$table1Admin = '<table style="background:#fff;text-align: center;border:0;width:80%;margin:0 auto;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;"><tr><td><h1>ORDEN DE COMPRA</h1></td></tr><tr><td><p>'.$nameClient.' a realizado una compra</h5></p></tr></table>';
 	$table2 = '<table style="border:0;width:80%;margin:0 auto;text-align: center;"><tr><td><h2>PEDIDO</h2></td></tr></table>';
 
 	//paso 4 ARREGLO shipment
@@ -181,8 +182,22 @@
 	$table9 .= '</tr>';
 	$table9 .= '</table>';
 
+	$table9Admin  = '<table style="width:80%;margin:0 auto;text-align:center;">';
+	$table9Admin .= '<tr>';
+	$table9Admin .= '<td>';
+	$table9Admin .= '<p style="font-size:12px;">En caso de que el cliente solicite factura, se enviara un nuevo correo con los datos.</p>';
+	$table9Admin .= '<p style="font-size:12px;">Toda la información del pedido se puede ver desde el administrador.</p>';
+	$table9Admin .= '</td>';
+	$table9Admin .= '</tr>';
+	$table9Admin .= '</table>';
+
+
+	$logo = $set->getWebsiteSetting('website_logo');
+	$table0 = '<table style="border:0;width:80%;margin:0 auto;text-align: center;"><tr><td align="center"><div style="margin:0 auto;width:230px;height:100px;padding:10px;">'.$logo.'</td></tr></table>';
+
 
 	$table10 = '<table style="width:100%;background:#f1f3f5;padding:20px;">';
+	$table10 .= '<tr><td>'.$table0.'</td></tr>';
 	$table10 .= '<tr><td>'.$table1.'</td></tr>';
 	$table10 .= '<tr><td>'.$table2.'</td></tr>';
 	$table10 .= '<tr><td>'.$table3.'</td></tr>';
@@ -191,6 +206,17 @@
 	$table10 .= '<tr><td>'.$table8.'</td></tr>';
 	$table10 .= '<tr><td>'.$table9.'</td></tr>';
 	$table10 .= '</table>';
+
+	$table10Admin = = '<table style="width:100%;background:#f1f3f5;padding:20px;">';
+	$table10Admin .= '<tr><td>'.$table0.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table1Admin.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table2.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table3.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table4.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table5.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table8.'</td></tr>';
+	$table10Admin .= '<tr><td>'.$table9Admin.'</td></tr>';
+	$table10Admin .= '</table>';
 
 
 	//PASO 6: guardar DATA en DB
@@ -223,6 +249,17 @@
 
 	$sendEmail = $email->sendEmail();
 	$message = $email->error_message; //si es TRUE el mensaje es 'EMAIL ENVIADO'
+
+	$contactoEmail = $set->getWebsiteSetting('contacto_email');
+	$emailAdmin = new Email();
+	$emailAdmin->setTo($contactoEmail);
+	$emailAdmin->setFrom($fromEmail);
+	$emailAdmin->setFromName($website_title);
+	$emailAdmin->setSubject($subject);
+	$emailAdmin->setMessage($table10Admin);
+
+	$sendEmail = $emailAdmin->sendEmail();
+	$message = $emailAdmin->error_message; //si es TRUE el mensaje es 'EMAIL ENVIADO'
 
 	$returnValue['return'] = $id_order;
 	$returnValue['message'] = $message;
