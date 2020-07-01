@@ -14,13 +14,13 @@
 	//DATA POST
 	$name = $_POST['name'];
 	$email = $_POST['email'];
-	$phone = $_POST['phone'];
-	$password = $_POST['password'];
-	$sex = $_POST['sex'];
-	$dob = $_POST['year']."-".$_POST['month']."-".$_POST['day'];
-	$cumple = date("Y-m-d",strtotime($dob));
+	$phone = '';
+	$password = '';
+	$sex = '';
+	$dob = '';
+	$cumple = '';
 	$newsletter = $_POST['newsletter'];
-	$id_facebook = '';
+	$id_facebook = $_POST['id_facebook'];
 
 
 	//EVALUAR SI EL EMAIL YA FUE REGISTRADO
@@ -55,7 +55,7 @@
 	                	$set->setErrorMessage('No se guardo cliente en mailchimp');   
 	                }
 		        }
-		        $set->loginClient($email,$password);
+		        $set->loginClientFacebook($id_facebook);
 		    }
 		}
 		catch (Conekta\ProccessingError $error){

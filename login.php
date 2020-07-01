@@ -47,7 +47,7 @@
     		    <div class="panels">
     		        <ul id="starks-panel" class="panel" role="tabpanel" aria-labelledby="starks-tab">
     		            <div class="facebookRegisterContainer">
-    		            	<a href="#" class="loginFacebook"><i class="fab fa-facebook-square"></i> Crear cuenta usando Facebook</a>
+    		            	<a href="#" id="registerFacebook"><i class="fab fa-facebook-square"></i> Crear cuenta usando Facebook</a>
     		            	<hr>
     		            </div>
     		            <div class="registerContainer">
@@ -126,7 +126,7 @@
     		        </ul>
     		        <ul id="lannisters-panel" class="panel active" role="tabpanel" aria-labelledby="lannisters-tab">
     		            <div class="facebookRegisterContainer">
-    		            	<a href="#" class="loginFacebook"><i class="fab fa-facebook-square"></i> Iniciar Sesion </a>
+    		            	<a href="#" id="loginFacebook"><i class="fab fa-facebook-square"></i> Iniciar Sesion </a>
     		            	<hr>
     		            </div>
     		            <div class="registerContainer">

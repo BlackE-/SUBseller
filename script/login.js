@@ -42,8 +42,8 @@
 
 	// 	// at least one number, one lowercase and one uppercase letter
  //    	// at least six characters
- //    	const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-	// 	return re.test(value);
+    	// const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
+		// return re.test(value);
 	// }
 
 	pass1.onkeyup = () =>{
@@ -79,16 +79,16 @@
 		  }
 	}
 
-	let password = document.getElementById('password1');
-	password.addEventListener('keyup',(event)=>{
-		event.preventDefault();
-		if(!validatePassword(password.value)){
-			password.classList.add('error');
-		}else{
-			password.classList.remove('error');
-			password.classList.add('success');
-		}
-	});
+	// let password = document.getElementById('password1');
+	// password.addEventListener('keyup',(event)=>{
+	// 	event.preventDefault();
+	// 	if(!validatePassword(password.value)){
+	// 		password.classList.add('error');
+	// 	}else{
+	// 		password.classList.remove('error');
+	// 		password.classList.add('success');
+	// 	}
+	// });
 
 	clearRegisterForm = () =>{
 		nameUser.classList.remove('animated');
@@ -271,4 +271,141 @@
     	loginClient();
     });
 
+
+
+
+    //facebook 
+    checkLoginFacebook = (id_facebook) =>{
+		let formData = new FormData();
+		formData.append('id_facebook',id_facebook);
+		const xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function(){
+			if (this.readyState == 4 && this.status == 200) {
+				console.log(this.response);
+				myObj = JSON.parse(this.response);
+				if(!myObj.return){
+					hideLoading();
+					setModalError(myObj.message);
+					setTimeout(function(){closeModal();}, 5000);
+				}else{
+					closeModal();
+					window.location.href = "cart";
+	            }
+			}
+		}
+		xhr.open('POST','include/LOGIN-loginClientFacebook.php', true);
+		xhr.send(formData); 
+	}
+
+
+    // Load the SDK asynchronously
+	let firstTime = sessionStorage.getItem("first_time");
+	(function(d, s, id) {
+		var js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return;
+		js = d.createElement(s); js.id = id;
+		js.src = "//connect.facebook.net/en_US/sdk.js";
+		fjs.parentNode.insertBefore(js, fjs);
+	}(document, 'script', 'facebook-jssdk'));
+	
+	window.fbAsyncInit = function() {
+		FB.init({
+			appId      : '3391808017516190',
+			cookie     : true,  // enable cookies to allow the server to access // the session
+			xfbml      : true,  // parse social plugins on this page
+			version    : 'v3.0' // use graph api version 2.5
+		});
+
+		FB.getLoginStatus(function(response) {
+		    if(!firstTime) {
+		        //hacer la llamada solo si es la 1ra vez en la pagina
+		        sessionStorage.setItem("first_time","1");
+		        let userid = response.authResponse.userID;
+        		checkLoginFacebook(userid);
+        	}
+		});
+	};
+
+
+	
+    
+    const registerFacebook = document.getElementById('registerFacebook');
+    registerFacebook.addEventListener('click',(event)=>{
+    	resetModal();
+		showLoading();
+    	openModal();
+
+    	FB.getLoginStatus(function(response) {
+    		let status = response.status;
+    		switch(status){
+    			case 'connected':
+    				//call to loginwithFacebook iD
+    				let userid = response.authResponse.userID;
+    				checkLoginFacebook(userid);
+    			break;
+    			default:
+    				FB.login(function(response) {
+		        		if (response.authResponse) {
+				            console.log('Welcome!  Fetching your information.... ');
+				            console.log(response); // dump complete info
+				            FB.api('/me?fields=id,email,name',function(responseFB){
+				            	console.log(responseFB);
+				            	console.log(responseFB.email);
+				                let user_email = responseFB.email; //get user email
+								if(typeof responseFB.email == "undefined"){
+									hideLoading();
+									setModalError('No pudimos recuperar tu correo');
+									setTimeout(function(){closeModal();}, 5000);
+									return false;
+								}else{
+									let user_name = responseFB.name;
+					                let user_id = responseFB.id;
+					                console.log(responseFB);
+					                console.log(user_name);
+					          		let formData = new FormData();
+					          		formData.append('facebook_name',user_name);
+					          		formData.append('id_facebook',user_id);
+					          		formData.append('facebook_email',facebook_email);
+
+									const xhr = new XMLHttpRequest();
+									xhr.onreadystatechange = function(){
+										if (this.readyState == 4 && this.status == 200) {
+											console.log(this.response);
+											myObj = JSON.parse(this.response);
+											if(!myObj.return){
+												hideLoading();
+												setModalError(myObj.message);
+												setTimeout(function(){closeModal();}, 5000);
+											}else{
+												closeModal();
+												window.location.href = "cart";
+								            }
+										}
+									}
+									xhr.open('POST','./include/LOGIN-registerClientFacebook.php', true);
+									xhr.send(formData); 
+								}   
+				            });
+				        } else {
+				            //user hit cancel button
+				            hideLoading();
+							setModalError('Login con Facebook cancelado');
+							setTimeout(function(){closeModal();}, 5000);
+				        }
+				   	},{'scope': 'email',return_scopes: true});//FB.login
+    			break;
+    		}
+		});
+    });
+
+    const loginFacebook = document.getElementById('loginFacebook');
+    loginFacebook.addEventListener('click',(event)=>{
+    	resetModal();
+		showLoading();
+    	openModal();
+    	FB.getLoginStatus(function(response) {
+	        let userid = response.authResponse.userID;
+    		checkLoginFacebook(userid);
+		});
+    });
 

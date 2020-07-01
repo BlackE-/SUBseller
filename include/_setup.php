@@ -61,6 +61,35 @@
 		    return $returnValue;
 	    }
 
+	    function loginClientFacebook($id_facebook){
+	    	$returnValue = true;
+	    	$this->checkDBLogin();
+
+	    	$formvars = array();
+			$formvars['id_facebook'] = $this->Sanitize($id_facebook);	
+			$qry = "SELECT id_client FROM client WHERE id_facebook='".$formvars['if_facebook']."'";
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleDBError("1.No tenemos registro");
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError("2.No tenemos registro");
+		            $returnValue = false;
+		        }else{
+		        	$row = $this->db->fetchArray($result);
+		        	if(!isset($_SESSION)){ session_start(); }
+			        $_SESSION[$this->GetLoginSessionVar()] = $row['id_client'];
+			        $_SESSION['timeout'] = time() + (1 * 24 * 60 * 60);
+			        						// 1 day; 24 hours; 60 mins; 60 secs
+			        //guardar en DB lo que este en SESSION
+			        $this->setCart();
+		        } 
+			}
+		    $this->db->closeAll();
+		    return $returnValue;
+	    }
+
 	    function checkPhone(){
 	    	$returnValue = true;
 	    	$this->checkDBLogin();
@@ -188,7 +217,7 @@
 			return $returnValue; 
 		}
 
-	    function insertClient($name,$email,$password,$sex,$id_conekta,$cumple,$telefono,$newsletter){
+	    function insertClient($name,$email,$password,$sex,$id_facebook,$id_conekta,$cumple,$telefono,$newsletter){
 	    	$returnValue = true;
 	    	$this->checkDBLogin();
 
@@ -197,17 +226,19 @@
 			$formvars['email'] = $this->Sanitize($email);
 			$formvars['password'] = password_hash($password, PASSWORD_DEFAULT);
 			$formvars['sex'] = $this->Sanitize($sex);
+			$formvars['facebook'] = $this->Sanitize($id_facebook);
 			$formvars['conekta'] = $this->Sanitize($id_conekta);
         	$formvars['cumple'] = $this->Sanitize($cumple);
         	$formvars['telefono'] = $this->Sanitize($telefono);	
         	$formvars['newsletter'] = $this->Sanitize($newsletter);	
 
-			$qry = 'INSERT INTO client (name,email,_password,sex,id_conekta,birthday,phone,,newsletter,date_created)
+			$qry = 'INSERT INTO client (name,email,_password,sex,id_facebook,id_conekta,birthday,phone,newsletter,date_created)
                 values(
                 "' . $formvars['name'] . '",
                 "' . $formvars['email'] . '",
                 "' . $formvars['password'] . '",
                 "' . $formvars['sex'] . '",
+                "' . $formvars['facebook'] .'",
                 "' . $formvars['conekta'] .'",
                 "'. $formvars['cumple'] .'",
                 "'. $formvars['telefono'] .'",
@@ -1911,7 +1942,7 @@
 				$this->db->HandleDBError('No update order');
 			}
 			else{
-				$returnValue = $id_order;
+				$returnValue = $id_billing;
 				$this->db->HandleError('La información fue guardada y enviada por correo');	
 			}
 			return $returnValue;
