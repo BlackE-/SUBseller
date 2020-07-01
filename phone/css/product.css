@@ -12,8 +12,12 @@ ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
 
 .productRow{display: grid;grid-template-columns: 1fr;grid-gap:10px;background: #fff;padding:20px;margin-bottom: 25px;}
 /*  PRODUCTO FOTOS  */
-.thumbContainer{width:100%;padding:20px 0;text-align:center;border-top:1px solid #12f9e7;overflow: hidden;display: grid;align-items: center;}
+#thumbContainer{width:100%;max-width:360px;overflow:hidden;padding:20px 0;text-align:center;border-top:1px solid #12f9e7;overflow: hidden;display: grid;align-items: center;}
+#thumbContainer img{width:100%;}
 #thumbSelected{display: block;margin: 0 auto;}
+.glide__bullets{max-width: 360px;margin:0 auto;text-align: center;}
+.glide__bullets button{outline:none;width:20px;height:20px;margin:10px;border-radius: 20px;border:1px solid #12f9e7;background-color:#fff;}
+.glide__bullets button.glide__bullet--active{border:1px solid #12f9e7;background-color:#12f9e7;}
 /*detaller*/
 .infoContainer{display: grid;align-items: center;border-right: 1px solid #12f9e7;}
 .infoContainer .typeContainer{text-align: right;}

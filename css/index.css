@@ -101,11 +101,12 @@
 #brandsContainer{background: #edf3fd;padding:50px 0;}
 #brandsContainer .container{max-width: 960px;display: block;}
 #glideBrands {position: relative;}
-#glideBrands .glide__slide {display:grid;align-items: center;height: 100px;overflow: hidden;}
+#glideBrands .glide__track .glide__slides {z-index: 10;}
+#glideBrands .glide__slide {display:grid;align-items: center;height: 100px;overflow: hidden;z-index: 10;}
 #glideBrands .glide__slide div{display:grid;align-items: center;    justify-content: center;}
 #glideBrands .glide__slide div a{height: 100%;}
 #glideBrands .glide__slide div a img{width:100%;}
-#glideBrands .glide__arrows{width: 105%;position: absolute;top:45%;left:-2.5%;display: grid;justify-content: space-between;grid-template-columns: 30px 30px;}
+#glideBrands .glide__arrows{width: 105%;z-index:0;position: absolute;top:45%;left:-2.5%;display: grid;justify-content: space-between;grid-template-columns: 30px 30px;}
 #glideBrands .glide__arrows .glide__arrow{outline: none;background: transparent;color:#12f9e7;border:0;font-size: 20px;}
 
 @media only screen and (max-width: 460px) {

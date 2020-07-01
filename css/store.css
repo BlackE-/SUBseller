@@ -10,11 +10,13 @@
 .storeContainer #storeContainer.tagFilter #productsContainer{grid-column-start: 1;grid-column-end: 2;}
 .storeContainer #storeContainer #topProductsContainer{display: grid;grid-template-columns:250px 250px;justify-content: space-between;    align-items: center;}
 .storeContainer #storeContainer #filtersContainer{grid-column-start: 1;grid-column-end: 2;    grid-row-start: 1;grid-row-end: 2;}
-
+@media only screen and (max-width: 815px) {
+	.storeContainer #storeContainer #topProductsContainer{grid-template-columns: 1fr;}
+}
 
 .storeContainer #storeContainer #topProductsContainer .totalProductos{color:#2361f0;background-color:#fff;border-radius:20px;border:1px solid #ededed;font-weight:600;text-align:center;    padding: 10px;}
 .storeContainer #storeContainer #topProductsContainer .totalProductos input{background:transparent;width:50px;border:none;outline:none;color: #8a8a8a;}
-.storeContainer #storeContainer #topProductsContainer #ordenContainer{text-align:right;}
+.storeContainer #storeContainer #topProductsContainer #ordenContainer{text-align:right;display: grid;grid-template-columns: 1fr 2fr;justify-content: center;align-items: center;grid-gap: 10px;}
 .storeContainer #storeContainer #topProductsContainer .ordenText{display:inline-block;vertical-align:middle;}
 .storeContainer #storeContainer #topProductsContainer .ordenSelect{position:relative;border:1px solid;border-radius:5px;display:inline-block;vertical-align:middle;}
 .storeContainer #storeContainer #topProductsContainer .ordenSelect:after {content: ' ';right: 11px;top: 11px; width:13px;height: 11px; background:url("../img/selectArrow.svg") right center no-repeat;position: absolute;pointer-events: none;}
@@ -41,7 +43,7 @@
 .storeContainer #storeContainer #productsContainer .name{margin: 0; font-size: 15px;color:#2361f0;font-weight: 700;}
 
 @media only screen and (max-width: 815px) {
-    #products .list {grid-template-columns: 230px;justify-content: center;grid-gap: 20px;}
+    #products .list{grid-template-columns: 230px !important;justify-content: center;grid-gap: 20px;}
 }
 
 .pagination{width:100%;text-align:center;    margin: 0;padding: 0;}

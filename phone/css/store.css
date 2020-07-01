@@ -5,8 +5,7 @@
 .storeContainer #storeContainer #topProductsContainer .ordenText{margin:0;}
 .storeContainer #storeContainer #topProductsContainer .ordenSelect{position:relative;}
 .storeContainer #storeContainer #topProductsContainer .ordenSelect:after {content: ' ';right: 11px;top: 11px; width:13px;height: 11px; background:url("../../img/selectArrow.svg") right center no-repeat;position: absolute;pointer-events: none;}
-.storeContainer #storeContainer #topProductsContainer .ordenSelect select {-webkit-appearance: none; -moz-appearance: none;appearance: none;padding:0 30px 0 10px;outline:none;height: 30px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
-
+.storeContainer #storeContainer #topProductsContainer .ordenSelect select {-webkit-appearance: none; -moz-appearance: none;appearance: none;padding:0 30px 0 10px;outline:none;height: 30px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;border:1px solid;}
 #tagContainer{text-align: center;}
 
 .storeContainer #storeContainer #topProductsContainer .filterCategoryContainer{padding:10px 0}
