@@ -14,7 +14,6 @@
 <head>
 	<?php include('header_meta.php');?>
 
-	<link rel="stylesheet" type="text/css" href="script/chosen/chosen.min.css">
 	<link rel="stylesheet" type="text/css" href="css/order.css">
 </head>
 <body>
@@ -38,6 +37,10 @@
 				<div class="order_details">
 					<?php
 						echo '<div><p>Pedido</p></div><div><p>'.$order['cve_order'].'</p></div>';
+						echo '<div><p>Cliente</p></div>';
+						$id_client = $order['client_id_client'];
+	                    $name = $set->getClientNameById($id_client);
+						echo '<div><a href="client?id_client='.$id_client.'"><p>'.$name.'</p></a></div>';
 						echo '<div><p>Dirección de envío</p></div>';
 						echo '<div>';
 						echo 	'<p>'.$shipping['address_line_1'].'</p>';

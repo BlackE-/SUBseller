@@ -57,6 +57,14 @@
 		    $this->db->closeAll();
 		    return $returnValue;
 	    }
+
+	    function logout(){
+	    	session_start();
+		    $sessionvar = $this->GetLoginSessionVar();
+		    $_SESSION[$sessionvar]=NULL;
+		    unset($_SESSION[$sessionvar]);
+		    return true;
+	    }
 	    /*
 			REGISTER
 	    */
@@ -295,7 +303,10 @@
 		function getClients(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT * FROM client ORDER BY id_client';
+			$qry = 'SELECT client.id_client,client.name, _order.client_id_client,
+					SUM(_order.total) as TOTAL,count(_order.id_order) as NUM
+					FROM client,_order
+					WHERE client.id_client = _order.client_id_client';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No clients');
@@ -307,12 +318,95 @@
 				}else{
 					$algo = array();
 					while($row = $this->db->fetchArray($result)){
+
+
 						array_push($algo, $row);
 					}
 					$returnValue = $algo;
 				}
 			}
 			return $returnValue; 
+		}
+
+		function getClient($id_client){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM client WHERE id_client = '.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getClientOrders($id_client){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT id_order,date_created,total,status FROM _order WHERE client_id_client='.$id_client.' ORDER BY id_order DESC ';
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$algo = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($algo, $row);
+					}
+					$returnValue = $algo;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getClientShippings($id_client){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM shipping WHERE name IS NOT NULL AND client_id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$algo = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($algo, $row);
+					}
+					$returnValue = $algo;
+				}
+			}
+			return $returnValue;
+		}
+
+		function getClientBillings($id_client){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT * FROM billing WHERE client_id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$returnValue = false;
+				}else{
+					$algo = array();
+					while($row = $this->db->fetchArray($result)){
+						array_push($algo, $row);
+					}
+					$returnValue = $algo;
+				}
+			}
+			return $returnValue;
 		}
 		
 		/*
@@ -1125,6 +1219,18 @@
 	            }
 	        } while (!$this->codeIsValid($code));
 	        return $code;
+	    }
+
+	    function setDiscount($id_product,$discount){
+	    	$returnValue = true;
+			$this->checkDBLogin();
+			$qry2 = 'UPDATE product SET discount="'.$discount.'" WHERE id_product='.$id_product;
+			$result = $this->db->updateQuery($qry2);
+			if(!$result){
+				$this->db->HandleError('Error');
+				$returnValue = false;
+			}
+			return $returnValue;
 	    }
 
 		/*
