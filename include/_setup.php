@@ -1061,7 +1061,7 @@
 		        	$cartTemp = $_SESSION['cart'];
 		        	foreach($cartTemp as $key=>$value){
 		        		if($cartTemp[$key]['id_product'] == $id_product){
-		        			$cartTemp[$key]['qty'] = $quantity;
+		        			$cartTemp[$key]['number_items'] = $quantity;
 		        		}
 					}
 					$_SESSION['cart'] = $cartTemp;
@@ -1090,15 +1090,14 @@
 	        	$returnValue = $this->deleteSessionCart($id_session_cart);
 	        }
 	        else{
-	        	$carTemp = $_SESSION['cart'];
 	        	$cartNew = array();
+	        	$cartTemp = $_SESSION['cart'];
 	        	foreach($cartTemp as $key=>$value){
-	        		if($carTemp[$key]['id_product'] != $id_product){
-	        			array_push($cartNew,array("id_product" => $carTemp[$key]['id_product'], "qty"=>$carTemp[$key]['qty'],"price"=>$carTemp[$key]['price']));
+	        		if($cartTemp[$key]['id_product'] != $id_product){
+	        			array_push($cartNew,array("id_product" => $cartTemp[$key]['id_product'], "number_items"=>$cartTemp[$key]['number_items'],"price"=>$cartTemp[$key]['price']));
 	        		}
 				}
 				$_SESSION['cart'] = $cartNew;
-				$this->db->HandleError('Cart delete Product');
 	        }
 			return $returnValue;
 		}

@@ -28,10 +28,16 @@
 	<div id="formsContainer">
 		<div class="container" id="box">
     		<div class="pasoContainer">
-                <p>PASO 1: <b>COMPLETA TU IDENTIDAD</b></p>
-                <div class="meter">
+    			<p>PASO 1: <b>COMPLETA TU IDENTIDAD</b></p>
+    			<ul>
+    				<li class="active">1</li>
+    				<li>2</li>
+    				<li>3</li>
+    				<li>4</li>
+    			</ul>
+                <!-- <div class="meter">
                   <span style="width: 25%"></span>
-                </div>
+                </div> -->
             </div>
     		<div class="error"></div>
     		

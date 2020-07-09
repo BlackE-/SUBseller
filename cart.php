@@ -18,7 +18,7 @@
 	// 	echo '<br>';
 	// }
 
-	// print_r($_SESSION);
+
 	$path = '/subseller';	
 ?>
 <!DOCTYPE html>

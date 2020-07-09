@@ -77,7 +77,7 @@
 	        		    echo 	'<div class="numbersContainer">';
 	        		    $price_sale = $product['price_sale'];
                         if($product['discount'] != 0){
-                        	$price_sale = $product['price_sale']*$product['discount'];
+                        	$price_sale = number_format($product['price_sale']*$product['discount'],2,'.',',');
                         }
                         echo '<input type="hidden" id="price" value="'.$price_sale.'">';
                         $price = explode('.',$price_sale);
@@ -86,7 +86,10 @@
 	            		echo 			'<input type="number" id="qty" class="quantity" placeholder="1" value="1" disabled/>';
 						echo 			'<button id="more"><i class="fas fa-plus"></i></button>';
 	            		echo 		'</div>';
+	            		echo 		'<div>';
 	            		echo 		'<p class="price" >$'.$price[0].'.<sup>'.$price[1].'</sup></p>';	
+	            		echo 		'<p class="little">Precio Unitario</p>';
+	            		echo 		'</div>';	
 	            		echo 	'</div>';
 	            		echo '<div class="buttonContainer"><button id="addToCart"><i class="fas fa-plus"></i> Agregar al carrito</button></div>';
 	        		    echo '<div class="informationContainer">';

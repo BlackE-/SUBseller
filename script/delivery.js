@@ -18,8 +18,8 @@
 	let id_shipping = 0;
 
 	const modalBody = document.querySelector('.modal-body');
-	showLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'inline-block';}
-	hideLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'none';}
+	showLoading = () =>{document.querySelector('.lds-spinner').style.display = 'inline-block';}
+	hideLoading = () =>{document.querySelector('.lds-spinner').style.display = 'none';}
 	resetModal = () =>{
 		let c = modalBody.children;
 		for (i = 0; i < c.length; i++) {
@@ -176,6 +176,7 @@
 		country.setAttribute('disabled','');
 		state.setAttribute('disabled','');
 		notes.setAttribute('disabled','');
+		addressName.setAttribute('disabled','');
 	}
 
 	unsetDeliveryForm = () =>{
@@ -209,7 +210,7 @@
 				const xhr = new XMLHttpRequest();
 				xhr.onreadystatechange = function(){
 					if (this.readyState == 4 && this.status == 200) {
-						console.log(this.response);
+						// console.log(this.response);
 						myObj = JSON.parse(this.response);
 						if(!myObj.return){
 							hideLoading();

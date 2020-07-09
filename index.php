@@ -104,16 +104,14 @@
 		                		echo '<div class="typeContainer"><p>'.$type.'</p></div>';
 		                		echo '<div class="boxBorder">';
 			                		echo '<a href="product?id='.$product['id_product'].'"><div class="thumbContainer" style="background-image:url('.$path.$product_img[0]['url'].')"/></div></a>';
-			                		// echo '<div class="thumbContainer"><a href="product?id='.$product['id_product'].'"><img class="bestSellersImg" data-src="'.$path.$product_img[0]['url'].'"/></a></div>';
 			                		echo '<div class="textContainer"><p>Tiempo de uso:'.$product['tiempo_de_uso'].'</p><p class="title">'.$product['name'].'<br>'.$product['description_short'].'</p></div>';
 			                		$price_sale = $product['price_sale'];
-			                		if(!$product['discount']){
-			                			$price_sale = $product['price_sale'] * $product['discount'];
+			                		if($product['discount'] != 0){
+			                			$price_sale = number_format($product['price_sale'] * $product['discount'],2,'.',',');
 			                		}
-			                		// echo '<div class="priceContainer">$'.number_format($price_sale, 2).'</div>';
 			                		$price = explode('.',$price_sale);
 			                		echo '<div class="priceContainer">$'.$price[0].'.<sup>'.$price[1].'</sup></div>';
-			                		echo '<div class="addCartContainer"><a href="product?id='.$product['id_product'].'"><i class="fas fa-plus"></i> Agregar al carrito</a></div>';
+			                		echo '<div class="addCartContainer"><a href="product?id='.$product['id_product'].'"><i class="fas fa-plus"></i> Ver producto</a></div>';
 		                		echo '</div>';
 		                		echo '</div>';
 		                		echo '</li>';

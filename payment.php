@@ -39,16 +39,27 @@
 	<div id="paymentContainer">
 		<div class="pasoContainer">
 	        <p>PASO 3:  <b> DATOS DE PAGO</b></p>
-	        <div class="meter">
-	          <span style="width: 75%"></span>
-	        </div>
+	        <ul>
+				<li class="completed">1</li>
+				<li class="completed">2</li>
+				<li class="active">3</li>
+				<li>4</li>
+			</ul>
+
+			<div id="termsContainer">
+                    <input id="checkTerminos" type="checkbox"/><label for="checkTerminos"><i class="fas fa-check"></i></label>
+                    <p>Aceptar <a href="avisodeprivacidad.pdf">Términos y Condiciones</a></p>
+                </div>
 	    </div>
+
+
 		<div class="container">
 			<div class="leftContainer">
 	            <div id="typePaymentContainer">
 	            	<input type="radio" name="typePayment" id="card" checked><label for="card"><i class="fas fa-credit-card"></i> <p>Tarjeta</p></label>
 	            	<input type="radio" name="typePayment" id="spei"><label for="spei"><i class="fas fa-exchange-alt"></i><p>SPEI</p></label>
 	            	<input type="radio" name="typePayment" id="oxxo"><label for="oxxo"><i class="fas fa-dollar-sign"></i><p>OXXO</p></label>
+	            	<input type="radio" name="typePayment" id="paypal"><label for="paypal"><i class="fab fa-cc-paypal"></i><p>PAYPAL</p></label>
 	            </div>
 				<div id="typePaymentBoxesContainer">
 					<div class="typePaymentBox active" id="box-card">
@@ -107,20 +118,21 @@
 						</form>
 					</div>
 					<div class="typePaymentBox" id="box-spei">
-						<p>Los pagos por medio de transferencias bancarias a través de SPEI.<br>creará una CLABE de pago, con ella podras pagar en el banco de tu preferencia</p><p>En la siguiente pantalla tendras ésta información, además será enviada a tu correo electrónico.</p>
+						<p>Los pagos por medio de transferencias bancarias a través de <b>SPEI</b>.<br>creará una CLABE de pago, con ella podras pagar en el banco de tu preferencia</p><p>En la siguiente pantalla tendras ésta información, además será enviada a tu correo electrónico.</p>
 					</div>
 					<div class="typePaymentBox" id="box-oxxo">
 						<p>Los pagos en efectivo:</p>
                         <ul>
-                            <li><p>OXXO<br>Al seleccionar esta opción se generara una referencia para poder hacer el pago en el OXXO mas cercano.</p></li>
+                            <li><p><b>OXXO</b><br>Al seleccionar esta opción se generara una referencia para poder hacer el pago en el OXXO mas cercano.</p></li>
                         </ul>
                         <p>Esta información además de poder visualizarla en la siguiente ventana, será enviada a tu correo.<br>Una vez realizado el pago se nos notificara para poder hacer el envío de tu pedido.</p>
 					</div>
+					<div class="typePaymentBox" id="box-paypal">
+						<p>Los pagos con: <b>PAYPAL</b><br>Al seleccionar esta opción se abrira una segunda ventana, donde una vez que hayas iniciado sesión en tu cuenta de PayPal podrás visualizar tu pedido, al confirmar, regresaras a ésta pantalla, para finalizar tu compra.</p></li>
+                        </ul>
+                        <p>La información de tu pago además de que podrás visualizar en la siguiente ventana, será enviada a tu correo.</p>
+					</div>
 				</div>
-				<div id="termsContainer">
-                    <input id="checkTerminos" type="checkbox"/><label for="checkTerminos"><i class="fas fa-check"></i></label>
-                    <p>Aceptar <a href="avisodeprivacidad.pdf">Términos y Condiciones</a></p>
-                </div>
 			</div>
     		<div class="rightContainer">
     			<div class="editContainer"><a href="cart" class="edit">Editar pedido</a></div>
@@ -197,7 +209,7 @@
 					<input type="text" id="coupon" placeholder="Cupon" autocomplete="off">
 					<button id="checkCoupon">Verificar</button>
 				</div>
-				<div id="paypal-button-container"></div>
+				 <div id="paypal-button-container"></div>
 				<div class="nextContainer"><button id="next">Pagar</button></div>
     		</div>
     	</div>

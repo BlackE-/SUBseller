@@ -34,7 +34,7 @@
                 <?php
                     $history = $set->getOrdersClient();
             		if(!$history){
-            			echo $set->getErrorMessage();
+            			echo '<p><i class="fas fa-inbox"></i> '.$set->getErrorMessage() .'</p>';
             		}
             		else{
             		    echo '<ul class="list">';

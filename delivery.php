@@ -30,10 +30,13 @@
 	<div id="deliveryContainer">
 		<div class="pasoContainer">
 	        <p>PASO 2:  <b> DIRECCIÓN DE ENTREGA</b></p>
-	        <div class="meter">
-	          <span style="width: 50%"></span>
-	        </div>
-	    </div>
+	       	<ul>
+				<li class="completed">1</li>
+				<li class="active">2</li>
+				<li>3</li>
+				<li>4</li>
+			</ul>
+ 		</div>
 		<div class="container">
 			<div class="leftContainer">
 	            <div class="deliveryFormContainer">

@@ -63,6 +63,7 @@
 			<div id="searchContainer">
 				<?php
 	                $products = $set->getProducts();
+	                $tipos = $set->getTypes();
 	                if(!$products){
 
 	                }else{
@@ -70,6 +71,10 @@
 		                foreach ($products as $key => $value) {
 		                	$product = $value['product'];
 		                	echo '<option value="product?id='.$product['id_product'].'">'.$product['name'].'</option>';
+		                }
+		                foreach ($tipos as $key => $value) {
+		                	$type = $value['type'];
+		                	echo '<option value="store?page=type&id='.$type['id_type'].'">'.$type['name'].'</option>';
 		                }
 		                echo '</select>';
 		            }

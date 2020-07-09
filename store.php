@@ -82,9 +82,8 @@
 	                                echo '<div class="priceContainer">';
 	                                $price_sale = $row['price_sale'];
 	                                if($row['discount'] != 0){
-	                                	$price_sale = $row['price_sale']*$row['discount'];
+	                                	$price_sale = number_format($row['price_sale']*$row['discount'],2,'.',',');
 	                                }
-	                                // echo '<p class="precioShow">$'.number_format($price_sale, 2).'</p>';
 	                                $price = explode('.',$price_sale);
 			                		echo '<p class="price">$'.$price[0].'.<sup>'.$price[1].'</sup></p>';
 	                                echo '<p>'.$row['description_short'].'</p>';
@@ -100,7 +99,7 @@
 	                                $typeProduct = $set->getProductTypeName($row['type_id_type']);
 	                                echo '<p class="type">'.$typeProduct.'</p>';
 	                                echo '<p class="id_type">'.$row['type_id_type'].'</p>';
-	                                echo '<div class="linkContainer"><a href="product?id='.$row['id_product'].'">AGREGAR AL CARRITO</a></div>';
+	                                echo '<div class="linkContainer"><a href="product?id='.$row['id_product'].'">VER PRODUCTO</a></div>';
 	            	            echo '</div></li>';
 	            	            if($maxPrice <$row['price_sale']){$maxPrice  = $row['price_sale']; }
 	            	        }

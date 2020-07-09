@@ -30,7 +30,7 @@ header .container #topContainer #cartContainer i{margin: 0 10px 0 0;font-size: 1
 }
 
 header #menuContainer{background:#eff4ff;display: grid;grid-template-columns: auto auto auto auto;align-self: center;max-width: 99%;}
-header #menuContainer .categoryDiv{display: grid;padding: 2px 25px 2px 2px;outline: none;height:30px;    align-items: center; border: none;margin: 0 auto;	background: url("../img/selectArrow.svg") right center no-repeat; 	appearance: none; -webkit-appearance: none;-moz-appearance: none; }
+header #menuContainer .categoryDiv{display: grid;padding: 2px 25px 2px 2px;outline: none;height:30px;    align-items: center; border: none;margin: 0 auto; 	appearance: none; -webkit-appearance: none;-moz-appearance: none; }
 header #menuContainer .categoryDiv a{color:#2361f0;text-decoration: none; }
 header #menuContainer #tiendaLinkContainer{display:none;text-align: center;align-items: center;}
 header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none;}
