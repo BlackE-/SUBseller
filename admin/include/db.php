@@ -452,6 +452,7 @@
                                 id_session_cart INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
                                 number_items INT,
                                 price DECIMAL(10,2),
+                                description TEXT,
                                 session_client_id_session_client INT UNSIGNED,
                                 product_id_product INT UNSIGNED,
                                 
