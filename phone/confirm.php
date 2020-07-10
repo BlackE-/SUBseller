@@ -38,9 +38,12 @@
 	<div id="confirmContainer">
 		<div class="pasoContainer">
 	        <p>PASO 4:  <b>CONFIRMACIÓN</b></p>
-	        <div class="meter">
-	          <span style="width: 100%"></span>
-	        </div>
+	        <ul>
+				<li class="completed">1</li>
+				<li class="completed">2</li>
+				<li class="completed">3</li>
+				<li class="active">4</li>
+			</ul>
 	    </div>
     <?php
 		if($id_order == 'undefined'){

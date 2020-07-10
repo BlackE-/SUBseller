@@ -1,15 +1,12 @@
 <footer>
     <div id="menuFooter">
         <div class="container">
-             <?php
-                    if(!$login){echo '<a href="login">INICIAR SESIÓN</span></a>';}
-                    else{echo '<a href="cliente/index"><span>MI CUENTA</span></a>';}
-                ?>
-                <a href="faq">PREGUNTAS FRECUENTES</a>
-                <a href="faq">AYUDA</a>
-                <a href="aviso.pdf">AVISO DE PRIVACIDAD</a>
+                <a href="/phone/client/index">MI CUENTA</a>
+                <a href="../faq">PREGUNTAS FRECUENTES</a>
+                <a href="../faq">AYUDA</a>
+                <a href="../aviso.pdf">AVISO DE PRIVACIDAD</a>
                 <a href="#">OPCION</a>
-                <a href="terminos.pdf">TÉRMINOS Y CONDICIONES</a>
+                <a href="../terminos.pdf">TÉRMINOS Y CONDICIONES</a>
         </div>
     </div>
 	<div id="newsletter">

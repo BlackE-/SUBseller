@@ -29,9 +29,12 @@
 	<div id="formsContainer">
 		<div class="pasoContainer">
                 <p><b>PASO 1</b></p>
-                <div class="meter">
-                  <span style="width: 25%"></span>
-                </div>
+                <ul>
+    				<li class="active">1</li>
+    				<li>2</li>
+    				<li>3</li>
+    				<li>4</li>
+    			</ul>
             </div>
 		<div class="container" id="box">
     		

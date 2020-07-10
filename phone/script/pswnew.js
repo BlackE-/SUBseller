@@ -2,8 +2,8 @@
     let passwordNew = document.getElementById('passwordNew');
 
 	const modalBody = document.querySelector('.modal-body');
-	showLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'inline-block';}
-	hideLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'none';}
+	showLoading = () =>{document.querySelector('.lds-spinner').style.display = 'inline-block';}
+	hideLoading = () =>{document.querySelector('.lds-spinner').style.display = 'none';}
 	resetModal = () =>{
 		let c = modalBody.children;
 		for (i = 0; i < c.length; i++) {

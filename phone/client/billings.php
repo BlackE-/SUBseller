@@ -34,7 +34,8 @@
                 <?php
                     $billings = $set->getBillingsFromClient();
             		if(!$billings){
-            			echo $set->getErrorMessage();
+            			echo '<p><i class="far fa-file-code"></i> <br>No tenemos datos fiscales guardados</p>';
+                        //echo $set->getErrorMessage();
             		}
             		else{
             		    echo '<ul class="list">';

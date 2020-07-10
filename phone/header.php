@@ -69,7 +69,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="container" id="caption">
+	<!-- <div class="container" id="caption">
 		<p>Envio nacional gratis en compras mayores a $500</p>
-	</div>
+	</div> -->
 </header>

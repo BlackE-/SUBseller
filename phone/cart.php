@@ -59,7 +59,7 @@
 								$proImg = $product[1]['media'];
 								$price_sale = $pro['price_sale'];
 		                        if($pro['discount'] != 0){
-		                        	$price_sale = $pro['price_sale']*$pro['discount'];
+		                        	$price_sale = number_format($pro['price_sale']*$pro['discount'],2,'.',',');
 		                        }
 		                        $price = explode('.',$price_sale);
 		                        $totalRow = number_format($value['price'] * $value['number_items'], 2, '.', '');

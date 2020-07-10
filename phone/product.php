@@ -17,7 +17,7 @@
 	<script>
          if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
          	<?php
-         		//echo 'window.location.replace("../product?id_product='.$id_product.'")';
+         		echo 'window.location.replace("../product?id='.$id_product.'")';
          	?>
         }
      </script>  
@@ -89,11 +89,12 @@
 	        		    echo 	'<div class="numbersContainer">';
 	        		    $price_sale = $product['price_sale'];
                         if($product['discount'] != 0){
-                        	$price_sale = $product['price_sale']*$product['discount'];
+                        	$price_sale = number_format($product['price_sale']*$product['discount'],2,'.',',');
                         }
                         echo '<input type="hidden" id="price" value="'.$price_sale.'">';
                         $price = explode('.',$price_sale);
 	                	echo 		'<p class="price" >$'.$price[0].'.<sup>'.$price[1].'</sup></p>';
+	                	echo 		'<p class="little" >Precio unitario</p>';
 	                	echo 		'<div class="qtyBox">';
 	            		echo 			'<button id="minus"><i class="fas fa-minus"></i></button>';
 	            		echo 			'<input type="number" id="qty" class="quantity" placeholder="1" value="1" disabled/>';

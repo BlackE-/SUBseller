@@ -37,6 +37,7 @@ ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
 .qtyText{display:inline-block;width:100px;}
 .quantity::-webkit-outer-spin-button,
 .quantity::-webkit-inner-spin-button{-webkit-appearance: none;margin: 0; }
+.little{padding:5px 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;text-align: center;}
 .informationContainer {border-left:1px solid #12f9e7;padding: 10px;text-align: right;}
 .informationContainer p{color:#545454;font-size: 12px;margin-top: 0;}
 .informationContainer .description_short{font-style: italic;}

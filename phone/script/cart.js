@@ -1,9 +1,9 @@
 	const modalBody = document.querySelector('.modal-body');
 	showLoading = () =>{
-		document.querySelector('.lds-dual-ring').style.display = 'block';
+		document.querySelector('.lds-spinner').style.display = 'block';
 	}
 	hideLoading = () =>{
-		document.querySelector('.lds-dual-ring').style.display = 'none';
+		document.querySelector('.lds-spinner').style.display = 'none';
 	}
 	resetModal = () =>{
 		let c = modalBody.children;

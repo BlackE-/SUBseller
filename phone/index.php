@@ -92,7 +92,7 @@
 			                		}
 			                		$price = explode('.',$price_sale);
 			                		echo '<div class="priceContainer">$'.$price[0].'.<sup>'.$price[1].'</sup></div>';
-			                		echo '<div class="addCartContainer"><a href="product?id='.$product['id_product'].'"><i class="fas fa-plus"></i> Agregar al carrito</a></div>';
+			                		echo '<div class="addCartContainer"><a href="product?id='.$product['id_product'].'"><i class="fas fa-plus"></i> Ver producto</a></div>';
 		                		echo '</div>';
 		                		echo '</div>';
 		                		echo '</li>';
