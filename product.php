@@ -16,7 +16,7 @@
 	<script>
          if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
          	<?php
-         		echo 'window.location.replace("phone/product?id_product='.$id_product.'")';
+         		echo 'window.location.replace("phone/product?id='.$id_product.'")';
          	?>
         }
      </script>  
@@ -91,6 +91,30 @@
 	            		echo 		'<p class="little">Precio Unitario</p>';
 	            		echo 		'</div>';	
 	            		echo 	'</div>';
+	            		echo '<p>Receta<br>Ingresa los datos de tu receta para tu pedido.</p>';
+	            		echo '<div class="receta" id="receta">';
+	            		echo '<table>';
+	            		echo '<tr><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Add</th></tr>';
+	            		echo '<tr><th class="od"><p><i class="fas fa-eye"></i><i class="fas fa-eye"></i><span>OD</span></th>';
+	            		echo '<td><input type="text" id="od_esfera" placeholder="+2.25"/></td>';
+	            		echo '<td><input type="text" id="od_cilindro" placeholder="-3.00"/></td>';
+	            		echo '<td><input type="text" id="od_eje" placeholder="180"/></td>';
+	            		echo '<td><input type="text" id="od_add" placeholder="optional"/></td>';
+	            		echo '</tr>';
+	            		echo '<tr><th class="id"><p><i class="fas fa-eye"></i><i class="fas fa-eye"></i><span>OI</span></p></th>';
+	            		echo '<td><input type="text" id="oi_esfera"/></td>';
+	            		echo '<td><input type="text" id="oi_cilindro"/></td>';
+	            		echo '<td><input type="text" id="oi_eje"/></td>';
+	            		echo '<td><input type="text" id="oi_add"/></td>';
+	            		echo '</tr>';
+	            		echo '<tr>';
+	            		echo '<td colspan="5">';
+	            		echo '<textarea id="notes" placeholder="Observaciones"></textarea>';
+	            		echo '</td>';
+	            		echo '</tr>';
+
+	            		echo '</table>';
+	            		echo '</div>';
 	            		echo '<div class="buttonContainer"><button id="addToCart"><i class="fas fa-plus"></i> Agregar al carrito</button></div>';
 	        		    echo '<div class="informationContainer">';
 	        		    echo 		'<p class="description">'.$product['description'].'</p>';

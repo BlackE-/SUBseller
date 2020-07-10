@@ -76,10 +76,30 @@
         let id_product = document.getElementById('id_product').value;
         let quantity = document.getElementById('qty').value;
         let price = document.getElementById('price').value;
-        
+        let receta = `<table><tr><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Add</th></tr>
+    					<tr><th class="od"><p>OD</p></th>
+	            		<td><p>${document.getElementById('od_esfera').value}</p></td>
+	            		<td><p>${document.getElementById('od_cilindro').value}</p></td>
+	            		<td><p>${document.getElementById('od_eje').value}</p></td>
+	            		<td><p>${document.getElementById('od_add').value}</p></td>
+	            		</tr>
+	            		<tr><th class="id"><p>OI</p></th>
+	            		<td><p>${document.getElementById('oi_esfera').value}</p></td>
+	            		<td><p>${document.getElementById('oi_cilindro').value}</p></td>
+	            		<td><p>${document.getElementById('oi_eje').value}</p></td>
+	            		<td><p>${document.getElementById('oi_add').value}</p></td>
+	            		</tr>
+	            		<tr>
+	            		<td colspan="5"><p>Observaciones: ${document.getElementById('notes').value}</p></td>
+	            		</tr>
+	            		</table>`;
+
+
+
         formData.append('id_product', id_product);
 		formData.append('quantity', quantity);
 		formData.append('price', price);
+		formData.append('receta', receta);
 
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
