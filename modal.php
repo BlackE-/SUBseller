@@ -17,7 +17,7 @@
 	.modal-body{height: auto;padding:20px 0;}
 	.closeModal:hover,.closeModal:focus {cursor: pointer;}
 
-	.lds-spinner {display: inline-block;position: relative;width: 80px;height: 80px;}
+	.lds-spinner {display: inline-block;position: relative;width: 80px;height: 80px;margin:0 auto;}
 	.lds-spinner div {transform-origin: 40px 40px;animation: lds-spinner 800ms linear infinite;}
 	.lds-spinner div:after {content: " ";display: block;position: absolute;width: 5px;border-radius: 20%;background: #2361f0;
 	}

@@ -67,7 +67,7 @@
 
 	    	$formvars = array();
 			$formvars['id_facebook'] = $this->Sanitize($id_facebook);	
-			$qry = "SELECT id_client FROM client WHERE id_facebook='".$formvars['if_facebook']."'";
+			$qry = "SELECT id_client FROM client WHERE id_facebook='".$formvars['id_facebook']."'";
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleDBError("1.No tenemos registro");
@@ -270,9 +270,10 @@
 									  sex="'.$formvars['sex'].'",
 									  birthday="'.$formvars['cumple'].'",
 									  phone="'.$formvars['telefono'].'",
-									  newsletter="'.$formvars['newsletter'].' WHERE id_client='.$id_client;
+									  newsletter="'.$formvars['newsletter'].'" WHERE id_client='.$id_client;
 			if(!$this->db->updateQuery($qry)){
 				$returnValue = false;
+				$this->db->HandleError('Información no guardada'.$qry);
 			}else{
 				$this->db->HandleError('Información guardada');
 			}
@@ -551,7 +552,7 @@
 					GROUP BY product_movement.product_id_product ORDER BY count DESC LIMIT 4';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
-				$qry = 'SELECT * FROM product WHERE status=1 ORDER BY RAND() LIMIT 4';
+				$qry = 'SELECT * FROM product WHERE fav=1 ORDER BY RAND() LIMIT 4';
 				$result = $this->db->selectQuery($qry);
 				if(!$result){
 					$this->db->HandleError('NO HAY PRODUCTOS');
@@ -845,7 +846,12 @@
 					//ya se tiene en session el id a recuperar
 					$id_session_client = $_SESSION['id_session_client'];
 					$items = $this->getItemsFromSessionClient($id_session_client);
-					$returnValue = count($items);
+					$cuenta = 0;
+					foreach($items as $key=>$value){
+						$cuenta += $value['number_items'];
+					}
+					// $returnValue = count($items);
+					$returnValue = $cuenta;
 				}
 				else{
 					$sessionvar = $this->GetLoginSessionVar();
@@ -866,7 +872,12 @@
 						$id_session_client = $row['id_session_client'];
 						$_SESSION['id_session_client'] = $id_session_client;
 						$items = $this->getItemsFromSessionClient($id_session_client);
-						$returnValue = count($items);
+						// $returnValue = count($items);
+						$cuenta = 0;
+						foreach($items as $key=>$value){
+							$cuenta += $value['number_items'];
+						}
+						$returnValue = $cuenta;
 					}
 
 				}
@@ -875,7 +886,12 @@
 				if(!isset($_SESSION['cart'])){
 		        	$_SESSION['cart'] = array();
 		        }
-		        $returnValue = count($_SESSION['cart']); 
+		        // $returnValue = count($_SESSION['cart']); 
+		        $cuenta = 0;
+				foreach($_SESSION['cart'] as $key=>$value){
+					$cuenta += $value['number_items'];
+				}
+				$returnValue = $cuenta;
 			}
 	        return $returnValue;
 	    }
@@ -890,7 +906,7 @@
 	       	else{
 	       		$array_items = array();
 	       		while($row = $this->db->fetchArray($result)){
-	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price']));
+	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price'],'description'=>$row['description'],'prescription'=>$row['prescription']));
 	       		}
 	       		$returnValue = $array_items;
 	       	}
@@ -913,11 +929,11 @@
 	    	return $id_session_client;
 	    }
 
-	    function insertSessionCart($id_session_client,$id_product,$qty,$price,$description){
+	    function insertSessionCart($id_session_client,$id_product,$qty,$price,$description,$prescription){
 	    	$returnValue = true;
 			$this->checkDBLogin();
-			$qry = "INSERT into session_cart (session_client_id_session_client,product_id_product,number_items,price,description)
-						VALUES(".$id_session_client.", ".$id_product.",".$qty.",".$price.",'".$description."')";
+			$qry = "INSERT into session_cart (session_client_id_session_client,product_id_product,number_items,price,description,prescription)
+						VALUES(".$id_session_client.", ".$id_product.",".$qty.",".$price.",'".$description."','".$prescription."')";
 			$result = $this->db->insertQuery($qry);
 			if(!$result){
 			    $this->db->HandleError("No se pudo guardar el producto");
@@ -994,12 +1010,34 @@
 			return $returnValue;
 	    }
 
+	    function uploadFile($archivo){
+	    	if ($archivo["error"] == UPLOAD_ERR_OK) {
+	            $folderName = "../img/prescription/";
+	            
+	            $coso = explode(".",$archivo['name']);
+	            $name = 'prescription'.date("m-d-Y_hia").".".$coso[1];
+	            $tmp_name = $archivo["tmp_name"];
+	            $ruta = $folderName . $name;
+	            
+	            if(!move_uploaded_file($tmp_name, $ruta)){
+	                $this->HandleError("NO SE PUDO GUARDAR archivo ".$ruta);
+	                $returnValue = false;
+	            }
+
+	            return "/img/prescription/" . $name;
+	        }
+	    }
+
 		function addProductToCart(){
 			$id_product = $_POST['id_product'];
 			$quantity = $_POST['quantity'];
 	        $price = $_POST['price'];
 	        $receta = $_POST['receta'];
-	        
+	        $prescription = $_FILES["prescription"];
+
+	        if(!$prescription){$path_prescription = '';}
+	        else{$path_prescription = $this->uploadFile($prescription);}
+
 	        $returnValue = true;
 			$this->checkDBLogin();
 			$result = $this->checkInventory($id_product,$quantity);
@@ -1013,14 +1051,14 @@
 		        	$qry = 'SELECT * from session_cart WHERE product_id_product='.$id_product.' AND session_client_id_session_client='.$id_session_client;
 		        	$result = $this->db->selectQuery($qry);
 		        	if(!$result){
-		        		$returnValue = $this->insertSessionCart($id_session_client,$id_product,$quantity,$price,$receta);
+		        		$returnValue = $this->insertSessionCart($id_session_client,$id_product,$quantity,$price,$receta,$path_prescription);
 		        	}else{
 		        		if(!$this->db->numRows($result)){
-		        			$returnValue = $this->insertSessionCart($id_session_client,$id_product,$quantity,$price,$receta);
+		        			$returnValue = $this->insertSessionCart($id_session_client,$id_product,$quantity,$price,$receta,$path_prescription);
 		        		}else{
 		        			$row = $this->db->fetchArray($result);
 		        			$newQty = intval($row['number_items']) + intval($quantity);
-		        			$returnValue = $this->updateSessionCartWithReceta($row['id_session_cart'],$newQty,$price,$receta);
+		        			$returnValue = $this->updateSessionCartWithReceta($row['id_session_cart'],$newQty,$price,$receta,$path_prescription);
 		        		}
 		        	}
 		        }
@@ -1041,7 +1079,7 @@
 		                    }
 			            }
 			            if(!$found)
-						    array_push($_SESSION['cart'],array("id_product" => $id_product, "number_items"=>$quantity,"price"=>$price,"description"=>$receta));
+						    array_push($_SESSION['cart'],array("id_product" => $id_product, "number_items"=>$quantity,"price"=>$price,"description"=>$receta,"prescription"=>$path_prescription));
 						$this->db->HandleError('Cart not empty Product');
 					}
 		        }
@@ -1943,8 +1981,6 @@
 		function getBilling($id_billing){
 			$returnValue = true;
 			$this->checkDBLogin();
-			if(!isset($_SESSION)){ session_start(); }
-			$id_client =  $_SESSION[$this->GetLoginSessionVar()];
 			$qry = 'SELECT * FROM billing WHERE id_billing='.$id_billing;
 			$result = $this->db->selectQuery($qry);
 			if(!$result){

@@ -37,31 +37,44 @@
             $returnValue = false;
         }
         else{
-   //      	$mailchimp_key = $set->getMailchimpKey();
-			// $mailchimp_id_list = $set->getMailchimpList();
-			// $MailChimp = new MailChimp($mailchimp_key); 
-			// $subscriber_hash = $MailChimp->subscriberHash($email);
-			// $result = $MailChimp->get("lists/$list_id/members/$subscriber_hash");
-   //          if ($result['status'] == '404') {
-   //          	if($newsletter){
-   //          		//no se hacae nada, ya esta guardado
-   //          		//no se ha guardado en mailchimp
-	  //           	$result = $MailChimp->post("lists/$mailchimp_id_list/members", [
-	  //       				'email_address' => $email,
-	  //       				'status'        => 'subscribed',
-	  //       		]);
-	  //       		if (!$MailChimp->success()) {
-	  //               	$returnValue = false;
-	  //               	$set->setErrorMessage('No se guardo cliente en mailchimp');   
-	  //               }
-   //          	}
-   //          }else{
-   //          	//ya esta guardado
-   //          	if(!$newsletter){
-   //          		//eliminar
-   //      			$returnValue = $MailChimp->delete("lists/$list_id/members/$subscriber_hash");
-   //          	}
-   //          }
+        	$mailchimp_key = $set->getMailchimpKey();
+			$mailchimp_id_list = $set->getMailchimpList();
+			$MailChimp = new MailChimp($mailchimp_key); 
+			$subscriber_hash = $MailChimp->subscriberHash($email);
+			$result = $MailChimp->get("lists/$mailchimp_id_list/members/$subscriber_hash");
+			if ($result['status'] == '404') {
+            	if($newsletter){
+            		//no se hacae nada, ya esta guardado
+            		//no se ha guardado en mailchimp
+	            	$result = $MailChimp->post("lists/$mailchimp_id_list/members", [
+	        				'email_address' => $email,
+	        				'status'        => 'subscribed',
+	        		]);
+	        		if (!$MailChimp->success()) {
+	                	$returnValue = false;
+	                	$set->setErrorMessage('No se guardo cliente en mailchimp');   
+	                }
+            	}
+            }else{
+            	//ya esta guardado
+            	if(!$newsletter){
+            		//eliminar
+        			//$returnValue = $MailChimp->delete("lists/$list_id/members/$subscriber_hash");
+        			$MailChimp->patch("lists/$mailchimp_id_list/members/$subscriber_hash", [
+	        				'status'        => 'unsubscribed',
+	        		]);
+	        		
+            	}else{
+            	    $MailChimp->patch("lists/$mailchimp_id_list/members/$subscriber_hash", [
+	        				'status'        => 'subscribed',
+	        		]);
+            	}
+            	
+            	if (!$MailChimp->success()) {
+                	$returnValue = false;
+                	$set->setErrorMessage('No se actualizo información en mailchimp');   
+                }
+            }
 	    }
 	}
 	catch (Conekta\ProccessingError $error){

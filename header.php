@@ -9,7 +9,8 @@
 			</a>
 		</div>
 		<div id="topContainer">
-			<p>Envío nacional gratis en compras mayores a $500</p>
+			<!-- <p>Envío nacional gratis en compras mayores a $500</p> -->
+			<p></p>
 			<div id="socialMediaHeader">
 				<?php
 					$fb = $set->getWebsiteSetting('facebook');
@@ -54,7 +55,6 @@
 	                	echo '<div class="categoryDiv">';
 	                	$category = $value['category'];
 	                	echo '<a href="store?page=category&id='.$category['id_category'].'">'.$category['name'].'</a>';
-	                	//echo '<a href="store/category/'.$category['id_category'].'">'.$category['name'].'</a>';
 	                	echo '</div>';
 	                }
 	                

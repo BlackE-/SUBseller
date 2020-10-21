@@ -52,6 +52,7 @@
 			<div id="searchContainer">
 				<?php
 	                $products = $set->getProducts();
+	                $tipos = $set->getTypes();
 	                if(!$products){
 
 	                }else{
@@ -60,13 +61,17 @@
 		                	$product = $value['product'];
 		                	echo '<option value="../product?id='.$product['id_product'].'">'.$product['name'].'</option>';
 		                }
+		                foreach ($tipos as $key => $value) {
+		                	$type = $value['type'];
+		                	echo '<option value="../store?page=type&id='.$type['id_type'].'">'.$type['name'].'</option>';
+		                }
 		                echo '</select>';
 		            }
 	            ?>
 			</div>
 		</div>
 	</div>
-	<div class="container" id="caption">
+	<!-- <div class="container" id="caption">
 		<p>Envio nacional gratis en compras mayores a $500</p>
-	</div>
+	</div> -->
 </header>

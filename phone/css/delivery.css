@@ -3,7 +3,7 @@
 .pasoContainer p b{color:#2361f0;}
 
 .pasoContainer ul{list-style: none;display: grid;grid-template-columns:repeat(4,25%);position: relative;padding: 0;}
-.pasoContainer ul li{z-index: 10;position: relative;}
+.pasoContainer ul li{z-index: 0;position: relative;}
 
 .pasoContainer ul li:before{content:'';z-index:0;position:absolute;width:105%;height:2px;top:70%;background: #ccc;}
 .pasoContainer ul li:last-child:before{width:0%;}
@@ -94,6 +94,6 @@ input[type=checkbox]:checked + label i{color: #fff;-webkit-text-stroke-color: tr
 
 
 .nextContainer{position: fixed;bottom: 0;left:0;width:calc(100% - 20px);    border-top: 1px solid #2361f0;background: #fff;padding:10px;align-items: center;}
-.nextContainer button{width:100%;background: #fff;text-decoration:none;outline: none;border: 0;color: #2361f0;transition: all 300ms linear;}
+.nextContainer button{width:100%;background: #12f9e7;text-decoration:none;outline: none;border: 0;color: #2361f0;transition: all 300ms linear;border-radius: 20px;padding:5px 10px;}
 
 footer{padding: 25px 0 60px 0 !important;}

@@ -1,20 +1,23 @@
 <?php  
-    require_once "../include/_setup.php";
+    require_once "include/_setup.php";
     $set = new Setup();
     $login = $set->checkLogin();
+    $path = '/subseller';
+
     $contactoEmail = $set->getWebsiteSetting('contacto_email');
 ?>
 <!DOCTYPE html>
 <html>
 <head>
     <script>
-         if(! /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
-            window.location.replace("../faq");
+         if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) ) {
+            window.location.replace("phone/faq");
         }
      </script>  
     <?php
         require_once('header_meta.php');
     ?>
+    <link rel="stylesheet" href="node_modules/nouislider/distribute/nouislider.css">
     <link rel="stylesheet" type="text/css" href="css/faq.css">
 </head>
 <body>
@@ -279,6 +282,5 @@
 
     <?php include("footer.php");?>
     <script type="text/javascript" src="script/faq.js"></script>
-
 	</body>
 </html>

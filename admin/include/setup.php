@@ -255,6 +255,8 @@
 
 				//social media
 				$qry = "INSERT into settings (name,value,type) values 
+											('social_media_logo','','socialmedia_website')";
+				$qry = "INSERT into settings (name,value,type) values 
 											('instagram','','socialmedia_website')";
 				if(!$this->db->insertQuery($qry)){
 					$returnValue = false;
@@ -303,10 +305,7 @@
 		function getClients(){
 			$returnValue = true;
 			$this->checkDBLogin();
-			$qry = 'SELECT client.id_client,client.name, _order.client_id_client,
-					SUM(_order.total) as TOTAL,count(_order.id_order) as NUM
-					FROM client,_order
-					WHERE client.id_client = _order.client_id_client';
+			$qry = 'SELECT id_client,name from client';
 			$result = $this->db->selectQuery($qry);
 			if(!$result){
 				$this->db->HandleError('No clients');
@@ -318,14 +317,36 @@
 				}else{
 					$algo = array();
 					while($row = $this->db->fetchArray($result)){
-
-
 						array_push($algo, $row);
 					}
 					$returnValue = $algo;
 				}
 			}
 			return $returnValue; 
+		}
+
+		function getClientRow($id_client){
+			$returnValue = true;
+			$this->checkDBLogin();
+			$qry = 'SELECT client.id_client,client.name, _order.client_id_client,
+					SUM(_order.total) as TOTAL,count(_order.id_order) as NUM
+					FROM client,_order
+					WHERE client.id_client = _order.client_id_client AND client.id_client='.$id_client;
+			$result = $this->db->selectQuery($qry);
+			if(!$result){
+				$this->db->HandleError('No clients');
+				$returnValue = false;
+			}else{
+				if(!$this->db->numRows($result)){
+					$this->db->HandleError('No orders');
+					$returnValue = false;
+				}else{
+					$row = $this->db->fetchArray($result);
+					$returnValue = $row;
+				}
+			}
+			return $returnValue;
+
 		}
 
 		function getClient($id_client){
@@ -593,7 +614,7 @@
 	       	else{
 	       		$array_items = array();
 	       		while($row = $this->db->fetchArray($result)){
-	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price']));
+	       			array_push($array_items, array('id_session_cart'=>$row['id_session_cart'],'id_product'=>$row['product_id_product'],'number_items'=>$row['number_items'],'price'=>$row['price'],'description'=>$row['description'],'prescription'=>$row['prescription']));
 	       		}
 	       		$returnValue = $array_items;
 	       	}

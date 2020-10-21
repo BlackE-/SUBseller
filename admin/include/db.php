@@ -453,6 +453,7 @@
                                 number_items INT,
                                 price DECIMAL(10,2),
                                 description TEXT,
+                                prescription TEXT,
                                 session_client_id_session_client INT UNSIGNED,
                                 product_id_product INT UNSIGNED,
                                 
@@ -511,29 +512,6 @@
                                 FOREIGN KEY(coupon_id_coupon)
                                     REFERENCES coupon(id_coupon)
                                     ON DELETE RESTRICT ON UPDATE CASCADE
-                            )";
-                $result = mysqli_query($this->connection,$create);
-                if(!$result){
-                    $returnValue = false;
-                    $this->HandleDBError('Error creating tables');
-                }
-                $create = "CREATE TABLE cart_item(
-                                id_cart_item INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
-                                product_id_product INT UNSIGNED,
-                                number_items INT, 
-                                price DECIMAL (10,2),
-                                order_id_order INT UNSIGNED,
-                                
-                                INDEX (product_id_product),
-                                INDEX (order_id_order),
-                                
-                                FOREIGN KEY(product_id_product)
-                                    REFERENCES product(id_product)
-                                    ON DELETE RESTRICT ON UPDATE CASCADE,
-                                
-                                FOREIGN KEY(order_id_order)
-                                    REFERENCES _order(id_order)
-                                    ON DELETE RESTRICT ON UPDATE CASCADE 
                             )";
                 $result = mysqli_query($this->connection,$create);
                 if(!$result){

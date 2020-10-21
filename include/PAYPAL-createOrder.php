@@ -56,6 +56,7 @@
 				exit();
 			}
 			$cart = $couponSetup['products'];
+			$last_array_value = end($cart);
 			foreach ($cart as $key => $value) {
 				$product = $set->getProduct($value['id_product']);
 				$pro = $product[0]['product'];
@@ -68,7 +69,8 @@
 				$items .= 			'"value":"'.$value['newPrice'].'"';
 				$items .=	'},';
 				$items .= 	'"quantity":"'.$value['number_items'].'"';
-				if ($key === array_key_last($cart)){$items .= '}';}
+				// if ($key === array_key_last($cart)){$items .= '}';}
+				if ($value === $last_array_value) {$items .= '}';}
 				else{$items .= '},';}
 			}
 			$total = $couponSetup['total'];
@@ -78,6 +80,7 @@
 		else{
 			//sin coupon
 			$cart = $set->getCart();
+			$last_array_value = end($cart);
 			foreach ($cart as $key => $value) {
 				$product = $set->getProduct($value['id_product']);
 				$pro = $product[0]['product'];
@@ -92,12 +95,12 @@
 				$items .= 			'"value":"'.$value['price'].'"';
 				$items .=	'},';
 				$items .= 	'"quantity":"'.$value['number_items'].'"';
-				if ($key === array_key_last($cart)){$items .= '}';}
+				// if ($key === array_key_last($cart)){$items .= '}';}
+				if ($value === $last_array_value) {$items .= '}';}
 				else{$items .= '},';}
 
 			   $subtotal += $totalRow;
 			}
-			$subtotal = $totalRow;
 			$freeDelivery = $set->getLimitFreeDelivery();
 			$total = $subtotal;
 			$shipping = 0;

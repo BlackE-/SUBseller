@@ -34,8 +34,9 @@
 	                    echo '<tr>';
 	                        echo '<td><p class="id_client">'.$value['id_client'].'</p></td>';
 	                        echo '<td><p class="name">'.$value['name'].'</p></td>';
-	                        echo '<td><p class="ordes">'.$value['NUM'].'</p></td>';
-	                        echo '<td><p class="total">$'.number_format($value['TOTAL'],2,'.',',').'</p></td>';
+	                        $row = $set->getClientRow($value['id_client']);
+	                        echo '<td><p class="ordes">'.$row['NUM'].'</p></td>';
+	                        echo '<td><p class="total">$'.number_format($row['TOTAL'],2,'.',',').'</p></td>';
 	                        echo '<td><a href="client.php?id_client='.$value['id_client'].'"><button><i class="fas fa-arrow-circle-right"></i></button></a></td>';
 	                    echo '</tr>';
 	                }

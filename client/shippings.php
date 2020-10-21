@@ -33,7 +33,8 @@
                 <?php
                     $shippings = $set->getShippingsFromClient();
                     if(!$shippings){
-                        echo $set->getErrorMessage();
+                        echo '<p><i class="fas fa-home"></i> Sin direcciones guardadas</p>';
+                        //echo $set->getErrorMessage();
                     }
                     else{
                         echo '<ul class="list">';

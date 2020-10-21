@@ -4,7 +4,6 @@
     let phoneUser = document.getElementById('phoneRegister'); 
     let pass1 = document.getElementById('password1'); 
     let pass2 = document.getElementById('password2'); 
-    let genero = document.getElementById('sexRegister'); 
     let newsletter = document.getElementById('checkNewsletter');
 
     let emailLogin = document.getElementById('emailLogin');
@@ -31,20 +30,6 @@
     	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
-
-	// validatePassword = (value) =>{
-	// 	// const pa = /^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])[a-zA-Z0-9]{8}$/;
-	// 	//const pa = /^[a-zA-Z0-9]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
-	// 	//https://www.regextester.com/110035
-	// 	// const pa = /(?=[A-Za-z0-9@#$%^&+!=]+$)^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@#$%^&+!=])(?=.{8,}).*$/;	//At least 8 characters, min 1 Uppercase 1 Lowercase 1 Number 1 special character and only contains symbols from the alphabet, num
-		
-	// 	//const pa = /^[a-zA-Z0-9[a-zA-Z0-9@#$%^&+!=_]]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
-
-	// 	// at least one number, one lowercase and one uppercase letter
- //    	// at least six characters
-    	// const re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
-		// return re.test(value);
-	// }
 
 	pass1.onkeyup = () =>{
 		// Validate lowercase letters
@@ -79,17 +64,6 @@
 		  }
 	}
 
-	// let password = document.getElementById('password1');
-	// password.addEventListener('keyup',(event)=>{
-	// 	event.preventDefault();
-	// 	if(!validatePassword(password.value)){
-	// 		password.classList.add('error');
-	// 	}else{
-	// 		password.classList.remove('error');
-	// 		password.classList.add('success');
-	// 	}
-	// });
-
 	clearRegisterForm = () =>{
 		nameUser.classList.remove('animated');
 		nameUser.classList.remove('swing');
@@ -103,7 +77,6 @@
 		pass1.classList.remove('swing');
 		pass2.classList.remove('animated');
 		pass2.classList.remove('swing');
-		genero.classList.remove('error');
 	}
 
 	checkRegisterForm = () =>{  
@@ -137,18 +110,9 @@
 		    pass1.classList.add('swing');
 		    return false;
 		}
-		// if(!validatePassword(pass1.value)){
-		// 	pass1.classList.add('animated');
-		//     pass1.classList.add('swing');
-		//     return false;
-		// }
 		if(pass1.value !== pass2.value){
 			pass2.classList.add('animated');
 		    pass2.classList.add('swing');
-		    return false;
-		}
-		if(genero.value === '0'){
-			genero.classList.add('error');
 		    return false;
 		}
 		return true;
@@ -168,7 +132,6 @@
 	        formData.append('day', document.getElementById('day').value);
 			formData.append('month', document.getElementById('month').value);
 			formData.append('year', document.getElementById('year').value);
-			formData.append('sex', genero.value);
 	        if(newsletter.checked){formData.append('newsletter', 1);}
 	        else{formData.append('newsletter', 0);}
 
@@ -182,9 +145,9 @@
 						setModalError(myObj.message);
 						setTimeout(function(){closeModal();}, 5000);
 					}else{
-						closeModal();
-						window.location.href = "cart";
-						// setTimeout(function(){closeModal();}, 2000);	
+						hideLoading();
+						setModalError('Tu cuenta ha sido creada');
+						setTimeout(function(){window.location.href = "cart";}, 2000);	
 		            }
 				}
 			}
@@ -250,7 +213,6 @@
 					}else{
 						closeModal();
 						window.location.href = "cart";
-						// setTimeout(function(){closeModal();}, 2000);	
 		            }
 				}
 			}
@@ -377,8 +339,8 @@
 												setModalError(myObj.message);
 												setTimeout(function(){closeModal();}, 5000);
 											}else{
-												closeModal();
-												window.location.href = "cart";
+												setModalError('Tu cuenta ha sido creada');
+												setTimeout(function(){window.location.href = "cart";}, 2000);
 								            }
 										}
 									}

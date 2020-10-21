@@ -41,6 +41,4 @@
     });
     selector.on('selectr.select', function(option) {
         window.location.href = option.value;
-        //console.log(option.value);
-
     });

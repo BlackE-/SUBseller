@@ -6,8 +6,9 @@
                     else{echo '<a href="client/index"><span>MI CUENTA</span></a>';}
                 ?>
                 <a href="faq">PREGUNTAS FRECUENTES</a>
-                <a href="faq">AYUDA</a>
+                <a href="https://wa.me/15214771261076?text=Me%20interesa%20unos%20lentes%20">AYUDA</a>
                 <a href="aviso.pdf">AVISO DE PRIVACIDAD</a>
+                <a href="store">TIENDA</a>
                 <a href="terminos.pdf">TÉRMINOS Y CONDICIONES</a>
         </div>
     </div>

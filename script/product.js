@@ -64,9 +64,7 @@
 		});
 	}
 
-	  
-
-
+	
 
 	document.getElementById('addToCart').addEventListener('click',()=>{
 		showLoading();
@@ -76,14 +74,16 @@
         let id_product = document.getElementById('id_product').value;
         let quantity = document.getElementById('qty').value;
         let price = document.getElementById('price').value;
-        let receta = `<table><tr><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Add</th></tr>
-    					<tr><th class="od"><p>OD</p></th>
+        let receta = `<div style="margin: 5px auto;padding: 10px;border-radius: 5px;border: 1px solid #ccc;">
+        				<table style="text-align: center;font-size: 10px;margin:0 auto;">
+        				<tr style="border-bottom: 1px solid #ccc;"><th></th><th>Esfera</th><th>Cilindro</th><th>Eje</th><th>Add</th></tr>
+    					<tr style="border: 1px solid #ccc;"><th style="border-right:1px solid #ccc;"><p>OD</p></th>
 	            		<td><p>${document.getElementById('od_esfera').value}</p></td>
 	            		<td><p>${document.getElementById('od_cilindro').value}</p></td>
 	            		<td><p>${document.getElementById('od_eje').value}</p></td>
 	            		<td><p>${document.getElementById('od_add').value}</p></td>
 	            		</tr>
-	            		<tr><th class="id"><p>OI</p></th>
+	            		<tr style="border: 1px solid #ccc;"><th style="border-right:1px solid #ccc;"><p>OI</p></th>
 	            		<td><p>${document.getElementById('oi_esfera').value}</p></td>
 	            		<td><p>${document.getElementById('oi_cilindro').value}</p></td>
 	            		<td><p>${document.getElementById('oi_eje').value}</p></td>
@@ -92,17 +92,24 @@
 	            		<tr>
 	            		<td colspan="5"><p>Observaciones: ${document.getElementById('notes').value}</p></td>
 	            		</tr>
-	            		</table>`;
-
+	            		</table></div>`;
+	    // let prescription = document.getElementById('prescription').files[0];
+	    let file = document.getElementById('prescription');
+	    let prescription = (file.files.length == 0 ) ? false : file.files[0];
 
 
         formData.append('id_product', id_product);
 		formData.append('quantity', quantity);
 		formData.append('price', price);
 		formData.append('receta', receta);
+		formData.append('prescription', prescription);
+		// for (var value of formData.keys()) {
+		//    console.log(value); 
+		// }
 
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
+			console.log(this.status);
 			if (this.readyState == 4 && this.status == 200) {
 				console.log(this.response);
 				myObj = JSON.parse(this.response);
@@ -121,8 +128,7 @@
 			}
 		}
 		xhr.open('POST', './include/PRODUCT-addProductToCart.php', true);
-		xhr.send(formData);  
-
+		xhr.send(formData);
 
 
 	});

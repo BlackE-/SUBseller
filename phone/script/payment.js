@@ -58,7 +58,7 @@
 					}	
 				}
 			}
-			xhr.open('POST','./include/PAYPAL-completeOrder.php', true);
+			xhr.open('POST','../include/PAYPAL-completeOrder.php', true);
 			xhr.send(fd);
 	}
 
@@ -67,12 +67,13 @@
 		let head = document.getElementsByTagName('head')[0];
 		let script = document.createElement('script');
 		script.type = 'text/javascript';
+		script.setAttribute('data-namespace','paypal_sdk');
 		script.src = url;
 		head.appendChild(script);
 
 		   //PAYPAL
 		setTimeout(function(){
-			paypal.Buttons({
+			window.paypal_sdk.Buttons({
 						createOrder: function (data, actions) {
 						  return fetch('../include/PAYPAL-createOrder.php', {
 						    method: 'POST'
@@ -144,7 +145,7 @@
 	loadPaypalScript(urlPaypal,'');	
 
 	const paypalButton = document.getElementById('paypal-button-container');
-	paypalButton.style.display = 'none';
+	//paypalButton.style.display = 'none';
 
 	//COUPON
 	const coupon = document.getElementById('coupon');
@@ -410,7 +411,7 @@
 								closeModal();
 								//windows relocation
 								let url = `confirm?id_order=${myObj.return}`;
-								Window.location.href = url
+								window.location.href = url
 							}
 						}
 					}

@@ -2,7 +2,7 @@
 html{scroll-behavior: smooth;}
 body{font-family: 'Lato', sans-serif;scroll-behavior: smooth;}
 .container{width:90%;max-width: 1280px;margin: 0 auto;display: grid;}
-header {background: 	linear-gradient(to bottom, #2361f0 40px,#2361f0 40px,#2361f0 40px,#eff4ff 40px,#eff4ff 40px);box-shadow: 1px 1px 10px #000;}
+header {width:100%;position:fixed;z-index:100;background: 	linear-gradient(to bottom, #2361f0 40px,#2361f0 40px,#2361f0 40px,#eff4ff 40px,#eff4ff 40px);box-shadow: 1px 1px 10px #000;}
 header .container{display:grid;grid-template-columns: 250px auto;grid-template-rows: 40px 80px;max-width: none;width: 100%;}
 @media only screen and (max-width: 1060px) {header .container{grid-template-columns: 200px auto;}}
 @media only screen and (max-width: 690px) {header .container{display:grid;grid-template-columns: 30% auto;grid-template-rows: 40px 80px;}}
@@ -48,6 +48,8 @@ header #menuContainer #tiendaLinkContainer a{color:#2361f0;text-decoration: none
 }
 @media only screen and (max-width: 360px) {header .container #topContainer{justify-content: right;}}
 
+
+.bodyContainer{padding:115px 0 0 0;}
 
 /*			FOOTER 					*/
 footer{background: #2361f0;padding: 50px 0;}

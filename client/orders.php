@@ -34,7 +34,7 @@
                 <?php
                     $history = $set->getOrdersClient();
             		if(!$history){
-            			echo '<p><i class="fas fa-inbox"></i> '.$set->getErrorMessage() .'</p>';
+            			echo '<p><i class="fas fa-inbox"></i> Sin Ordenes</p>';
             		}
             		else{
             		    echo '<ul class="list">';
@@ -45,7 +45,7 @@
                 	        switch ($value['status']) {
                 	        	case 'PENDING PAYMENT':echo '<p class="status payment">ESPERANDO PAGO</p>';break;
                 	        	case 'PROCESSING':echo '<p class="status processing">PAGADO</p>';break;
-                	        	case 'CANCELED':echo '<p class="status canceled">CANCELED</p>';break;
+                	        	case 'CANCELED':echo '<p class="status canceled">CANCELADO</p>';break;
                 	        	case 'EXPIRED':echo '<p class="status expired">EXPIRADO</p>';break;
                 	        	case 'COMPLETED':echo '<p class="status complete">COMPLETADO</p>';break;
                 	        }

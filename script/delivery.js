@@ -53,14 +53,14 @@
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if (this.readyState == 4 && this.status == 200) {
-				// console.log(this.response);
+				console.log(this.response);
 				myObj = JSON.parse(this.response);
 				if(!myObj.return){
 					hideLoading();
 					setModalError(myObj.message);
 					setTimeout(function(){closeModal();}, 5000);
 				}
-	            returnValue = myObj.return; 
+	            return myObj.return; 
 			}
 		}
 		xhr.open('POST','./include/DELIVERY-insertPhone.php'); //i dont want it async
@@ -82,7 +82,8 @@
 				phone.classList.add('swing');
 				return false;
 			}
-			if(!savePhone()){return false;}else{phoneSave = !phoneSave;return false;}
+			savePhone();
+			phoneSave = false;
 		}
 
 		if(addressline1.value == ''){
@@ -113,6 +114,7 @@
 	//save shipping in DB
 	deliveryFormSubmit = () =>{
 		if(checkDeliveryForm()){
+			console.log('return from check deliveryFormSubmit');
     		resetModal();
     		openModal();
 			showLoading();

@@ -36,11 +36,12 @@
 </head>
 <body>
 	<?php include('header.php');?>
-	<div id="cartHeader">
-		<div class="container">
-			<h1>Carrito</h1>
+	<div class="bodyContainer">
+		<div id="cartHeader">
+			<div class="container">
+				<h1>Carrito</h1>
+			</div>
 		</div>
-	</div>
 		<?php
 			if(empty($cart)){
 		?>
@@ -127,6 +128,7 @@
 		<?php
 			} //end ELSE if cart is empty	
 		?>
+	</div>
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
 	<script type="text/javascript" src="script/cart.js"></script>

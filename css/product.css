@@ -47,12 +47,30 @@ ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
     .qtyBox button{ width:50px;height:50px;}
     .qtyBox .quantity{width:50px;height:50px;}
 }
-.receta{margin:0 auto;padding:10px;border-radius: 5px;border:1px solid #ccc;}
-.receta table{width:360px;text-align: center;}
+
+.tabs{display: grid;grid-template-columns: 1fr 1fr;justify-content: center;align-items: center;grid-gap: 10px;margin:10px 10px 0 10px;}
+.tabs label{color:#545454;}
+.radio-tabs{margin:0 auto;text-align:center;}
+.radio-tabs input[name='houses-state']{display: none;}
+.radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}
+.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}
+.radio-tabs .tab:hover {background-color: #fff;}
+@media all and (max-width : 570px) {.radio-tabs .tab {padding:10px 20px;font-size:14px;}}
+@media all and (max-width : 440px) {.radio-tabs .tab {padding:10px;font-size:10px;}}
+.radio-tabs .panels {background-color: #fff;padding: 1em 20px;margin: 0px 10px;border-right: 1px solid #ccc;border-left: 1px solid #ccc;border-bottom: 1px solid #ccc;}
+.panels ul{margin:0;padding:0;}
+.radio-tabs .panel {display: none;}
+#starks:checked ~ .panels #starks-panel,
+#lannisters:checked ~ .panels #lannisters-panel {display: block;}
+
+
+
+.receta{padding:10px;border-radius: 5px;}
+.receta table{width:360px;text-align: center;margin:0 auto;}
 .receta table tr{margin:5px 0;}
 .receta table th{font-size: 14px;}
 .receta table th p{position: relative;padding: 0 5px 0 0;}
-.receta table th p span{position: absolute;border:1px solid #000;background:#fff;padding:10px;top:0px;left:-50px;opacity: 0;z-index: -1;transition: all 300ms ease-in;}
+.receta table th p span{position: absolute;border:1px solid #000;background:#fff;padding:10px;top:0px;left:-70px;opacity: 0;z-index: -1;transition: all 300ms ease-in;}
 .receta table th p:hover span{opacity: 1;z-index: 1;}
 .receta table th i{color:#2361f0;}
 
@@ -64,7 +82,7 @@ ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
 .receta table input[type="text"]{width:50px;border:0;padding:10px;background: transparent;outline: none;} 
 .receta table textarea{width:100%;resize:none;height:50px;background: transparent;outline: none;border:0;} 
 
-.buttonContainer{margin:20px 0;}
+.buttonContainer{margin:20px 0;text-align: left;}
 .buttonContainer #addToCart{background:transparent;border:0;outline:0;text-decoration: none;color:#2361f0;font-size: 20px;}
 .buttonContainer #addToCart i{transition: all 300ms ease-in;}
 .buttonContainer #addToCart:hover i{transform:rotate(90deg);}

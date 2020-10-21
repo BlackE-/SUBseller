@@ -176,6 +176,13 @@
 										echo 		'<p class="totalRow" >$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p>';
 										echo 	'</div>';
 										echo '</div>';
+										echo '<div>'.$value['description'].'</div>';
+										if(!$value['prescription']){
+
+										}else{
+											echo '<p>Receta</p>';
+											echo '<a href="..'.$value['prescription'].'"><img style="width:100%;" src="..'.$value['prescription'].'"/></a>';
+										}
 									}
 							?>
 					</div>

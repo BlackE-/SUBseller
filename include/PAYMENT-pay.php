@@ -87,6 +87,7 @@
 	        $table3 .= '<p style="font-size: 12px;font-weight:800;">'.$pro['name'].'</p>';
 	        $table3 .= '<p style="font-size: 12px;">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 	        $table3 .= '</td>';
+	        $table3 .= '<td>'.$value['description'].'</td>';
 	        $table3 .= '<td><p style="color:#12f9e7;font-size:12px;">$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p></td>';
 			$table3 .= "</tr>";
 		}
@@ -131,6 +132,7 @@
 	        $table3 .= '<p style="font-size: 12px;font-weight:800;">'.$pro['name'].'</p>';
 	        $table3 .= '<p style="font-size: 12px;">'.$value['number_items'] . 'x $' . $price[0].'.<sup>'.$price[1].'</sup></p>';
 	        $table3 .= '</td>';
+	        $table3 .= '<td>'.$value['description'].'</td>';
 	        $table3 .= '<td><p style="color:#12f9e7;font-size:12px;">$'.$priceRow[0].'.<sup>'.$priceRow[1].'</sup></p></td>';
 			$table3 .= "</tr>";
 		}
@@ -432,7 +434,7 @@
 	$table10 .= '<tr><td>'.$table9.'</td></tr>';
 	$table10 .= '</table>';
 
-	$table10Admin = = '<table style="width:100%;background:#f1f3f5;padding:20px;">';
+	$table10Admin = '<table style="width:100%;background:#f1f3f5;padding:20px;">';
 	$table10Admin .= '<tr><td>'.$table0.'</td></tr>';
 	$table10Admin .= '<tr><td>'.$table1Admin.'</td></tr>';
 	$table10Admin .= '<tr><td>'.$table2.'</td></tr>';

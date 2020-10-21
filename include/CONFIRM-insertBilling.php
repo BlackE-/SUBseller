@@ -7,7 +7,7 @@
 
 	}else{
 		//PASO CREAR Y ENVIAR CORREO A CLIENTE
-		$billing = $set->getBilling($returnValue['id_billing']);
+		$billing = $set->getBilling($returnValue);
 		$fromEmail = $set->getWebsiteSetting('from_email');
 		$website_title = $set->getWebsiteSetting('website_title');
 		$subject = 'Factura de pedido:'.$returnValue['id_order'].' en'.$website_title;

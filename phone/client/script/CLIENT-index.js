@@ -1,16 +1,11 @@
 	let nameUser = document.getElementById("nameRegister"); 
     let emailUser  = document.getElementById('emailRegister');
     let phoneUser = document.getElementById('phoneRegister'); 
-    let genero = document.getElementById('sexRegister'); 
     let newsletter = document.getElementById('checkNewsletter');
 
-    let emailLogin = document.getElementById('emailLogin');
-    let passwordLogin = document.getElementById('passwordLogin');
-
-
 	const modalBody = document.querySelector('.modal-body');
-	showLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'inline-block';}
-	hideLoading = () =>{document.querySelector('.lds-dual-ring').style.display = 'none';}
+	showLoading = () =>{document.querySelector('.lds-spinner').style.display = 'inline-block';}
+	hideLoading = () =>{document.querySelector('.lds-spinner').style.display = 'none';}
 	resetModal = () =>{
 		let c = modalBody.children;
 		for (i = 0; i < c.length; i++) {
@@ -38,7 +33,6 @@
 		phoneUser.classList.remove('swing'); 
 		emailUser.classList.remove('animated');
 		emailUser.classList.remove('swing');
-		genero.classList.remove('error');
 	}
 
 	checkRegisterForm = () =>{  
@@ -47,7 +41,7 @@
 			nameUser.classList.add('swing');
 			return false;
 		}
-		if( phoneUser.value === ""){
+		if(phoneUser.value === ""){
 		    phoneUser.classList.add('animated');
 		    phoneUser.classList.add('swing');
 		    return false;
@@ -60,10 +54,6 @@
 		if(!validateEmail(emailUser.value)){
 			emailUser.classList.add('animated');
 		    emailUser.classList.add('swing');
-		    return false;
-		}
-		if(genero.value === '0'){
-			genero.classList.add('error');
 		    return false;
 		}
 		return true;
@@ -82,7 +72,6 @@
 	        formData.append('day', document.getElementById('day').value);
 			formData.append('month', document.getElementById('month').value);
 			formData.append('year', document.getElementById('year').value);
-			formData.append('sex', genero.value);
 	        if(newsletter.checked){formData.append('newsletter', 1);}
 	        else{formData.append('newsletter', 0);}
 

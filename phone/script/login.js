@@ -2,11 +2,9 @@
     let apellidoRegister = document.getElementById('apellidoRegister');
     let emailUser  = document.getElementById('emailRegister');
     let phoneUser = document.getElementById('phoneRegister'); 
-    let pass1 = document.getElementById('password1'); 
-    let pass2 = document.getElementById('password2'); 
-    let genero = document.getElementById('sexRegister'); 
     let newsletter = document.getElementById('checkNewsletter');
-
+	let password = document.getElementById('password1');
+    
     let emailLogin = document.getElementById('emailLogin');
     let passwordLogin = document.getElementById('passwordLogin');
 
@@ -31,22 +29,39 @@
     	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
+	
+	pass1.onkeyup = () =>{
+		// Validate lowercase letters
+		  const lowerCaseLetters = /[a-z]/g;
+		  if(pass1.value.match(lowerCaseLetters)) {  
+		    document.getElementById('min').classList.add("valid");
+		  } else {
+		    document.getElementById('min').classList.remove("valid");
+		  }
+		  
+		  // Validate capital letters
+		  const upperCaseLetters = /[A-Z]/g;
+		  if(pass1.value.match(upperCaseLetters)) {  
+		    document.getElementById('MAY').classList.add("valid");
+		  } else {
+		    document.getElementById('MAY').classList.remove("valid");
+		  }
 
-	validatePassword = (value) =>{
-		const pa = /^[a-zA-Z0-9[a-zA-Z0-9@#$%^&+!=]]{8,}$/;	//Minimum 8 Character Password with lowercase, uppercase letters and numbers 
-		//https://www.regextester.com/110035
-		return pa.test(value);
+		  // Validate numbers
+		  const numbers = /[0-9]/g;
+		  if(pass1.value.match(numbers)) {  
+		    document.getElementById('num1').classList.add("valid");
+		  } else {
+		    document.getElementById('num1').classList.remove("valid");
+		  }
+		  
+		  // Validate length
+		  if(pass1.value.length >= 8) {
+		    document.getElementById('8char').classList.add("valid");
+		  } else {
+		    document.getElementById('8char').classList.remove("valid");
+		  }
 	}
-	let password = document.getElementById('password1');
-	password.addEventListener('keyup',(event)=>{
-		event.preventDefault();
-		if(!validatePassword(password.value)){
-			password.classList.add('error');
-		}else{
-			password.classList.remove('error');
-			password.classList.add('success');
-		}
-	});
 
 	clearRegisterForm = () =>{
 		nameUser.classList.remove('animated');
@@ -61,7 +76,6 @@
 		pass1.classList.remove('swing');
 		pass2.classList.remove('animated');
 		pass2.classList.remove('swing');
-		genero.classList.remove('error');
 	}
 
 	checkRegisterForm = () =>{  
@@ -105,10 +119,6 @@
 		    pass2.classList.add('swing');
 		    return false;
 		}
-		if(genero.value === '0'){
-			genero.classList.add('error');
-		    return false;
-		}
 		return true;
 	}
 
@@ -126,7 +136,6 @@
 	        formData.append('day', document.getElementById('day').value);
 			formData.append('month', document.getElementById('month').value);
 			formData.append('year', document.getElementById('year').value);
-			formData.append('sex', genero.value);
 	        if(newsletter.checked){formData.append('newsletter', 1);}
 	        else{formData.append('newsletter', 0);}
 
@@ -243,8 +252,7 @@
 					setTimeout(function(){closeModal();}, 5000);
 				}else{
 					hideLoading();
-					setModalError('Tu cuenta ha sido creada');
-					setTimeout(function(){window.location.href = "cart";}, 2000);
+					window.location.href = "cart";
 	            }
 			}
 		}
@@ -272,12 +280,14 @@
 		});
 
 		FB.getLoginStatus(function(response) {
-		    if(!firstTime) {
-		        //hacer la llamada solo si es la 1ra vez en la pagina
-		        sessionStorage.setItem("first_time","1");
-		        let userid = response.authResponse.userID;
-        		checkLoginFacebook(userid);
-        	}
+			console.log(response);
+		    if(typeof(response) != 'undefined'){
+		        let status = response.status;
+		        if(status === 'connected'){
+				    let userid = response.authResponse.userID;
+        		    checkLoginFacebook(userid);
+		        }
+		    }
 		});
 	};
 
@@ -332,8 +342,8 @@
 												setModalError(myObj.message);
 												setTimeout(function(){closeModal();}, 5000);
 											}else{
-												closeModal();
-												window.location.href = "cart";
+												setModalError('Tu cuenta ha sido creada');
+												setTimeout(function(){window.location.href = "cart";}, 2000);
 								            }
 										}
 									}

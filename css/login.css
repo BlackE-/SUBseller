@@ -15,7 +15,8 @@
 .pasoContainer ul li:nth-child(2):after{content:'2';}
 .pasoContainer ul li:nth-child(3):after{content:'3';}
 .pasoContainer ul li:nth-child(4):after{content:'4';}
-.pasoContainer ul li.active:after,.pasoContainer ul li.completed:after{background: #2361f0;color: #fff;}
+.pasoContainer ul li.active:after{background: #fff;color: #2361f0;border:1px solid #2361f0;}
+.pasoContainer ul li.completed:after{background: #2361f0;color: #fff;}
 
 
 

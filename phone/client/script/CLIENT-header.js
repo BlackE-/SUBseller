@@ -4,7 +4,6 @@
 	if(!urlActive.includes('?')){
 		const liActive = '#nav_'+urlActive;
 		const active = document.querySelector(liActive);
-		// console.log(active);
 		if(active !== null){
 			active.classList.add('active');
 		}
