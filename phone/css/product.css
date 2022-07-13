@@ -1,0 +1,100 @@
+.productContainer{padding:0;background: #f7f7f7;}
+.productContainer #productContainer{grid-template-columns: 1fr;grid-gap: 10px;}
+
+/*  BREAD */
+ul.breadcrumb {  padding: 10px 0px;  list-style: none;  background-color: #eee;}
+ul.breadcrumb li {font-size: 12px;display: inline-block}
+ul.breadcrumb li:first-child:before {  content: "";}
+ul.breadcrumb li:before {padding: 5px;  color: black;  content: "/\00a0";}
+ul.breadcrumb li a {  color: #0275d8;text-decoration: none;}
+ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
+
+
+.productRow{display: grid;grid-template-columns: 1fr;grid-gap:10px;background: #fff;padding:20px 10px;margin-bottom: 25px;}
+/*  PRODUCTO FOTOS  */
+#thumbContainer{width:100%;max-width:360px;overflow:hidden;padding:20px 0;text-align:center;border-top:1px solid #12f9e7;overflow: hidden;display: grid;align-items: center;}
+#thumbContainer img{width:100%;}
+#thumbSelected{display: block;margin: 0 auto;}
+.glide__bullets{max-width: 360px;margin:0 auto;text-align: center;}
+.glide__bullets button{outline:none;width:20px;height:20px;margin:10px;border-radius: 20px;border:1px solid #12f9e7;background-color:#fff;}
+.glide__bullets button.glide__bullet--active{border:1px solid #12f9e7;background-color:#12f9e7;}
+/*detaller*/
+.infoContainer{display: grid;align-items: center;border-right: 1px solid #12f9e7;}
+.infoContainer .typeContainer{text-align: right;}
+.infoContainer .typeContainer p{background:#2361f0;padding:0 10px;color:#fff;display: inline-block;margin:0;}
+.infoContainer .detailsContainer{padding:10px;}
+.infoContainer .detailsContainer p{color:#545454;font-size: 12px;}
+.infoContainer .detailsContainer .name{color:#2361f0;font-weight: 700;font-size: 16px;margin:0;}
+
+
+.infoContainer .sideBySideContainer{display: grid;grid-template-columns: 1fr 1fr;border-top:1px solid #12f9e7;align-items: start;}
+.infoContainer .numbersContainer{display: grid;grid-template-columns: 1fr;padding:10px 0;grid-gap:10px;}
+.infoContainer .numbersContainer .price{color:#12f9e7;font-weight: 700;font-size: 20px;text-align: center;margin:0;}
+.infoContainer .numbersContainer .price sup{font-size: 12px;}
+.qtyBox {margin:0 auto;}
+.qtyBox button{    background: #fff;border:0;border-bottom: 1px solid #12f9e7;border-right: 1px solid #12f9e7;border-radius:0;color:#12f9e7;height: 25px;width: 25px;font-size: 10px;    display: inline-block; vertical-align: middle; outline:none;}
+.qtyBox .quantity{width:25px;height:25px;text-align:center; outline: none;   display: inline-block;vertical-align: middle;border:none;background:#12f9e7;color: #2361f0;-moz-appearance:textfield; }
+.qtyText{display:inline-block;width:100px;}
+.quantity::-webkit-outer-spin-button,
+.quantity::-webkit-inner-spin-button{-webkit-appearance: none;margin: 0; }
+.little{padding:5px 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;text-align: center;}
+.informationContainer {border-left:1px solid #12f9e7;padding: 10px;text-align: right;}
+.informationContainer p{color:#545454;font-size: 12px;margin-top: 0;}
+.informationContainer .description_short{font-style: italic;}
+
+
+.tabs{display: grid;grid-template-columns: 1fr 1fr;justify-content: center;align-items: center;grid-gap: 10px;margin:0;}
+.tabs label{color:#545454;}
+.radio-tabs{margin:15px auto 25px auto;text-align: center;width:100%;}
+.radio-tabs input[name='houses-state']{display: none;}
+/*.radio-tabs .tab {display: inline-block;padding: 10px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;font-size: 12px;}*/
+/*.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}*/
+
+
+.radio-tabs .tab {display: inline-block;padding: 10px;cursor: pointer;background-color: #fff;
+	border-bottom: .3em solid #fbfbfc;font-size: 12px;}
+.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;
+	background-color: #ededed;cursor: default;color:#000;}
+.radio-tabs .tab:hover {background-color: #fff;}
+.radio-tabs .panels {background-color: #fff;}
+.panels ul{margin:0;padding:0;}
+.radio-tabs .panel {display: none;}
+#starks:checked ~ .panels #starks-panel,
+#lannisters:checked ~ .panels #lannisters-panel {display: block;}
+
+.recetaLabel{    color: #545454;font-size: 12px;}
+.receta{margin:0 auto;padding:10px;border-radius: 5px;border:1px solid #ccc;}
+.receta table{width:245px;text-align: left;margin: 0 auto;}
+.receta table tr{margin:2.5px 0;}
+.receta table th{font-size: 12px;}
+.receta table th.od, .receta table th.oi{text-align: center;}
+.receta table th p{position: relative;}
+.receta table th p span{background:#fff;padding:10px;transition: all 300ms ease-in;}
+.receta table th p:hover span{opacity: 1;z-index: 1;}
+.receta table th i{color:#2361f0;}
+
+.receta table th.od i:nth-child(1){color:#eee;}
+.receta table th.oi i:nth-child(2){color:#eee;}
+.receta table td{border:1px solid #ccc;}
+.receta table td:nth-child(even){background: #eff4ff;}
+.receta table td:nth-child(odd){background: #f7f7f7;}
+.receta table input[type="text"]{width:70px;border:0;padding:10px;background: transparent;outline: none;} 
+.receta table textarea{width:100%;resize:none;height:50px;background: transparent;outline: none;border:0;} 
+
+
+.receptaContainerInput input{font-size: 10px;}
+
+#productFooterFixed{position: fixed;bottom: 0;left:0;width:calc(100% - 20px);    border-top: 1px solid #2361f0;background: #fff;padding:10px;align-items: center;}
+.buttonContainer #addToCart{background: #12f9e7;font-size:14px;text-decoration:none;outline: none;border: 0;color: #2361f0;padding: 10px 0;width:100%;border-radius: 20px;}
+.buttonContainer #addToCart i{transition: all 300ms ease-in;}
+.buttonContainer #addToCart:hover i{transform:rotate(90deg);}
+#productFooterFixed .totalContainer{display: grid;grid-template-columns: 50px 1fr;}
+#productFooterFixed p{color:#545454;margin: 0;}
+#productFooterFixed #total{color:#2361f0;font-weight: 800;}
+#productFooterFixed p sup{font-size: 8px;}
+
+.modal-body{padding: 20px !important;}
+.modal-body a{border:0;background: #2361f0;height:50px;color:#fff;max-width: 250px;display: block;line-height: 50px;text-decoration: none;margin: 20px auto 0 auto;}
+
+
+footer{padding: 25px 0 60px 0 !important;}

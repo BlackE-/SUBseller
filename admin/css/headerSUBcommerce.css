@@ -1,0 +1,95 @@
+header {
+  display: grid;
+  grid-template-columns: 150px auto 120px;
+  grid-gap: 10px;
+  padding: 10px 20px;
+  border-bottom: 1px solid #b7002a;
+  align-items: center;
+  box-shadow: 0px 2px 20px rgba(33, 33, 33, 0.4);
+}
+
+header .logoContainer img {
+  width: 30px;
+}
+
+@media only screen and (max-width: 460px) {
+  .logoContainer span {
+    display: none;
+  }
+}
+.mainContainer {
+  display: grid;
+  grid-template-columns: 150px auto;
+}
+
+.mainContainer #sidebar {
+  padding: 10px 0 0 10px;
+  background: #b7002a;
+  display: grid;
+  grid-template-rows:calc(100% - 77px) 80px;
+}
+.mainContainer #sidebar ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.mainContainer #sidebar ul li {
+  padding: 10px 0 10px 10px;
+}
+.mainContainer #sidebar ul li a {
+  color: #ffffff;
+  text-decoration: none;
+}
+.mainContainer #sidebar ul li i {
+  width: 25px;
+}
+.mainContainer #sidebar ul li i, .mainContainer #sidebar ul span {
+  display: inline-block;
+}
+.mainContainer #sidebar ul li:hover {
+  background: #ffffff;
+}
+.mainContainer #sidebar ul li:hover a {
+  color: #b7002a;
+}
+.mainContainer #sidebar ul li.active {
+  background: #ffffff;
+}
+.mainContainer #sidebar ul li.active a {
+  color: #b7002a;
+}
+
+@media only screen and (max-width: 740px) {
+  .mainContainer {
+    grid-template-columns: 50px auto;
+  }
+
+  .mainContainer #sidebar ul li span {
+    display: none;
+  }
+}
+footer {
+  display: grid;
+  background: #ccc;
+  padding: 20px;
+  align-items: baseline;
+  grid-template-columns: 33.3333% 33.3333% 33.3333%;
+}
+
+footer div:first-child img {
+  width: 50px;
+}
+
+footer div:nth-child(3) {
+  text-align: right;
+}
+
+@media only screen and (max-width: 460px) {
+  footer {
+    grid-template-columns: 100%;
+    grid-gap: 10px;
+    justify-items: center;
+  }
+}
+
+/*# sourceMappingURL=headerSUBcommerce2.css.map */

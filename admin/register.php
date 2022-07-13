@@ -1,21 +1,24 @@
 <?php
-	require_once dirname(__FILE__) . '/include/db.php';
 	require_once dirname(__FILE__) . '/include/setup.php';
-	$db = new DB();
-	$set = new Setup($db);
+	$set = new Setup();
+	$checkDBLogin = $set->checkDBLogin();
+	if(!$checkDBLogin['return']){
+		header('Location: init.php');
+		exit;
+	}
 ?>
 <!DOCTYPE html>
 <html lang="es">
 	<head>
-		<?php include('header_meta.php');?>
 		<link rel="stylesheet" type="text/css" href="css/login.css">
 	</head>
 	<body>
 	    <div class="container" id="registerContainer">
-	    	<h1><?php echo $site_name;?></h1>
-	        <img class="logo" src="<?php echo $logo?>">
+	    	<h1>Bienvenido a SUBcommerce</h1>
+	    	<img class="logo" src="../img/subseller.svg">
 	        <form class="loginForm" id="form1">
 	        	<p class="topRegister"><b>REGISTRO</b></p>
+	        	<p class="topRegister">Para continuar crea tu usuario</p>
 	        	<div class="row">
 	        	    <input type="email" name="email" placeholder="email@gmail.com" required/>
 	        	</div>
@@ -24,10 +27,16 @@
 	        	</div>
 	        	<div class="row">
 	        		<input type="submit" class="submitLogin" value="REGISTER">
-	        		<p class="forgot"><a href="recoverPassword.php"><i>Olvidé mi contraseña</i></a></p>
 	        	</div>
-	        	<div class="error"></div>
+	        	<div class="error" id="error"></div>
 	    	</form>
+	    	<div class="noShow" id="divToLogin">
+	    		<h1>Success</h1>
+	    		<p>Usuario registrado.</p>
+	    		<a href="login"><button>INICIAR SESIÓN</button></a>
+	    	</div>
+	    	
+			
 		</div>
 
 		<?php include("modal.php");?> 

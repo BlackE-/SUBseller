@@ -1,0 +1,122 @@
+input,textarea{border:1px solid #aaa;font-size:13px;padding: 5px;}
+input:focus,textarea:focus{outline: none; box-shadow: 0 0 0 2px rgba(200, 0, 0, 0.2);}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button {-webkit-appearance: none; margin: 0;}
+input[type=number] {  -moz-appearance: textfield;}
+
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 2fr 1fr;grid-template-rows: 80px auto;grid-gap: 10px; background:rgba(232, 232, 232, 0.5);}
+.mainContainer #main .product_data,
+.mainContainer #main .product_settings,
+.mainContainer #main .product_img,
+.mainContainer #main .product_settings_2,
+.mainContainer #main .product_price,
+.mainContainer #main .product_inventory{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 0 20px 20px 20px;border-radius: 2px;}
+
+/*
+
+	return div
+
+*/
+.mainContainer #main .returnDiv{grid-column-start: 1;grid-column-end: 3;background: transparent;;border:0;}
+.mainContainer #main .returnDiv a{color:#aaa;text-decoration: none;}
+.mainContainer #main .returnDiv a:hover{color:#b7002a;}
+.mainContainer #main .product_price{grid-column-start: 1;grid-column-end: 2;}
+.mainContainer #main .product_inventory{grid-column-start: 1;grid-column-end: 2;}
+/*
+	
+	save 
+
+*/
+.mainContainer #main .saveContainer{margin:0 0 20px 0;background: #fff;border:1px solid #e3e3e3;padding: 20px;border-radius: 2px;display: grid;grid-template-columns: 1fr 1fr;grid-gap:10px;}
+.mainContainer #main .saveContainer #saveNewProduct{background: #b7002a;color:#fff;border:0; width: 100%;padding: 5px;}
+.mainContainer #main .saveContainer #cancel{background: #fff;color:#000;border:1px solid; padding: 5px;text-align: center;text-decoration: none;}
+/*
+	PRODUCT DATA
+*/
+.mainContainer #main .product_data input[type='text']{width:calc(100% - 10px);}
+.mainContainer #main .product_data textarea{width:calc(100% - 10px);height:200px;resize:none;border:1px solid #aaa;}
+/*
+
+	ORGANIZACION
+
+*/
+#brandSelect,#typeSelect,#unit{width:100%;padding: 7px 28px 7px 14px;    font-size: 13px;cursor: pointer;border: 1px solid #999;border-radius: 3px;background-color: #fff;}
+#unit option{padding: 7px;}
+
+/*
+		
+	CONFIGURACION
+
+*/
+.statusContainer{display: inline-block;}
+.statusContainer input[type=checkbox] {height: 0;width: 0;visibility: hidden;}
+.statusContainer label {cursor: pointer;text-indent: -9999px;width: 30px;height: 20px;background: grey;display: block;border-radius: 10px;position: relative;display: inline-block;}
+.statusContainer label:after {content: '';position: absolute;top: 5px;left: 5px;width: 9px;height: 9px;background: #fff;border-radius: 9px;transition: 0.3s;}
+.statusContainer input:checked + label {background: #d13628;}
+.statusContainer input:checked + label:after {left: calc(100% - 5px);transform: translateX(-100%);}
+.statusContainer label:active:after {width: 13px;}
+
+
+/*
+
+	imagenes
+
+*/
+
+.product_img{display: grid;grid-template-columns: 1fr 1fr;}
+.product_img h4{grid-column-start: 1;grid-column-end: 3;}
+
+.pickThumbnail {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
+.pickThumbnail + label {font-size: 1em; color: black;display: inline-block;}
+.pickThumbnail:hover + label {cursor: pointer;}
+
+.secondaryContainerDiv{display: grid;grid-template-columns: repeat(2,150px);}
+.secondaryContainerDiv img{width:100%;}
+.secondaryContainer {position: relative;}
+.secondaryContainer .removeImage{position:absolute; right:0;}
+
+.pickSecundary {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
+.pickSecundary + label {grid-column-start:1;grid-column-end:3;font-size: 1em; color: black;display: inline-block;}
+.pickSecundary:hover + label {cursor: pointer;}
+
+
+/*
+
+	prices
+
+*/
+.product_price{display: grid;grid-template-columns: 1fr 1fr;align-items: center;}
+.product_price h4{grid-column-start: 1;grid-column-end: 3;}
+.product_price div{position: relative;}
+.product_price .priceContainer label{position: absolute;top:4px;left:5px;font-size: 13px;}
+.product_price .statusContainerDiv{float:right;    display: inline-block;    width: 35px;    margin: 15px 15px 0 0;}
+.product_price div input{padding: 3px 3px 3px 15px;outline: 0;width:85%;border:1px solid #aaa;}
+
+
+
+/*
+
+	inventario
+
+*/
+.product_inventory{display: grid;grid-template-columns: 1fr 1fr;}
+.product_inventory h4{grid-column-start: 1;grid-column-end: 3;}
+.product_inventory div{position: relative;}
+.product_inventory div label{position: absolute;top:4px;left:5px;}
+.product_inventory div input{padding: 3px;outline: 0;width:90%;border:1px solid #aaa;}
+
+
+
+
+/*
+		DERECHA
+*/
+.product_settings select{width:100%;}
+.product_settings_2 table{width: 100%;}
+.product_settings_2 table p {display: inline-block;margin: 0;}
+
+
+.productorRelacionadosContainerDiv select{width: 100%;}
+
+.tagsContainerDiv select{width:100%;}
+.tagsContainerDiv .addTag{display: grid;grid-template-columns: 80% 20px;grid-template-rows: 30px;grid-gap:10px;align-items: center;}
+.tagsContainerDiv .addTag .saveTag:hover{cursor: pointer;}

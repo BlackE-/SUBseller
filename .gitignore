@@ -1,3 +1,11 @@
+node_modules/
 # ignore all logs
 *.log
 *.ini
+
+img/brand/*
+img/carousel/*
+img/category/*
+img/html/*
+img/product/*
+img/type/*

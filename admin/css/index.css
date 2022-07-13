@@ -1,0 +1,27 @@
+.mainContainer #main {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-gap: 10px;
+}
+.mainContainer #main .salesByMonthContainer {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+.mainContainer #main .salesByMonthContainer .canvasContainer {
+  max-width: 960px;
+  margin: 0 auto;
+  width: 100%;
+  text-align: center;
+}
+@media only screen and (max-width: 460px) {
+  .mainContainer #main {
+    grid-template-rows: 1fr 1fr 1fr;
+    grid-template-columns: 100%;
+  }
+  .mainContainer #main .salesByMonthContainer{
+    grid-column-start: 1;
+    grid-column-end: 2;
+  }
+}

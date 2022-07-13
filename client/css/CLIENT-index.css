@@ -1,0 +1,42 @@
+.dataForm{overflow: hidden;}
+.dataForm{background-color: #fff;padding: 1em 20px;}
+
+.dataForm input[type="text"],.dataForm input[type="number"],.dataForm input[type="email"]{transition:all 300ms ease-in;width:calc(100% - 10px);margin:10px 0; outline:0;border:0;border-bottom:1px solid #a9bdcc;border-radius:0;padding:5px 0 5px 10px;}
+.dataForm input[type="text"]:focus,.dataForm input[type="number"]:focus,.dataForm input[type="password"]:focus,.dataForm input[type="email"]:focus{box-shadow:1px 1px 1px rgba(0,0,255,0.5);}
+.dataForm input[type=number]::-webkit-outer-spin-button,
+.dataForm input[type=number]::-webkit-inner-spin-button {-webkit-appearance: none;margin: 0;}
+.dataForm input[type=number] {-moz-appearance:textfield;}
+.dataForm input.error{box-shadow: 1px 1px 1px rgba(255,0,0,0.5);}
+.dataForm select.error{border:1px solid rgb(250, 49, 81,0.5)}
+::-webkit-input-placeholder { color: #54b0ac;font-style:italic;}
+::-moz-placeholder {color: #54b0ac;font-style:italic;}
+:-ms-input-placeholder {  color: #54b0ac;font-style:italic;}
+:-moz-placeholder { color: #54b0ac;font-style:italic;}
+.little{padding:5px 0 10px 0;margin:0;font-size:10px;color:#a9bdcc;}
+
+.selectBirthdayContainer{display: grid;grid-template-columns: 1fr 2fr 1fr;grid-gap:15px;}
+.selectdivdate{position:relative;display:inline-block;border:1px solid #d2dae6;}
+.selectdivdate:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
+select::-ms-expand {display: none;}
+.selectdivdate select {-webkit-appearance: none; -moz-appearance: none;appearance: none;outline:none;width:100%;border:none;display: inline-block;height: 30px;  color:#54b0ac;  padding: 2px 0 0 5px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
+@media only screen and (max-width: 550px) {.selectBirthdayContainer{grid-template-columns:1fr;}}
+.selectdivsex{position:relative;display:block;border:1px solid #d2dae6;    overflow: hidden;}
+.selectdivsex:after {content: ' ';right: 4px;top: 10px; width:13px;height: 11px; background: url(../../img/selectArrow.svg) right center no-repeat;position: absolute;pointer-events: none;}
+select::-ms-expand {display: none;}
+.selectdivsex select {-webkit-appearance: none; -moz-appearance: none;appearance: none;outline:none;width:100%;border:none;display: block;height: 30px;  color:#54b0ac;  padding: 2px 0 0 5px;float: right;font-size: 14px;line-height: 1.75;background-color: transparent;background-image: none;-ms-word-break: normal;word-break: normal;}
+
+#checkboxNewsletter{display: grid;grid-template-columns: 34px auto;grid-gap:10px;align-items: center;}
+input[type=checkbox] {display:none;}
+input[type=checkbox] + label{border:1px solid #aabecc;position:relative;border-radius:34px;height: 34px;width: 34px;cursor: pointer;}
+input[type=checkbox] + label i{position:absolute;top: 8px;left: 8px;color: #aabecc;color: transparent;font-size: 18px;-webkit-text-stroke-width: 1px;-webkit-text-stroke-color: #aabecc;transition: all 300ms ease-in;}
+input[type=checkbox]:checked + label{border:1px solid #1ccfc8;background-color:#1ccfc8;}
+input[type=checkbox]:checked + label i{color: #fff;-webkit-text-stroke-color: transparent;}
+@media all and (max-width : 410px) {.dataForm select{width:100%;}}
+
+.submitRegister{ background: #2361f0;outline: none;border: 0;color: #fff;padding: 15px 50px;margin: 15px 0 0 0;border-radius: 50px;-webkit-box-shadow: 0px 2px 2px 0px #616060;-moz-box-shadow: 0px 2px 2px 0px #616060;box-shadow: 0px 2px 2px 0px #616060;transition: all 300ms linear;}
+.submitRegister:hover{cursor:pointer;background: #fff;color: #2361f0;}
+@media all and (max-width : 1075px) {.radio-tabs,.pasoContainer{width:80%;}}
+@media all and (max-width : 815px) {
+    .dataForm input{width:100%;}
+    input[type=checkbox] + label{float:none;}
+}

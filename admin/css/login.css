@@ -1,6 +1,8 @@
-#registerContainer,#loginContainer{padding:100px 0 0 0;text-align: center;}
-#registerContainer img,#loginContainer img{max-width:100px;margin:0 auto;}
+body{font-family: sans-serif;}
+#registerContainer,#loginContainer{padding: 20px 0;text-align: center;}
+#registerContainer img, #loginContainer img{max-width:100px;margin:20px auto;}
 .loginForm{font-family:sans-serif;color:#000;max-width:360px;margin:0 auto;text-align:center;padding:50px 30px;border:1px solid #d6232e;}
+.loginForm input[type="text"],
 .loginForm input[type="email"],
 .loginForm input[type="password"]{width:100%;border:0;border-bottom:1px solid #d6232e;margin:10px 0;padding:15px 0 15px 15px;outline:none;}
 .loginForm input[type="submit"]{background-color:#d9232e;color:#fff;border:2px solid #fff;border-radius:40px;width:80%;margin:20px auto;padding:15px 0;font-weight:800;outline:none;
@@ -11,3 +13,17 @@ box-shadow: 0px 4px 4px 0px rgba(143,21,27,1);}
 .loginForm a:hover{color:rgba(0,0,0,1);}
 .loginForm a:after{content:"";position:absolute;bottom:-5px;left:0;width:0;height:1px;background-color:#a8bfff;transition:300ms width ease-in;}
 .loginForm a:hover:after{width:100%;}
+
+.noShow{display:none;}
+.show{display:block;}
+
+
+#divToLogin button{background-color:#d9232e;color:#fff;border:2px solid #fff;border-radius:40px;
+	width:80%;max-width:360px;margin:20px auto;padding:15px 0;font-weight:800;outline:none;
+-webkit-box-shadow: 0px 4px 4px 0px rgba(143,21,27,1);
+-moz-box-shadow: 0px 4px 4px 0px rgba(143,21,27,1);
+box-shadow: 0px 4px 4px 0px rgba(143,21,27,1);
+}
+
+
+

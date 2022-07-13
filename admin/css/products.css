@@ -1,0 +1,42 @@
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 1fr;  grid-template-rows: 50px auto;  grid-gap: 10px;background: rgba(238, 238, 238, 0.5);}
+.mainContainer #main #newProductContainer{display: grid;grid-template-columns: 100px 200px;justify-content: space-between;}
+.mainContainer #main #newProductContainer .newProduct{width:100%;max-width:250px;height:40px;background: #b7002a;border:1px solid transparent;border-radius:5px;color:#fff;transition:all 300ms ease-in; }
+.mainContainer #main #newProductContainer .newProduct:hover{background: #fff;color:#b7002a;border:1px solid #b7002a;}
+
+.importProducts {width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;}
+.importProducts + label {color: #9f9e9e;line-height: 40px;cursor: pointer}
+.importProducts + label:hover{color: #000;}
+
+.productosContainer .dt-buttons{background: rgba(238, 238, 238, 0.5);}
+.productosContainer .dt-buttons button{width:100%;height:40px;background: transparent;border:1px solid transparent;color:#9f9e9e;}
+.productosContainer .dt-buttons button:hover{color:#000;}
+.productosContainer .dt-buttons .btn-pdf{max-width:70px;}
+.productosContainer .dt-buttons .btn-excel{max-width:100px;}
+.productosContainer .dataTables_wrapper{background: #fff;}
+
+.productosContainer .dataTables_wrapper .dataTables_filter{padding:20px;float:none;text-align: left;}
+.productosContainer .dataTables_wrapper .dataTables_filter input{width: calc(100% - 75px);}
+.productosContainer .dataTable{padding:20px;}
+.productosContainer .dataTable th:nth-child(2),
+.productosContainer .dataTable td:nth-child(2){display: none;}
+
+.productosContainer .thumb{width:100px;margin: 0 auto;display: block;}
+.productosContainer .price{text-align: center;}
+.productosContainer input[type=checkbox] {height: 0;width: 0;visibility: hidden;}
+.productosContainer .statusContainer {    width: 35px;margin: 0 auto;}
+.productosContainer .statusContainer label {cursor: pointer;text-indent: -9999px;width: 30px;height: 20px;background: grey;display: block;border-radius: 10px;position: relative;display: inline-block;}
+.productosContainer .statusContainer label:after {content: '';position: absolute;top: 5px;left: 5px;width: 9px;height: 9px;background: #fff;border-radius: 9px;transition: 0.3s;}
+.productosContainer .statusContainer input:checked + label {background: #b7002a;}
+.productosContainer .statusContainer input:checked + label:after {left: calc(100% - 5px);transform: translateX(-100%);}
+.productosContainer .statusContainer label:active:after {width: 13px;}
+.productosContainer #example button{background-color:transparent;color:#b7002a;border:1px solid #b7002a;border-radius:5px;outline:none;transition: 0.4s ease all;-moz-transition: 0.4s ease all;-webkit-transition: 0.4s ease all;}
+.productosContainer #example button:hover{color:#fff;background-color:#b7002a;}
+
+.productosContainer .favContainer {width: 20px;margin: 0 auto;}
+.productosContainer .favContainer input[type="checkbox"]{height: 0;width: 0;visibility: hidden;}
+.productosContainer .favContainer label {cursor: pointer;background:transparent;display: inline-block;text-indent: 0;position:inherit;border-radius: 0;}
+.productosContainer .favContainer label span{color:grey;}
+.productosContainer .favContainer input:checked + label {background: transparent;}
+.productosContainer .favContainer input:checked + label span {color:#d13628;}
+
+.productosContainer .inventario{text-align: right;}

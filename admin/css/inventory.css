@@ -1,0 +1,22 @@
+.mainContainer #main { padding: 20px;  display: grid;  grid-template-columns: 1fr;  grid-template-rows: 50px auto;  grid-gap: 10px;background: rgba(238, 238, 238, 0.5);}
+.mainContainer #main #newProductContainer{display: grid;grid-template-columns: 100px 200px;justify-content: space-between;}
+.productosContainer .dataTables_wrapper{background: #fff;}
+
+.productosContainer .dataTables_wrapper .dataTables_filter{padding:20px;float:none;text-align: left;}
+.productosContainer .dataTables_wrapper .dataTables_filter input{width: calc(100% - 75px);}
+.productosContainer .dataTable{padding:20px;}
+
+.productosContainer .thumb{width:100px;margin: 0 auto;display: block;}
+.productosContainer .inputQty{width:100px;}
+.productosContainer .formUpdateQty input[type='submit']:disabled{background: #9f9e9e;border: 0;color:#fff;height: 25px;}
+.productosContainer .formUpdateQty input[type='submit']{background: #b7002a;border: 0;color:#fff;height: 25px;}
+
+.productosContainer .inventario{text-align: center;font-size:13px;}
+.productosContainer .inventario i,
+.productosContainer .inventario input{display: none;}
+.productosContainer .inventario input{background: rgba(255,0,0,0.5);border:0;width:20px;}
+.productosContainer .inventario input::-webkit-outer-spin-button,
+.productosContainer .inventario input::-webkit-inner-spin-button {-webkit-appearance: none; margin: 0;}
+.productosContainer .inventario input[type=number] {  -moz-appearance: textfield;}
+
+
