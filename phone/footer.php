@@ -1,15 +1,29 @@
 <footer>
     <div id="menuFooter">
         <div class="container">
-             <?php
-                    if(!$login){echo '<a href="login">INICIAR SESIÓN</span></a>';}
-                    else{echo '<a href="client/index"><span>MI CUENTA</span></a>';}
-                ?>
-                <a href="faq">PREGUNTAS FRECUENTES</a>
+                <a href="somos">QUIENES SOMOS</a>
                 <a href="https://wa.me/15214771261076?text=Me%20interesa%20unos%20lentes%20">AYUDA</a>
-                <a href="aviso.pdf">AVISO DE PRIVACIDAD</a>
-                <a href="store">TIENDA</a>
-                <a href="terminos.pdf">TÉRMINOS Y CONDICIONES</a>
+                <a href="salud-visual">SALUD VISUAL</a>
+                <a href="faq">PREGUNTAS FRECUENTES</a>
+                <?php
+                    //if(!$login){echo '<a href="login">INICIAR SESIÓN</span></a>';}
+                    //else{echo '<a href="client/index"><span>MI CUENTA</span></a>';}
+                ?>
+                <a href="contacto">CONTACTO</a>
+                <a href="../avisodeprivacidad.pdf">AVISO DE PRIVACIDAD</a>
+                <a href="facturacion">FACTURACIÓN</a>
+                <a href="../terminosycondiciones.pdf">TÉRMINOS Y CONDICIONES</a>
+        </div>
+    </div>
+    <div class="container">
+        <div id="socialMediaContainer">
+        <?php
+            $fb = $set->getWebsiteSetting('facebook');
+            echo '<a target="_blank" href="'.$fb.'"><i class="fab fa-facebook-square"></i></a>';
+
+            $ig = $set->getWebsiteSetting('instagram');
+            echo '<a target="_blank" href="'.$ig.'"><i class="fab fa-instagram"></i></a>'; 
+        ?>
         </div>
     </div>
 	<div id="newsletter">

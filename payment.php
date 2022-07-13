@@ -209,8 +209,8 @@
 						<input type="text" id="coupon" placeholder="Cupon" autocomplete="off">
 						<button id="checkCoupon">Verificar</button>
 					</div>
-					 <div id="paypal-button-container"></div>
 					<div class="nextContainer"><button id="next">Pagar</button></div>
+					<div id="paypal-button-container"></div>
 	    		</div>
 	    	</div>
 		</div>

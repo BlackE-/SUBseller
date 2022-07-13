@@ -74,6 +74,10 @@ footer{background: #2361f0;padding: 25px 0;}
 footer #menuFooter .container{grid-template-columns: 1fr 1fr;grid-gap: 15px;}
 footer #menuFooter .container a{color:#fff;text-decoration: none;font-size: 10px;}
 
+
+footer #socialMediaContainer{display: grid;align-items: center;grid-template-columns: 1fr 1fr ;text-align: center;    justify-content: center;margin-top:25px;}
+footer #socialMediaContainer a{color:#fff;font-size: 25px;}
+
 footer #newsletter {padding: 25px 0;}
 footer #newsletter .container{border-bottom: 1px solid #c4c4c4;border-top: 1px solid #c4c4c4;}
 

@@ -12,8 +12,11 @@
 		p.innerText = msg;
 		modalBody.appendChild(p);
 	}
+
+
+
 	let id_billing = 0;
-	const id_order = document.getElementById('id_order').value;
+	const id_order = document.getElementById('id_order');
 	const billing = document.getElementById('billings');
 	const rfc = document.getElementById('rfc');
 	const email = document.getElementById('email');
@@ -25,24 +28,31 @@
 	const city = document.getElementById('city');
 	const country = document.getElementById('country');
 	const state = document.getElementById('state');
-	const checkRFC = document.getElementById('checkRFC');
-	checkRFC.addEventListener('change',()=>{
-		if(checkRFC.checked){
-			document.getElementById('facturaContainer').classList.add('show');
-			let topPos = document.getElementById('facturaContainer').scrollHeight + 50;
-			window.scrollTo({ top: topPos, behavior: 'smooth' });
-		}else{
-			document.getElementById('facturaContainer').classList.remove('show');
-		}
-	});
 	
+	clearForm = () =>{
+		id_order.classList.remove('animated');
+		id_order.classList.remove('swing');
+		billing.classList.remove('animated');
+		billing.classList.remove('swing');
+		email.classList.remove('animated'); 
+		email.classList.remove('swing'); 
+		cfdi.classList.remove('animated');
+		cfdi.classList.remove('swing');
+		razon_social.classList.remove('animated');
+		razon_social.classList.remove('swing');
+	}
 
 	validateEmail = (email) => {
     	const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     	return re.test(String(email).toLowerCase());
 	}
 
-	checkFacturaForm = () =>{  
+	checkFacturaForm = () =>{
+	  	if(id_order.value === "0"){
+			id_order.classList.add('animated');
+			id_order.classList.add('swing');
+			return false;
+		}
 		if(rfc.value === ""){
 			rfc.classList.add('animated');
 			rfc.classList.add('swing');
@@ -73,54 +83,54 @@
 
 	const request = document.getElementById('request');
 	request.addEventListener('click',function(){
-		if(checkRFC.checked){
-			if(checkFacturaForm()){
-				resetModal();
-				showLoading();
-				openModal();
+		if(checkFacturaForm()){
+			resetModal();
+			showLoading();
+			openModal();
 
-				let fd = new FormData();
-				fd.append('id_order',id_order);
-				fd.append('id_billing',id_billing);
-				fd.append('rfc',rfc.value);
-				fd.append('cfdi',cfdi.value);
-				fd.append('razon_social',razon_social.value);
-				fd.append('email',email.value);
-				fd.append('address1',address1.value);
-				fd.append('address2',address2.value);
-				fd.append('city',city.value);
-				fd.append('cp',cp.value);
-				fd.append('state',state.value);
-				fd.append('country',country.value);
+			let fd = new FormData();
+			fd.append('id_order',id_order.value);
+			fd.append('id_billing',id_billing);
+			fd.append('rfc',rfc.value);
+			fd.append('cfdi',cfdi.value);
+			fd.append('razon_social',razon_social.value);
+			fd.append('email',email.value);
+			fd.append('address1',address1.value);
+			fd.append('address2',address2.value);
+			fd.append('city',city.value);
+			fd.append('cp',cp.value);
+			fd.append('state',state.value);
+			fd.append('country',country.value);
 
-				const xhr = new XMLHttpRequest();
-				xhr.onreadystatechange = function(){
-					if (this.readyState == 4 && this.status == 200) {
-						myObj = JSON.parse(this.response);
-						console.log(myObj);
-						hideLoading();
-						setModalError(myObj.message);
-						setTimeout(()=>{closeModal();},5000);
-						if(!myObj.return){
-							//no se pudo guardar
-						}else{
-							//todo bien
-							//disable button
-							request.setAttribute('disable','');
-						}
+			const xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function(){
+				if (this.readyState == 4 && this.status == 200) {
+					console.log(this.response);
+					myObj = JSON.parse(this.response);
+					console.log(myObj);
+					hideLoading();
+					setModalError(myObj.message);
+					setTimeout(()=>{closeModal();},5000);
+					if(!myObj.return){
+						//no se pudo guardar
+					}else{
+						//todo bien
+						//disable button
+						request.setAttribute('disable','');
 					}
 				}
-				xhr.open('POST','../include/CONFIRM-insertBilling.php', true);
-				xhr.send(fd);
-
 			}
+			xhr.open('POST','./include/CONFIRM-insertBilling.php', true);
+			xhr.send(fd);
+
 		}
 		else{
 			resetModal();
 			openModal();
 			hideLoading();
-			setModalError('Debe de aceptar elegir Factura');
+			setModalError('Por favor, llena los campos necesarios');
 			setTimeout(()=>{
+				clearForm();
     			closeModal();
     		},2000);
 			return false;
@@ -200,7 +210,7 @@
 			            }
 					}
 				}
-				xhr.open('POST','../include/CONFIRM-getBilling.php', true);
+				xhr.open('POST','./include/CONFIRM-getBilling.php', true);
 				xhr.send(formBilling); 
 			}
 		});

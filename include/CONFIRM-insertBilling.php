@@ -10,11 +10,14 @@
 		$billing = $set->getBilling($returnValue);
 		$fromEmail = $set->getWebsiteSetting('from_email');
 		$website_title = $set->getWebsiteSetting('website_title');
-		$subject = 'Factura de pedido:'.$returnValue['id_order'].' en'.$website_title;
+		$order = $set->getOrder($returnValue);
+		$subject = 'Factura de pedido:'.$returnValue.' en'.$website_title;
 		$contactoEmail = $set->getWebsiteSetting('contacto_email');
+		$logo = $set->getWebsiteSetting('social_media_logo');
+		// $logo = $set->getWebsiteSetting('website_logo');
 
 
-		$table0 = '<table style="border:0;width:80%;margin:0 auto;text-align: center;"><tr><td align="center"><div style="margin:0 auto;width:230px;height:100px;padding:10px;">'.$logo.'</td></tr></table>';
+		$table0 = '<table style="border:0;width:80%;margin:0 auto;text-align: center;"><tr><td align="center"><div style="margin:0 auto;width:230px;height:100px;padding:10px;"><img style="width:100px;" src="'.$logo.'"/></td></tr></table>';
 		$table1 = '<table style="background:#fff;text-align: center;border:0;width:80%;margin:0 auto;border-radius: 4px;box-shadow: 0 1px 2px 0 rgba(0,0,0,.03);border: solid 1px #dee5ec;"><tr><td><h1>SOLICITUD DE FACTURA</h1></td></tr><tr><td></tr></table>';
 		$table2 = '<table style="border:0;width:80%;margin:0 auto;text-align: center;"><tr><td><h2>PEDIDO: '.$order['cve_order'].'</h2></td></tr></table>';
 
@@ -78,7 +81,7 @@
 		$emailAdmin->setFrom($fromEmail);
 		$emailAdmin->setFromName($website_title);
 		$emailAdmin->setSubject($subject);
-		$emailAdmin->setMessage($table10Admin);
+		$emailAdmin->setMessage($table10);
 
 		$sendEmail = $emailAdmin->sendEmail();
 		$message = $emailAdmin->error_message; //si es TRUE el mensaje es 'EMAIL ENVIADO'

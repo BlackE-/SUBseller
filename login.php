@@ -57,7 +57,7 @@
 	    		            <div class="registerContainer">
 	    		            	<form id="registerForm" class="registerForm">
 	    		            		<p class="topRegister"><b>o usar tu correo electrónico</b></p>
-	    		            		<div class="row"><input type="text" id="nameRegister" placeholder="Nombre"/></div>
+	    		            		<div class="row"><input type="text" id="nameRegister" placeholder="Nombres"/></div>
 	    		            		<div class="row"><input type="text" id="apellidoRegister" placeholder="Apellido"/></div>
 		    		            	<div class="row"><input type="number" id="phoneRegister" placeholder="Telefono: 10 dígitos"/></div>
 		    		            	<div class="row"><input type="email" id="emailRegister" placeholder="Correo Electrónico"/><p class="little">Aquí enviaremos la confirmación del pedido.</p></div>
@@ -108,7 +108,7 @@
 		    							<p class="little">Te daremos ofertas especiales de cumpleaños.</p>
 		    		            	</div>
 		    		            	<div class="row" id="checkboxNewsletter">
-		    		            			<input id="checkNewsletter" type="checkbox"/><label for="checkNewsletter"><i class="fas fa-check"></i></label>
+		    		            			<input id="checkNewsletter" type="checkbox" checked /><label for="checkNewsletter"><i class="fas fa-check"></i></label>
 		    		            			<p class="newsletterText">Suscríbeme al boletín<br>de ofertas y consejos</p>
 		    		            	</div>
 		    		            	<div class="row">

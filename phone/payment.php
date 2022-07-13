@@ -47,7 +47,7 @@
 		    </div>
 		    <div class="container">
 		    	<div id="termsContainer">
-	                    <input id="checkTerminos" type="checkbox" checked /><label for="checkTerminos"><i class="fas fa-check"></i></label>
+	                    <input id="checkTerminos" type="checkbox" checked/><label for="checkTerminos"><i class="fas fa-check"></i></label>
 	                    <p>Aceptar <a href="avisodeprivacidad.pdf">Términos y Condiciones</a></p>
 	                </div>
 		    </div>
@@ -231,8 +231,8 @@
 				</div>
 	    	</div>
 	    	<div class="nextContainer">
-				<div id="paypal-button-container"></div>
 				<button id="next">Pagar</button>
+				<div id="paypal-button-container"></div>
 			</div>
 		</div>
 	</div>

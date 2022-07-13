@@ -3,7 +3,8 @@
     let emailUser  = document.getElementById('emailRegister');
     let phoneUser = document.getElementById('phoneRegister'); 
     let newsletter = document.getElementById('checkNewsletter');
-	let password = document.getElementById('password1');
+	let pass1 = document.getElementById('password1');
+	let pass2 = document.getElementById('password2');
     
     let emailLogin = document.getElementById('emailLogin');
     let passwordLogin = document.getElementById('passwordLogin');
@@ -158,8 +159,13 @@
 			xhr.open('POST','../include/LOGIN-registerClient.php', true);
 			xhr.send(formData);    
     	}else{
+    		resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Por favor, llena todos campos');
     		setTimeout(()=>{
     			clearRegisterForm();
+    			closeModal();
     		},5000);
     	}
     }
@@ -225,8 +231,13 @@
 
     	}
     	else{
+    		resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Por favor, llena todos campos');
     		setTimeout(()=>{
     			clearLoginForm();
+    			closeModal();
     		},5000);
     	}
     }

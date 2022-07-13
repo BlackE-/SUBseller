@@ -40,7 +40,7 @@
 					<li class="completed">1</li>
 					<li class="completed">2</li>
 					<li class="completed">3</li>
-					<li class="active">4</li>
+					<li class="completed">4</li>
 				</ul>
 		    </div>
 	    <?php
@@ -176,67 +176,7 @@
 					</div>
 
 					<div class="nextContainer"><a href="store"><button id="">Ir a Tienda</button></a></div>
-
-					<div class="enableBilling">
-			    		<div id="facturaCheckContainer">
-			    			<input id="checkRFC" type="checkbox"/><label for="checkRFC"><i class="fas fa-check"></i></label>
-			    			<p>Solicitar factura</p>
-			    		</div>
-			    	</div>
 	    		</div>
-	    		<div id="facturaContainer">
-	                	<div class="facturaSavedContainer">
-	                		<?php
-	                			$billings = $set->getBillingsFromClient();
-		            			if(is_array($billings)){
-		            		?>
-		            			<div class="billingsSavedContainer">
-		            				<div class="billingsSaved">
-				            			<select id="billings">
-				            				<?php
-				            					echo '<option value="0">Elegir un RFC</option>';
-				            					foreach ($billings as $key => $value) {
-				            						echo '<option value="'.$value['id_billing'].'">'.$value['rfc'].'</option>';
-				            					}
-				            				?>
-				            			</select>
-				            		</div>
-		            			</div>
-		            		<?php
-		            			}
-		            		?>
-	                	</div>
-
-	                	<div id="facturaContainerBox">
-	                		<input type="text" id="rfc" placeholder="RFC*" required>
-	                		<input type="email" id="email" placeholder="Correo Electrónico*" required>
-		                	<input type="text" id="razon_social" placeholder="Razon Social*" required>
-		                	<div class="selectCDFI">
-		            			<select id="cfdi">
-		            				<option value="0">Elegir CFDI</option>
-		            				<option value="01-AdquisionMercancia">01 - Adquisición Mercancias</option>
-		            				<option value="03-GastosGeneral">03 - Gastos General</option>
-		            			</select>
-		            		</div>
-		                	<input type="text" id="address1" placeholder="Domicilio">
-		                	<input type="text" id="address2" placeholder="Domicilio (cont)">
-		                	<input type="text" id="cp" length="6" placeholder="CP">
-		                	<input type="text" id="city" placeholder="Alcaldia/Municipio">
-		                	<input type="text" id="country" value="MEX" disabled>
-	                		<div class="selectState">
-		            			<select id="state">
-		            				<option value="0">Elegir un estado</option>
-			            	<?php
-			            		$states = $set->getStates('MEX');
-			            		foreach ($states as $key => $value) {
-			            			echo '<option value="'.$value.'">'.$value.'</option>';
-			            		}
-			            	?>
-		            			</select>
-		            		</div>
-		            		<div class="nextContainer"><button id="request">Solicitar</button></a></div>
-	                	</div>
-	                </div>
 	    	</div>
 	    	
 		<?php
@@ -246,6 +186,5 @@
 	</div>
 	<?php include('footer.php');?>
 	<?php include('modal.php');?>
-	<script type="text/javascript" src="script/confirm.js"></script>
 </body>
 </html>

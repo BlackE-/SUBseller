@@ -154,8 +154,13 @@
 			xhr.open('POST','./include/LOGIN-registerClient.php', true);
 			xhr.send(formData);    
     	}else{
+    		resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Por favor, llena todos campos');
     		setTimeout(()=>{
     			clearRegisterForm();
+    			closeModal();
     		},5000);
     	}
     }
@@ -221,8 +226,13 @@
 
     	}
     	else{
+    		resetModal();
+			openModal();
+			hideLoading();
+			setModalError('Por favor, llena todos campos');
     		setTimeout(()=>{
     			clearLoginForm();
+    			closeModal();
     		},5000);
     	}
     }

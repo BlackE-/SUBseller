@@ -52,8 +52,10 @@ ul.breadcrumb li a:hover { color: #01447e;text-decoration: underline;}
 .tabs label{color:#545454;}
 .radio-tabs{margin:0 auto;text-align:center;}
 .radio-tabs input[name='houses-state']{display: none;}
-.radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}
-.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}
+/*.radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}*/
+/*.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;background-color: #fff;border-bottom: .3em solid #fff;cursor: default;color:#000;}*/
+.radio-tabs .tab {display: inline-block;padding: 15px 40px;cursor: pointer;background-color: #fff;color:#000;}
+.radio-tabs #starks:checked ~ .tabs #starks-tab,.radio-tabs #lannisters:checked ~ .tabs #lannisters-tab {font-weight:800;font-style:italic;cursor: default;background-color: #ededed;border-bottom: .3em solid #fbfbfc;}
 .radio-tabs .tab:hover {background-color: #fff;}
 @media all and (max-width : 570px) {.radio-tabs .tab {padding:10px 20px;font-size:14px;}}
 @media all and (max-width : 440px) {.radio-tabs .tab {padding:10px;font-size:10px;}}

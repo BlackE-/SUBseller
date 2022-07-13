@@ -1033,10 +1033,14 @@
 			$quantity = $_POST['quantity'];
 	        $price = $_POST['price'];
 	        $receta = $_POST['receta'];
-	        $prescription = $_FILES["prescription"];
+	        $hasPresciption = $_POST['hasPresciption'];
 
-	        if(!$prescription){$path_prescription = '';}
-	        else{$path_prescription = $this->uploadFile($prescription);}
+	        if($hasPresciption == 0){
+				$path_prescription = '';
+	        }else{
+	        	$prescription = $_FILES["prescription"];
+	        	$path_prescription = $this->uploadFile($prescription);
+	        }
 
 	        $returnValue = true;
 			$this->checkDBLogin();
@@ -1973,7 +1977,7 @@
 			}
 			else{
 				$returnValue = $id_billing;
-				$this->db->HandleError('La información fue guardada y enviada por correo');	
+				$this->db->HandleError('La información fue guardada y enviada a tu correo');	
 			}
 			return $returnValue;
 		}

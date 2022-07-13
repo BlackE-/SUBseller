@@ -95,6 +95,7 @@
 	            		</table></div>`;
 	    // let prescription = document.getElementById('prescription').files[0];
 	    let file = document.getElementById('prescription');
+	    let hasPresciption = (file.files.length == 0 ) ? false : true;
 	    let prescription = (file.files.length == 0 ) ? false : file.files[0];
 
 
@@ -102,6 +103,7 @@
 		formData.append('quantity', quantity);
 		formData.append('price', price);
 		formData.append('receta', receta);
+		formData.append('hasPresciption', hasPresciption);
 		formData.append('prescription', prescription);
 		// for (var value of formData.keys()) {
 		//    console.log(value); 
@@ -109,7 +111,6 @@
 
 		const xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
-			console.log(this.status);
 			if (this.readyState == 4 && this.status == 200) {
 				console.log(this.response);
 				myObj = JSON.parse(this.response);

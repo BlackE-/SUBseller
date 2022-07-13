@@ -53,13 +53,13 @@
 	    		    <div class="panels">
 	    		        <ul id="starks-panel" class="panel" role="tabpanel" aria-labelledby="starks-tab">
 	    		            <div class="facebookRegisterContainer">
-	    		            	<a href="#" class="loginFacebook"><i class="fab fa-facebook-square"></i> Crear cuenta usando Facebook</a>
+	    		            	<a href="#" class="loginFacebook" id="registerFacebook"><i class="fab fa-facebook-square"></i> Crear cuenta usando Facebook</a>
 	    		            	<hr>
 	    		            </div>
 	    		            <div class="registerContainer">
 	    		            	<form id="registerForm" class="registerForm">
 	    		            		<p class="topRegister"><b>o usar tu correo electrónico</b></p>
-	    		            		<div class="row"><input type="text" id="nameRegister" placeholder="Nombre"/></div>
+	    		            		<div class="row"><input type="text" id="nameRegister" placeholder="Nombres"/></div>
 	    		            		<div class="row"><input type="text" id="apellidoRegister" placeholder="Apellido"/></div>
 		    		            	<div class="row"><input type="number" id="phoneRegister" placeholder="Telefono: 10 dígitos"/></div>
 		    		            	<div class="row"><input type="email" id="emailRegister" placeholder="Correo Electrónico"/><p class="little">Aquí enviaremos la confirmación del pedido.</p></div>
@@ -109,18 +109,8 @@
 		                				</div>		
 		    							<p class="little">Te daremos ofertas especiales de cumpleaños.</p>
 		    		            	</div>
-		    		            	<div class="row">
-		    		            		    <div class="selectdivsex">
-		        		            			<select class="sexRegister" id="sexRegister">
-		        		            				<option value="0">Género</option>
-		        		            				<option value="F">Mujer</option>
-		        		            				<option value="M">Hombre</option>
-		        		            			</select>
-		        		            		</div>
-		    		            			<p class="little">Te daremos ofertas personalizadas.</p>
-		    		            	</div>
 		    		            	<div class="row" id="checkboxNewsletter">
-		    		            			<input id="checkNewsletter" type="checkbox"/><label for="checkNewsletter"><i class="fas fa-check"></i></label>
+		    		            			<input id="checkNewsletter" type="checkbox" checked /><label for="checkNewsletter"><i class="fas fa-check"></i></label>
 		    		            			<p class="newsletterText">Suscríbeme al boletín<br>de ofertas y consejos</p>
 		    		            	</div>
 		    		            	<div class="row">
@@ -132,7 +122,7 @@
 	    		        </ul>
 	    		        <ul id="lannisters-panel" class="panel active" role="tabpanel" aria-labelledby="lannisters-tab">
 	    		            <div class="facebookRegisterContainer">
-	    		            	<a href="#" class="loginFacebook"><i class="fab fa-facebook-square"></i> Iniciar Sesion </a>
+	    		            	<a href="#" class="loginFacebook" id="loginFacebook"><i class="fab fa-facebook-square"></i> Iniciar Sesion </a>
 	    		            	<hr>
 	    		            </div>
 	    		            <div class="registerContainer">

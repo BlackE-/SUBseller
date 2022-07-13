@@ -17,14 +17,17 @@
 		</div>
 		<div class="column" id="column2">
 			<a href="store" class="title">TIENDA</a>
+			<a href="somos">Quienes Somos</a>
+			<a href="salud-visual">Salud Visual</a>
+			<a href="contacto">Contacto</a>
+			<a href="facturacion">Facturación</a>
 			<?php
-			if(!$categories){
-
-			}else{
-			foreach ($tipos as $key => $value) {
-            	$type = $value['type'];
-            	echo '<a href="store?store?page=type&id='.$type['id_type'].'">'.$type['name'].'</a>';}
-        	}
+			// if(!$categories){
+			// }else{
+			// foreach ($tipos as $key => $value) {
+   //          	$type = $value['type'];
+   //          	echo '<a href="store?store?page=type&id='.$type['id_type'].'">'.$type['name'].'</a>';}
+   //      	}
 			?>
 		</div>
 		<div class="column" id="column3">
@@ -33,8 +36,10 @@
 		            if(!$login){echo '<a href="login" class="title">INICIAR SESIÓN</a>';}
 		            else{echo '<a href="client/index" class="title">MI CUENTA</a>';}
 		        ?>
+				<a href="faq">Preguntas Frecuentes</a>
 				<a href="https://wa.me/15214771261076?text=Me%20interesa%20unos%20lentes%20" target="_blank">Ayuda</a>
 				<a href="avisodeprivacidad.pdf" class="title">AVISO DE PRIVACIDAD</a>
+				<a href="terminosycondiciones.pdf" class="title">TÉRMINOS Y CONDICIONES</a>
 			</div>
 			<div>
 				<div id="socialMediaContainer">
